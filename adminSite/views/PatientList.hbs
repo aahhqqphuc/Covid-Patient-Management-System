@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-6">
+        <h1>Covid patient list</h1>
+    </div>
+
+</div>
+
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id Bệnh nhân</th>
+            <th scope="col">Tên đầy đủ</th>
+            <th scope="col">CMND</th>
+            <th scope="col">Năm sinh</th>
+            <th scope="col">Quê quán</th>
+            <th scope="col">Dư nợ</th>
+
+            <th scope="col" class="text-end">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {{#each patients}}
+        <tr>
+            <th scope="row">{{id_benh_nhan}}</th>
+            <td>{{ho_ten}}</td>
+            <td>{{cmnd}}</td>
+            <td>{{nam_sinh}}</td>
+            <td>{{tinh}}, {{huyen}}, {{xa}}</td>
+            <td>{{du_no}}</td>
+            <td class="text-end">
+                <a href="/patient/{{this.id_benh_nhan}}" type="button" class="btn btn-light btn-small"><i class="bi bi-eye"></i>
+                    View Detail</a>
+            </td>
+        </tr>
+        {{/each}}
+
+    </tbody>
+</table>
+

@@ -15,7 +15,8 @@ app.use(
   })
 );
 app.use("/order", require("./controllers/home.C"));
-app.use("/", (req, res) => {
-  res.redirect("/order");
-});
+
+
+app.use("/patient", require("./controllers/patient.C"));
+
 app.listen(3000);
