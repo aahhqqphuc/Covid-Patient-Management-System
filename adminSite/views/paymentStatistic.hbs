@@ -1,0 +1,58 @@
+<div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <ul class="row justify-content-center nav nav-tabs bg-light">
+            <li class="nav-item">
+                <a class="nav-link statistic-nav-link" href="./patient">Thông tin ca nhiễm</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link statistic-nav-link" href="./product">Thông tin về gói nhu yếu phẩm</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link statistic-nav-link active" href="./payment">Thông tin dư nợ, thanh toán</a>
+            </li>
+        </ul>
+
+        <!-- Main Content -->
+        <div id="content" class="row justify-content-center content-statistical">
+            <div class="container-fluid col-lg-10 col-md-10 col-sm-12">
+                <div class="row">
+                    <div class="col m-2">
+                        <h1 class="h2 mb-0 text-gray-800">Thống kê dư nợ, thanh toán</h1>
+                    </div>
+
+                </div>
+                <div class="row" style="overflow: scroll;">
+                    <table class="table table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Id hóa đơn</th>
+                                <th scope="col">Tên người mua</th>
+                                <th scope="col">Ngày mua</th>
+                                <th scope="col">Dư nợ</th>
+                                <th scope="col">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each order}}
+                            <tr>
+                                <th scope="row">{{this.idOrder}}</th>
+                                <td>{{this.buyer}}</td>
+                                <td>{{this.date}}</td>
+                                <td>{{this.debt}}</td>
+                                <td>{{this.status}}</td>
+                            </tr>
+                            {{/each}}
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <!-- End of Main Content -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
