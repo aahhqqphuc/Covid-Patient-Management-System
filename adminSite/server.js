@@ -19,4 +19,6 @@ app.use("/order", require("./controllers/home.C"));
 
 app.use("/patient", require("./controllers/patient.C"));
 
+app.use(express.static(__dirname+'/views'));
+
 app.listen(3000);
