@@ -37,31 +37,31 @@
 
     </div>
 
-    <table class="table table-bordered" id="datatablesSimple">
+    <table class="table table-bordered" id="AccountTable">
         <thead class="thead-dark">
             <tr>
-                <th scope="col">Tên đầy đủ</th>
-                <th scope="col">CMND</th>
-                <th scope="col">Năm sinh</th>
-                <th scope="col">Quê quán</th>
-                <th scope="col">Trạng thái bệnh nhân</th>
-                <th scope="col">Nơi điều trị hiện tại</th>
+                <th scope="col">Tên User</th>
+                <th scope="col">Role</th>
+                <th scope="col">Hoạt động cuối</th>
+                <th scope="col">Thời gian hoạt động cuối</th>
+                <th scope="col">Trạng thái tài khoản</th>
                 <th scope="col" class="text-end">Action</th>
             </tr>
         </thead>
         <tbody>
 
-            {{#each patients}}
+            {{#each admin}}
             <tr>
-                <td>{{ho_ten}}</td>
-                <td>{{cmnd}}</td>
-                <td>{{nam_sinh}}</td>
-                <td>{{tinh}}, {{huyen}}, {{xa}}</td>
-                <td>F{{trang_thai}}</td>
-                <td>{{tennoidieutri}}</td>
+                <td>{{user_name}}</td>
+                <td>{{role}}</td>
+                <td>{{last_action}}</td>
+                <td>{{action_date}}</td>
+                <td>{{status}}</td>
                 <td class="text-end">
-                    <a href="/patient/detail?id={{this.id_benh_nhan}}" type="button" class="btn btn-light btn-small"><i class="bi bi-eye"></i>
-                        Detail</a>
+                    <a href="/patient/detail?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small"><i class="bi bi-eye"></i>
+                        </a>
+                    <a href="/patient/detail?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small"><i class="bi bi-lock-fill"></i>
+                        </a>
                 </td>
             </tr>
             {{/each}}
