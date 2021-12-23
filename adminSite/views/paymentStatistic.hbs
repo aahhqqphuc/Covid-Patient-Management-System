@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/css/sb-admin-2.min.css">
 <div id="wrapper">
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -23,8 +24,8 @@
                     </div>
 
                 </div>
-                <div class="row" style="overflow: scroll;">
-                    <table class="table table-bordered">
+                <div class="" style="overflow: scroll;">
+                    <table class="table table-bordered" id="payment-Statistic-Table">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">Id hóa đơn</th>
@@ -37,11 +38,11 @@
                         <tbody>
                             {{#each order}}
                             <tr>
-                                <th scope="row">{{this.idOrder}}</th>
-                                <td>{{this.buyer}}</td>
-                                <td>{{this.date}}</td>
-                                <td>{{this.debt}}</td>
-                                <td>{{this.status}}</td>
+                                <th scope="row">{{id_hoa_don}}</th>
+                                <td><a href="">{{ho_ten}}</a></td>
+                                <td>{{ngay_mua}}</td>
+                                <td>{{du_no}}</td>
+                                <td>{{trang_thai}}</td>
                             </tr>
                             {{/each}}
 

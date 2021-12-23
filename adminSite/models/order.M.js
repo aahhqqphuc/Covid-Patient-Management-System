@@ -12,5 +12,5 @@ module.exports = {
   get: async (fieldName, value) => {
     const res = await db.get(tbName, fieldName, value);
     return res;
-  }
+  },
 };

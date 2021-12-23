@@ -1,28 +1,28 @@
 const express = require('express');
 const router = express.Router();
 const pStatusM = require('../models/patientStatus.M');
-const orderDetailM = require('../models/orderDetail.M');
-// const packageDetailM = require('../models/packageDetail.M');
-const orderM = require('../models/order.M');
 const patientM = require('../models/patient.M');
 const treatmentHistoryM = require('../models/treatmentHistory.M');
+const db = require('../models/db');
+
+// get time
+const dnow = new Date;
+const dateNow = `${dnow.getDate()}/${dnow.getMonth() + 1}/${dnow.getFullYear()}`
 
 router.get('/patient', async (req, res) => {
-    const dnow = new Date;
-    const dateNow = `${dnow.getDate()}/${dnow.getMonth() + 1}/${dnow.getFullYear()}`
 
     const pStatus = await pStatusM.all();
     const treatmentHistory = await treatmentHistoryM.all();
 
     const pStatusNow = pStatus.filter((per) => { return per.ngay_cap_nhat.toString().includes(dateNow) })
 
-    const pf0 = pStatus.filter((per) => { return per.trang_thai_moi == 'F0' })
-    const pf1 = pStatus.filter((per) => { return per.trang_thai_moi == 'F1' })
-    const pf2 = pStatus.filter((per) => { return per.trang_thai_moi == 'F2' })
-    const pf3 = pStatus.filter((per) => { return per.trang_thai_moi == 'F3' })
-    const pCured = pStatusNow.filter((per) => { return per.trang_thai_moi == 'Đã khỏi bệnh' })
+    const pf0 = pStatus.filter((per) => { return per.trang_thai_moi == 0 })
+    const pf1 = pStatus.filter((per) => { return per.trang_thai_moi == 1 })
+    const pf2 = pStatus.filter((per) => { return per.trang_thai_moi == 2 })
+    const pf3 = pStatus.filter((per) => { return per.trang_thai_moi == 3 })
+    const pCured = pStatusNow.filter((per) => { return per.trang_thai_moi == -1 })
     const pMove = treatmentHistory.filter((per) => { return per.ngay_cap_nhat.toString().includes(dateNow) })
-    const totalCured = pStatus.filter((per) => { return per.trang_thai_moi == 'Đã khỏi bệnh' })
+    const totalCured = pStatus.filter((per) => { return per.trang_thai_moi == -1 })
 
     res.render('patientStatistic', {
         timeUpdate: dateNow,
@@ -37,43 +37,60 @@ router.get('/patient', async (req, res) => {
     });
 })
 
-// router.get('/product', async (req, res) => {
-//     const orderDetail = await orderDetailM.all();
-//     const packageDetail = await packageDetailM.all();
+router.get('/product', async (req, res) => {
+    const query = `select ct.id_san_pham, n.ten_sanpham, sum(ct.so_luong) so_luong
+    from public.chi_tiet_nhu_cau_yeu_pham ct, public.nhu_yeu_pham n where ct.id_san_pham = n.id_nhu_yeu_pham
+    group by ct.id_san_pham, n.ten_sanpham
+    order by so_luong desc`;
 
-//     const numProd = packageDetail.reduce((sum, item) => sum + item.so_luong, 0);
+    const query1 = `select ct.id_goi_nhu_cau_yeu_pham, n.ten_goi, count(*) so_luong
+    from public.chi_tiet_hoa_don ct, public.goi_nhu_yeu_pham n where ct.id_goi_nhu_cau_yeu_pham = n.id_goi_nhu_yeu_pham
+    group by ct.id_goi_nhu_cau_yeu_pham, n.ten_goi
+    order by so_luong desc`;
 
-//     res.render('productStatistic', {
-//         numPackage: orderDetail.length,
-//         numProd: numProd,
-//     });
-// })
+    const proDetail = await db.runQuery(query);
+    const packageDetail = await db.runQuery(query1);
 
-// router.get('/payment', async (req, res) => {
-//     const orderPaid = await orderM.get("trang_thai", "1");
+    const numProd = proDetail.reduce((sum, item) => sum + parseInt(item.so_luong), 0);
+    const numPack = packageDetail.reduce((sum, item) => sum + parseInt(item.so_luong), 0);
 
-//     const order = [];
+    res.render('productStatistic', {
+        timeUpdate: dateNow,
+        packages: packageDetail,
+        products: proDetail,
+        numPackage: numPack,
+        numProd: numProd,
+    });
+})
 
-//     orderPaid.forEach(async e => {
-//         let p = await patientM.get("id_benh_nhan", e.id_nguoi_mua);
+router.get('/payment', async (req, res) => {
+    const query = `SELECT hd.*, bn.ho_ten, bn.du_no FROM public.hoa_don hd, public.benh_nhan_covid bn
+    where bn.id_benh_nhan = hd.id_nguoi_mua`;
 
-//         const pNew = {
-//             'idOrder': e.id_hoa_don,
-//             'buyer': p[0].ho_ten,
-//             'date': e.ngay_mua,
-//             'debt': p[0].du_no,
-//             'status': e.trang_thai,
-//         };
+    const orders = await db.runQuery(query);
 
-//         order.push(pNew);
-//     });
+    orders.forEach((order) => {
+        order.ngay_mua = order.ngay_mua.getDate() + " / " + (order.ngay_mua.getMonth() + 1) + " / " + order.ngay_mua.getFullYear();
+    })
 
-//     console.log(order);
+    res.render('paymentStatistic', {
+        order: orders
+    });
+})
 
-//     res.render('paymentStatistic', {
-//         order: order
-//     });
-// })
+router.get('/paymentAcc', async (req, res) => {
+    
+
+    res.render('minPay', {
+        payAcc: payAccs
+    });
+})
+
+router.post('/paymentAcc/edit/:idAcc', async (req, res) => {
+    const newMinPay = req.body.newMinPay;
+    console.log(req.params.idAcc, newMinPay);
+    res.redirect('../../paymentAcc')
+})
 
 module.exports = router;
 

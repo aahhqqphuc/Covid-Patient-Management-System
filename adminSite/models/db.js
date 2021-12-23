@@ -8,9 +8,7 @@ const schema = "public";
 const connectionString = {
   user: "postgres",
   host: "localhost",
-  // database: "WebProject",
-  // password: "1",
-  database: "QLBN",
+  database: "WebProject",
   password: "150301",
   port: 5432,
   max: 30,
@@ -82,7 +80,7 @@ exports.delete = async (tbName, fieldName, id) => {
     schema: schema,
   });
   const query = pgPromise.as.format(`Delete  from $1 where  "${fieldName}"='${id}'`, table);
-  console.log(query);
+
   try {
     const res = await db.any(query);
     return res;
@@ -90,3 +88,15 @@ exports.delete = async (tbName, fieldName, id) => {
     console.log("error db/add :", error);
   }
 };
+
+// -------------------------
+
+exports.runQuery = async(query) => {
+  try {
+    const res = await db.any(query);
+    return res;
+  } catch (error) {
+    console.log("error db/runQuery :", error);
+  }
+}
+
