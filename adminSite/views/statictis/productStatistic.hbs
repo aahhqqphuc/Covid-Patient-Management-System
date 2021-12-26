@@ -1,0 +1,105 @@
+<link rel="stylesheet" href="/css/sb-admin-2.min.css">
+<div id="content-wrapper" class="d-flex flex-column">
+    <ul class="row justify-content-center nav nav-tabs bg-light">
+        <li class="nav-item">
+            <a class="nav-link statistic-nav-link" href="./patient">Thông tin ca nhiễm</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link statistic-nav-link active" href="./product">Thông tin về gói nhu yếu phẩm</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link statistic-nav-link" href="./payment">Thông tin dư nợ, thanh toán</a>
+        </li>
+    </ul>
+
+    <!-- Main Content -->
+    <div id="content" class="content-statistical">
+
+        <div class="statistic-info container-fluid col-lg-8 col-md-10 col-sm-12">
+            <!-- Page Heading -->
+            <div class="d-sm-flex justify-content-center py-2">
+                <h1 class="h2 mb-0 text-gray-800 text-center">Thống kê thông tin nhu yếu phẩm</h1>
+            </div>
+
+            <div class="mt-2">
+                <div class="">
+                    <h3 class="">Dữ liệu tiêu thụ</h3>
+                    <label>Cập nhật ngày: {{timeUpdate}}</label>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-xl-6 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="text-lg text-center font-weight-bold text-info text-uppercase mb-1">
+                                    Số gói nhu yếu phẩm đã bán</div>
+                                <div class="h5 mb-0 font-weight-bold text-center text-gray-800">{{numPackage}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="text-lg text-center font-weight-bold text-info text-uppercase mb-1">
+                                    Số sản phẩm đã bán</div>
+                                <div class="h5 mb-0 font-weight-bold text-center text-gray-800">{{numProd}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-2 mb-4">
+                <div class="mb-3">
+                    <h3 class="">Danh sách gói nhu yếu phẩm bán chạy nhất</h3>
+                </div>
+
+                <table class="table table-bordered" id="package-Statistic-Table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Id gói nhu yếu phẩm</th>
+                            <th scope="col">Tên gói</th>
+                            <th scope="col">Số lượng đã bán</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each packages}}
+                        <tr>
+                            <th scope="row">{{id_goi_nhu_cau_yeu_pham}}</th>
+                            <td><a href="">{{ten_goi}}</a></td>
+                            <td>{{so_luong}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-2 mb-4">
+                <div class="mb-3">
+                    <h3 class="">Danh sách sản phẩm bán chạy nhất</h3>
+                </div>
+
+                <table class="table table-bordered" id="product-Statistic-Table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Id sản phẩm</th>
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Số lượng đã bán</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each products}}
+                        <tr>
+                            <th scope="row">{{id_san_pham}}</th>
+                            <td><a href="">{{ten_sanpham}}</a></td>
+                            <td>{{so_luong}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- End of Main Content -->
+</div>

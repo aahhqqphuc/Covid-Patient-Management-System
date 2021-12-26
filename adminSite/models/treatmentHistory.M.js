@@ -1,20 +1,16 @@
 const db = require("./db");
 
-const tbName = "hoa_don";
-<<<<<<< HEAD
-const idFieldName = "ID_Hoa_Don";
-=======
-const idFieldName = "id_hoa_don";
->>>>>>> develop
+const tbName = "lich_su_dieu_tri";
+const idFieldName = "id_lich_su_dieu_tri";
 
 module.exports = {
   all: async () => {
     const res = await db.load(tbName);
     return res;
   },
-
+  
   get: async (fieldName, value) => {
     const res = await db.get(tbName, fieldName, value);
     return res;
-  },
+  }
 };

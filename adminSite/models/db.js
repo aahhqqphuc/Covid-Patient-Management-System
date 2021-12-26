@@ -14,6 +14,8 @@ const connectionString = {
 
 const db = pgPromise(connectionString);
 
+exports.getDb = db;
+
 exports.load = async (tbName) => {
   const table = new pgPromise.helpers.TableName({
     table: tbName,
@@ -82,5 +84,14 @@ exports.delete = async (tbName, fieldName, id) => {
     return res;
   } catch (error) {
     console.log("error db/delete :", error);
+  }
+};
+
+exports.runQuery = async (query) => {
+  try {
+    const res = await db.any(query);
+    return res;
+  } catch (error) {
+    console.log("error db/runQuery :", error);
   }
 };
