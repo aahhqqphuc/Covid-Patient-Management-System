@@ -1,6 +1,6 @@
 const db = require("./db");
 
-const tbName = "Hoa_Don";
+const tbName = "hoa_don";
 const idFieldName = "ID_Hoa_Don";
 
 module.exports = {
