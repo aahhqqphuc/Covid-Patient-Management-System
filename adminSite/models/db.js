@@ -9,7 +9,7 @@ const connectionString = {
   user: "postgres",
   host: "localhost",
   database: "WebProject",
-  password: "1",
+  password: "123456",
   port: 5432,
   max: 30,
 };
@@ -91,26 +91,13 @@ exports.delete = async (tbName, fieldName, id) => {
   }
 };
 
-<<<<<<< HEAD
 // -------------------------
 
-exports.runQuery = async(query) => {
-=======
-exports.getByQuery = async (query) => {
-  
->>>>>>> develop
+exports.runQuery = async (query) => {
   try {
     const res = await db.any(query);
     return res;
   } catch (error) {
-<<<<<<< HEAD
     console.log("error db/runQuery :", error);
   }
-}
-=======
-    console.log("error db/add :", error);
-  }
 };
-
->>>>>>> develop
-
