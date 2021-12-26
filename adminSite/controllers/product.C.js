@@ -6,13 +6,13 @@ const upload = require("../middlewares/upload");
 const fs = require("fs-extra");
 router.get("/", async (req, res) => {
   const data = await model.all();
-  res.render("Product/ProductList", {
+  res.render("product/productList", {
     products: data,
-    script: ["../Product/ProductList.js"],
+    script: ["../product/productList.js"],
   });
 });
 router.get("/add", async (req, res) => {
-  res.render("product/newProduct", { script: ["../Product/upload.js"] });
+  res.render("product/newProduct", { script: ["../product/upload.js"] });
 });
 router.get("/edit/:id", async (req, res) => {
   let id = req.params.id;

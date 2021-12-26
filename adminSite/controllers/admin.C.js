@@ -6,13 +6,8 @@ module.exports = router;
 
 router.get("/", async (req, res) => {
   const data = await model.all();
-  res.render("adminAccountList", {
+  res.render("admin/adminAccountList", {
     admin: data,
-    script:["../adminList.js"],
+    script: ["../admin/adminList.js"],
   });
 });
-
-
-
-
-
