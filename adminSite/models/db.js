@@ -9,12 +9,14 @@ const connectionString = {
   user: "postgres",
   host: "localhost",
   database: "WebProject",
-  password: "150301",
+  password: "1",
   port: 5432,
   max: 30,
 };
-
 const db = pgPromise(connectionString);
+
+exports.getDb = db;
+
 exports.load = async (tbName) => {
   const table = new pgPromise.helpers.TableName({
     table: tbName,
@@ -89,14 +91,26 @@ exports.delete = async (tbName, fieldName, id) => {
   }
 };
 
+<<<<<<< HEAD
 // -------------------------
 
 exports.runQuery = async(query) => {
+=======
+exports.getByQuery = async (query) => {
+  
+>>>>>>> develop
   try {
     const res = await db.any(query);
     return res;
   } catch (error) {
+<<<<<<< HEAD
     console.log("error db/runQuery :", error);
   }
 }
+=======
+    console.log("error db/add :", error);
+  }
+};
+
+>>>>>>> develop
 
