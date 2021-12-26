@@ -14,6 +14,13 @@ app.use(
     extended: "true",
   })
 );
+
+// app.use("/order", require("./controllers/home.C"));
+
+app.use("/statistic", require("./controllers/statistic.C"));
+
+// app.use("/patient", require("./controllers/patient.C"));
+
 app.use("/order", require("./controllers/home.C"));
 
 app.use("/product", require("./controllers/product.C"));

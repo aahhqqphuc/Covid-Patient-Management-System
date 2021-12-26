@@ -1,0 +1,8 @@
+/* ---- table minPay---- */
+.btn-change{
+    display: none;
+}
+
+.table-rows:hover .btn-change {
+    display: inline-block;
+}

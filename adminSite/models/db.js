@@ -3,6 +3,7 @@ const { table } = require("console");
 const pgPromise = require("pg-promise")({
   capSQL: true,
 });
+
 const schema = "public";
 const connectionString = {
   user: "postgres",
@@ -29,6 +30,7 @@ exports.load = async (tbName) => {
     console.log("error db/load :", error);
   }
 };
+
 exports.get = async (tbName, fieldName, value) => {
   const table = new pgPromise.helpers.TableName({
     table: tbName,
@@ -42,6 +44,7 @@ exports.get = async (tbName, fieldName, value) => {
     console.log("error db/get :", error);
   }
 };
+
 exports.add = async (tbName, entity) => {
   const table = new pgPromise.helpers.TableName({
     table: tbName,
@@ -56,6 +59,7 @@ exports.add = async (tbName, entity) => {
     console.log("error db/add :", error);
   }
 };
+
 exports.edit = async (tbName, fieldName, entity) => {
   const table = new pgPromise.helpers.TableName({
     table: tbName,
@@ -71,13 +75,14 @@ exports.edit = async (tbName, fieldName, entity) => {
     console.log("error db/add :", error);
   }
 };
+
 exports.delete = async (tbName, fieldName, id) => {
   const table = new pgPromise.helpers.TableName({
     table: tbName,
     schema: schema,
   });
   const query = pgPromise.as.format(`Delete  from $1 where  "${fieldName}"='${id}'`, table);
-  console.log(query);
+
   try {
     const res = await db.any(query);
     return res;
@@ -86,14 +91,26 @@ exports.delete = async (tbName, fieldName, id) => {
   }
 };
 
+<<<<<<< HEAD
+// -------------------------
+
+exports.runQuery = async(query) => {
+=======
 exports.getByQuery = async (query) => {
   
+>>>>>>> develop
   try {
     const res = await db.any(query);
     return res;
   } catch (error) {
+<<<<<<< HEAD
+    console.log("error db/runQuery :", error);
+  }
+}
+=======
     console.log("error db/add :", error);
   }
 };
 
+>>>>>>> develop
 
