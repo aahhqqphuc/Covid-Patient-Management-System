@@ -6,9 +6,9 @@ module.exports = router;
 
 router.get("/", async (req, res) => {
   const data = await model.all();
-  res.render("PatientList", {
+  res.render("patientList", {
     patients: data,
-    script:["../PatientList.js"],
+    script:["../patientList.js"],
   });
 });
 
@@ -20,12 +20,12 @@ router.get("/detail", async (req, res) => {
   const data = await model.detail_treatHis(req.query.id);
   const patientTrailDown = await model.viewPatientsDetail_PatientTrailDown(req.query.id);
   const patientTrailUp = await model.viewPatientsDetail_PatientTrailUp(req.query.id);
-  res.render("PatientDetail", {
+  res.render("patientDetail", {
     patient:patient[0],
     detail: data,
     trailDown: patientTrailDown,
     trailUp: patientTrailUp,
-    script:["../PatientList.js"],
+    script:["../patientList.js"],
   });
 });
 
