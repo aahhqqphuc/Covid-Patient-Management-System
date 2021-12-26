@@ -16,13 +16,12 @@ app.use(
 );
 app.use("/order", require("./controllers/home.C"));
 
+app.use("/product", require("./controllers/product.C"));
 
 app.use("/patient", require("./controllers/patient.C"));
 
-
 app.use("/admin", require("./controllers/admin.C"));
 
-
-app.use(express.static(__dirname+'/views'));
+app.use(express.static(__dirname + "/views"));
 
 app.listen(3000);
