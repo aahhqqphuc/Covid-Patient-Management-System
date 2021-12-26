@@ -4,6 +4,7 @@ const pStatusM = require('../models/patientStatus.M');
 const patientM = require('../models/patient.M');
 const treatmentHistoryM = require('../models/treatmentHistory.M');
 const db = require('../models/db');
+const axios = require("axios");
 
 // get time
 const dnow = new Date;
@@ -16,13 +17,13 @@ router.get('/patient', async (req, res) => {
 
     const pStatusNow = pStatus.filter((per) => { return per.ngay_cap_nhat.toString().includes(dateNow) })
 
-    const pf0 = pStatus.filter((per) => { return per.trang_thai_moi == 0 })
-    const pf1 = pStatus.filter((per) => { return per.trang_thai_moi == 1 })
-    const pf2 = pStatus.filter((per) => { return per.trang_thai_moi == 2 })
-    const pf3 = pStatus.filter((per) => { return per.trang_thai_moi == 3 })
-    const pCured = pStatusNow.filter((per) => { return per.trang_thai_moi == -1 })
+    const pf0 = pStatus.filter((per) => { return per.trang_thai == 0 })
+    const pf1 = pStatus.filter((per) => { return per.trang_thai == 1 })
+    const pf2 = pStatus.filter((per) => { return per.trang_thai == 2 })
+    const pf3 = pStatus.filter((per) => { return per.trang_thai == 3 })
+    const pCured = pStatusNow.filter((per) => { return per.trang_thai == -1 })
     const pMove = treatmentHistory.filter((per) => { return per.ngay_cap_nhat.toString().includes(dateNow) })
-    const totalCured = pStatus.filter((per) => { return per.trang_thai_moi == -1 })
+    const totalCured = pStatus.filter((per) => { return per.trang_thai == -1 })
 
     res.render('patientStatistic', {
         timeUpdate: dateNow,
@@ -64,32 +65,58 @@ router.get('/product', async (req, res) => {
 })
 
 router.get('/payment', async (req, res) => {
-    const query = `SELECT hd.*, bn.ho_ten, bn.du_no FROM public.hoa_don hd, public.benh_nhan_covid bn
-    where bn.id_benh_nhan = hd.id_nguoi_mua`;
-
-    const orders = await db.runQuery(query);
-
-    orders.forEach((order) => {
-        order.ngay_mua = order.ngay_mua.getDate() + " / " + (order.ngay_mua.getMonth() + 1) + " / " + order.ngay_mua.getFullYear();
+    axios({
+        method: 'get',
+        url: '',
+        responseType: 'json'
     })
+        .then(function (response) {
+            const orders = response.data;
+           
+            res.render('paymentStatistic', {orders});
+        })
+        .catch(function (err) {
+            console.log("err /payment ", err);
+        })
 
-    res.render('paymentStatistic', {
-        order: orders
-    });
+    // orders.forEach((order) => {
+    //     order.ngay_mua = order.ngay_mua.getDate() + " / " + (order.ngay_mua.getMonth() + 1) + " / " + order.ngay_mua.getFullYear();
+    // })
+
 })
 
-router.get('/paymentAcc', async (req, res) => {
-    
-
-    res.render('minPay', {
-        payAcc: payAccs
-    });
+router.get('/minPayment', async (req, res) => {
+    axios({
+        method: 'get',
+        url: '',
+        responseType: 'json'
+    })
+        .then(function (response) {
+            const level = response.data;
+           
+            res.render('minPayment', {level});
+        })
+        .catch(function (err) {
+            console.log("err /minPayment ", err);
+        })
 })
 
-router.post('/paymentAcc/edit/:idAcc', async (req, res) => {
-    const newMinPay = req.body.newMinPay;
-    console.log(req.params.idAcc, newMinPay);
-    res.redirect('../../paymentAcc')
+router.post('/minPayment', async (req, res) => {
+    axios({
+        method: 'post',
+        url: '',
+        data: req.body,
+    })
+        .then(function (response) {
+            res.redirect();
+        })
+        .catch(function (err) {
+            console.log("err /minPayment ", err);
+        })
+})
+
+router.get('/paymentManagement', async (req, res) => {
+    res.render('paymentManagement');
 })
 
 module.exports = router;

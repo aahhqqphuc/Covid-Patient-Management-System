@@ -1,59 +1,53 @@
 <link rel="stylesheet" href="/css/sb-admin-2.min.css">
-<div id="wrapper">
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
 
-        <ul class="row justify-content-center nav nav-tabs bg-light">
-            <li class="nav-item">
-                <a class="nav-link statistic-nav-link" href="./patient">Thông tin ca nhiễm</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link statistic-nav-link" href="./product">Thông tin về gói nhu yếu phẩm</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link statistic-nav-link active" href="./payment">Thông tin dư nợ, thanh toán</a>
-            </li>
-        </ul>
+<div id="content-wrapper" class="d-flex flex-column">
 
-        <!-- Main Content -->
-        <div id="content" class="row justify-content-center content-statistical">
-            <div class="container-fluid col-lg-10 col-md-10 col-sm-12">
-                <div class="row">
-                    <div class="col m-2">
-                        <h1 class="h2 mb-0 text-gray-800">Thống kê dư nợ, thanh toán</h1>
-                    </div>
+    <ul class="row justify-content-center nav nav-tabs bg-light">
+        <li class="nav-item">
+            <a class="nav-link statistic-nav-link" href="./patient">Thông tin ca nhiễm</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link statistic-nav-link" href="./product">Thông tin về gói nhu yếu phẩm</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link statistic-nav-link active" href="./payment">Thông tin dư nợ, thanh toán</a>
+        </li>
+    </ul>
 
-                </div>
-                <div class="" style="overflow: scroll;">
-                    <table class="table table-bordered" id="payment-Statistic-Table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Id hóa đơn</th>
-                                <th scope="col">Tên người mua</th>
-                                <th scope="col">Ngày mua</th>
-                                <th scope="col">Dư nợ</th>
-                                <th scope="col">Trạng thái</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each order}}
-                            <tr>
-                                <th scope="row">{{id_hoa_don}}</th>
-                                <td><a href="">{{ho_ten}}</a></td>
-                                <td>{{ngay_mua}}</td>
-                                <td>{{du_no}}</td>
-                                <td>{{trang_thai}}</td>
-                            </tr>
-                            {{/each}}
-
-                        </tbody>
-                    </table>
+    <!-- Main Content -->
+    <div id="content" class="row justify-content-center content-statistical">
+        <div class="container-fluid col-lg-10 col-md-10 col-sm-12">
+            <div class="row">
+                <div class="col m-2">
+                    <h1 class="h2 mb-0 text-gray-800">Thống kê dư nợ, thanh toán</h1>
                 </div>
 
             </div>
-        </div>
-        <!-- End of Main Content -->
+            <table class="table table-bordered" id="payment-Statistic-Table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Id hóa đơn</th>
+                        <th scope="col">Tên người mua</th>
+                        <th scope="col">Ngày mua</th>
+                        <th scope="col">Dư nợ</th>
+                        <th scope="col">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each orders}}
+                    <tr>
+                        <th scope="row">{{id_hoa_don}}</th>
+                        <td><a href="">{{ho_ten}}</a></td>
+                        <td>{{ngay_mua}}</td>
+                        <td>{{du_no}}</td>
+                        <td>{{trang_thai}}</td>
+                    </tr>
+                    {{/each}}
 
+                </tbody>
+            </table>
+        </div>
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Main Content -->
+
 </div>
