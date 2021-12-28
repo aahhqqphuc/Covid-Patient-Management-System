@@ -1,7 +1,7 @@
 const db = require("./db");
 
-const tbName = "hoa_don";
-const idFieldName = "id_hoa_don";
+const tbName = "noi_dieu_tri";
+const idFieldName = "mavitri";
 
 module.exports = {
   all: async () => {

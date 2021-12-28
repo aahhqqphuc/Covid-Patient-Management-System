@@ -3,6 +3,22 @@ var curYear = new Date().getFullYear();
 yob.setAttribute("max", curYear);
 yob.setAttribute("value", curYear);
 
+$("#add-patient-form").submit(function () {
+  if (
+    checkName() &&
+    checkId() &&
+    checkProvince() &&
+    checkDistrict() &&
+    checkCommune() &&
+    checkRelatedPatient() &&
+    checkState()
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
 jQuery(document).ready(function ($) {
   $("#province").change(async function (event) {
     $("#district").empty();

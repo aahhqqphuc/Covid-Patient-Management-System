@@ -1,6 +1,7 @@
+require("dotenv").config();
+
 const express = require("express"),
   app = express(),
-  port = 3000,
   exphbs = require("express-handlebars");
 const hbs = exphbs.create({
   extname: "hbs",
@@ -17,8 +18,6 @@ app.use(
 
 app.use(express.static(__dirname + "/public"));
 
-//app.use(express.static(__dirname + "/views"));
-
 app.use("/patient", require("./controllers/patient.C"));
 
 app.use("/address", require("./controllers/address.C"));
@@ -33,4 +32,4 @@ app.get("/", (req, res) => {
   res.render("home", {});
 });
 
-app.listen(port);
+app.listen(process.env.PORT);

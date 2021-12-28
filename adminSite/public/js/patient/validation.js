@@ -1,19 +1,3 @@
-$("#add-patient-form").submit(function () {
-  if (
-    checkName() ||
-    checkId() ||
-    checkProvince() ||
-    checkDistrict() ||
-    checkCommune() ||
-    checkRelatedPatient() ||
-    checkState()
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-});
-
 function checkName() {
   var reg = /^[a-zA-Z ]{2,}$/;
   var name = $("#name").val();
@@ -159,5 +143,17 @@ function checkRelatedCommune() {
   }
 
   $("#related-commune-danger").attr("hidden", true);
+  return true;
+}
+
+function checkPlace() {
+  var place = $("#place").val();
+
+  if (place === "place-empty") {
+    $("#place-danger").attr("hidden", false);
+    return false;
+  }
+
+  $("#place-danger").attr("hidden", true);
   return true;
 }

@@ -1,15 +1,17 @@
+require("dotenv").config();
+
 const pgPromise = require("pg-promise")({
   capSQL: true,
 });
 
 const schema = "public";
 const connectionString = {
-  user: "postgres",
-  host: "localhost",
-  database: "WebProject",
-  password: "123456",
-  port: 5432,
-  max: 30,
+  user: process.env.user,
+  host: process.env.host,
+  database: process.env.database,
+  password: process.env.password,
+  port: process.env.db_port,
+  max: process.env.db_max,
 };
 
 const db = pgPromise(connectionString);

@@ -24,9 +24,12 @@ module.exports = {
   },
 
   get: async (fieldName, value) => {
-    var query = `SELECT bn.*,tt.trang_thai, vt.tennoidieutri  FROM public.benh_nhan_covid bn join public.trang_thai_benh_nhan tt on bn.id_benh_nhan = tt.id_benh_nhan join lich_su_dieu_tri ls on ls.id_benh_nhan = bn.id_benh_nhan join noi_dieu_tri vt on vt.mavitri = ls.mavitri WHERE ls.status = '1'
-  ORDER BY bn.id_benh_nhan ASC`;
-    const res = await db.getByQuery(query);
+    var query = `SELECT bn.*,tt.trang_thai, vt.tennoidieutri  
+    FROM public.benh_nhan_covid bn join public.trang_thai_benh_nhan tt on bn.id_benh_nhan = tt.id_benh_nhan 
+      join lich_su_dieu_tri ls on ls.id_benh_nhan = bn.id_benh_nhan join noi_dieu_tri vt on vt.mavitri = ls.mavitri 
+      WHERE ls.status = '1'
+    ORDER BY bn.id_benh_nhan ASC`;
+    const res = await db.runQuery(query);
     return res;
   },
 
@@ -37,11 +40,11 @@ module.exports = {
 
   detail_treatHis: async (id) => {
     var query = `SELECT CASE WHEN ls.status = 1 THEN 'Hiện tại'
-  WHEN ls.status = 2 THEN 'Quá khứ' END as status,ngay_di_chuyen,ngay_cap_nhat,vt.tennoidieutri,tinh,huyen,xa FROM public.lich_su_dieu_tri ls join noi_dieu_tri vt on ls.mavitri =
-  vt.mavitri
+  WHEN ls.status = 2 THEN 'Quá khứ' END as status,ngay_di_chuyen,ngay_cap_nhat,vt.tennoidieutri,tinh,huyen,xa 
+  FROM public.lich_su_dieu_tri ls join noi_dieu_tri vt on ls.mavitri = vt.mavitri
     where ls.id_benh_nhan = '${id}'
     ORDER BY ls.mavitri ASC`;
-    const res = await db.getByQuery(query);
+    const res = await db.runQuery(query);
     res.forEach((element) => {
       element.ngay_di_chuyen =
         "Ngày " +
@@ -62,19 +65,21 @@ module.exports = {
   },
 
   viewPatientsDetail_PatientTrailDown: async (id) => {
-    var query = `SELECT bn.*,lq.noi_tiep_xuc_tinh,noi_tiep_xuc_huyen,noi_tiep_xuc_xa FROM public.benh_nhan_covid bn join public.nguoi_lien_quan lq on bn.id_benh_nhan = lq.id_nguoi_bi_lay
+    var query = `SELECT bn.*,lq.noi_tiep_xuc_tinh,noi_tiep_xuc_huyen,noi_tiep_xuc_xa 
+    FROM public.benh_nhan_covid bn join public.nguoi_lien_quan lq on bn.id_benh_nhan = lq.id_nguoi_bi_lay
   where lq.id_nguoi_lay = '${id}'
 ORDER BY bn.id_benh_nhan ASC `;
-    const res = await db.getByQuery(query);
+    const res = await db.runQuery(query);
 
     return res;
   },
 
   viewPatientsDetail_PatientTrailUp: async (id) => {
-    var query = `SELECT bn.*,lq.noi_tiep_xuc_tinh,noi_tiep_xuc_huyen,noi_tiep_xuc_xa FROM public.benh_nhan_covid bn join public.nguoi_lien_quan lq on bn.id_benh_nhan = lq.id_nguoi_lay
+    var query = `SELECT bn.*,lq.noi_tiep_xuc_tinh,noi_tiep_xuc_huyen,noi_tiep_xuc_xa 
+    FROM public.benh_nhan_covid bn join public.nguoi_lien_quan lq on bn.id_benh_nhan = lq.id_nguoi_lay
   where lq.id_nguoi_bi_lay = '${id}'
 ORDER BY bn.id_benh_nhan ASC `;
-    const res = await db.getByQuery(query);
+    const res = await db.runQuery(query);
 
     return res;
   },

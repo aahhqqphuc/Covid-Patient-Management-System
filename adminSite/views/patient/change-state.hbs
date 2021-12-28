@@ -1,0 +1,31 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/patient">Bệnh nhân</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Chuyển trạng thái bệnh nhân</li>
+  </ol>
+</nav>
+<form method="post" action="/patient/change-state/{{id}}" id="change-state-form">
+  <div class="col-3">
+    <label for="floatingInput">Mã bệnh nhân: {{id}}</label>
+  </div>
+  <div class="col-3">
+    <label for="floatingInput">Trạng thái cũ: {{patient_state}}</label>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Trạng thái mới: </label>
+    <select name="state" id="state" required>
+      <option value="state-empty">---Chọn trạng thái---</option>
+      {{#each states}}
+        <option value={{id_trang_thai}}>{{trang_thai}}</option>
+      {{/each}}
+    </select>
+    <br />
+    <span class="text-danger" hidden id="state-danger">Chưa chọn trạng thái</span>
+  </div>
+  <div class="col-2 d-grid mt-2">
+    <button class="btn btn-primary" type="submit">Chuyển trạng thái</button>
+  </div>
+</form>
+
+<script type="text/javascript" src="/js/patient/change-state.js"></script>
+<script type="text/javascript" src="/js/patient/validation.js"></script>

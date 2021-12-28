@@ -47,6 +47,9 @@
     <div class="col-6">
       <h1>Covid patient list</h1>
     </div>
+    <div class="col-6 d-flex justify-content-end">
+      <a href="/patient/add" type="button" class="btn btn-primary align-self-center">Thêm bệnh nhân mới</a>
+    </div>
 
   </div>
 
@@ -76,7 +79,15 @@
             <a href="/patient/detail?id={{this.id_benh_nhan}}" type="button" class="btn btn-light btn-small"><i
                 class="bi bi-eye"
               ></i>
-              Detail</a>
+              Chi tiết</a>
+            <a href="/patient/change-state/{{this.id_benh_nhan}}" type="button" class="btn btn-light btn-small"><i
+                class="bi bi-pencil"
+              ></i>
+              Chuyển trạng thái</a>
+            <a href="/patient/change-place/{{this.id_benh_nhan}}" type="button" class="btn btn-light btn-small"><i
+                class="bi bi-pencil"
+              ></i>
+              Chuyển nơi điều trị</a>
           </td>
         </tr>
       {{/each}}
