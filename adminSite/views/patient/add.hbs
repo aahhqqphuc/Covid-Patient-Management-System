@@ -1,0 +1,140 @@
+<link rel="stylesheet" href="/css/patient/add.css" />
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/patient">Bệnh nhân</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Thêm mới bệnh nhân</li>
+  </ol>
+</nav>
+
+<form method="post" action="/patient/add" id="add-patient-form">
+  <div class="col-3">
+    <label for="floatingInput">Họ tên bệnh nhân</label>
+    <div class="form-floating mb-3">
+      <input required type="text" class="form-control" name="name" id="name" />
+      <span class="text-danger" hidden id="name-danger">Tên không đúng định dạng</span>
+    </div>
+  </div>
+  <div class="col-3">
+    <label for="floatingInput">Loại giấy tờ</label>
+    <div class="form-floating mb-3">
+      <select name="idType" id="idType" required>
+        <option value="idCard">Chứng minh nhân dân</option>
+        <option value="citiIdCard">Căn cước công dân</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="form-floating mb-3">
+      <input required type="text" class="form-control" name="id" id="id" />
+      <span class="text-danger" hidden id="id-danger">CMND/CCCD không đúng định dạng</span>
+    </div>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Năm sinh</label>
+    <div class="form-floating mb-3">
+      <input type="number" min="1900" max="*jsvariable*" step="1" value="*jsvariable*" id="yob" name="yob" />
+    </div>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Tỉnh</label>
+    <div class="form-floating mb-3">
+      <select name="province" id="province" required>
+        <option value="province-empty">---Chọn thành phố / tỉnh---</option>
+        {{#each provinces}}
+          <option value={{id_tinh}}>{{ten_tinh}}</option>
+        {{/each}}
+      </select>
+      <br />
+      <span class="text-danger" hidden id="province-danger">Chưa chọn thành phố / tỉnh</span>
+    </div>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Huyện</label>
+    <div class="form-floating mb-3">
+      <select name="district" id="district" required>
+        <option value="district-empty">---Chọn quận / huyện---</option>
+      </select>
+      <br />
+      <span class="text-danger" hidden id="district-danger">Chưa chọn quận / huyện</span>
+    </div>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Xã</label>
+    <div class="form-floating mb-3">
+      <select name="commune" id="commune" required>
+        <option value="commune-empty">---Chọn phường / xã---</option>
+      </select>
+      <br />
+      <span class="text-danger" hidden id="commune-danger">Chưa chọn phường / xã</span>
+    </div>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Trạng thái</label>
+    <div class="form-floating mb-3">
+      <select name="state" id="state" required>
+        <option value="state-empty">---Chọn trạng thái---</option>
+        {{#each states}}
+          <option value={{id_trang_thai}}>{{trang_thai}}</option>
+        {{/each}}
+      </select>
+      <br />
+      <span class="text-danger" hidden id="state-danger">Chưa chọn trạng thái</span>
+    </div>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Liên quan đến bệnh nhân</label>
+    <div class="form-floating mb-3">
+      <select name="related-patient" id="related-patient" required>
+        <option value="related-patient-empty">---Chọn bệnh nhân liên quan---</option>
+        {{#each patients}}
+          <option value={{id_benh_nhan}}>{{id_benh_nhan}}</option>
+        {{/each}}
+      </select>
+      <br />
+      <span class="text-danger" hidden id="related-patient-danger">Chưa chọn bệnh nhân liên quan</span>
+    </div>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Nơi tiếp xúc</label>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Tỉnh</label>
+    <div class="form-floating mb-3">
+      <select name="related-province" id="related-province" required>
+        <option value="related-province-empty">---Chọn thành phố / tỉnh---</option>
+        {{#each provinces}}
+          <option value={{id_tinh}}>{{ten_tinh}}</option>
+        {{/each}}
+      </select>
+      <br />
+      <span class="text-danger" hidden id="related-province-danger">Chưa chọn thành phố / tỉnh</span>
+    </div>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Huyện</label>
+    <div class="form-floating mb-3">
+      <select name="related-district" id="related-district" required>
+        <option value="related-district-empty">---Chọn quận / huyện---</option>
+      </select>
+      <br />
+      <span class="text-danger" hidden id="related-district-danger">Chưa chọn quận / huyện</span>
+    </div>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Xã</label>
+    <div class="form-floating mb-3">
+      <select name="related-commune" id="related-commune" required>
+        <option value="related-commune-empty">---Chọn phường / xã---</option>
+      </select>
+      <br />
+      <span class="text-danger" hidden id="related-commune-danger">Chưa chọn phường / xã</span>
+    </div>
+  </div>
+  <div class="col-12 d-grid mt-2">
+    <button class="btn btn-primary col-1" type="submit">Thêm</button>
+  </div>
+</form>
+
+<script type="text/javascript" src="/js/patient/add-patient.js"></script>
+<script type="text/javascript" src="/js/patient/validation.js"></script>
