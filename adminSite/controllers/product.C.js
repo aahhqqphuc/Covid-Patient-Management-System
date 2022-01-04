@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const model = require("../models/product.M");
+const productM = require("../models/product.M");
 module.exports = router;
 const upload = require("../middlewares/upload");
 const fs = require("fs-extra");
 router.get("/", async (req, res) => {
-  const data = await model.all();
+  const data = await productM.all();
   res.render("product/productList", {
+    layout: "adminLayout",
     products: data,
     script: ["../product/productList.js"],
   });
@@ -16,15 +17,10 @@ router.get("/add", async (req, res) => {
 });
 router.get("/edit/:id", async (req, res) => {
   let id = req.params.id;
-  let cats = await categoryM.all();
-  let pro = await productM.get(id);
+  let pro = await productM.getById(id);
+  console.log(pro);
   res.render("product/editProduct", {
-    cssP: () => "css",
-    scriptsP: () => "scripts",
-    footerP: () => "footer",
-    categories: cats.filter((x) => x.CatID !== pro.CatID),
     product: pro,
-    selectedCat: cats.find((x) => x.CatID === pro.CatID),
   });
 });
 router.post("/product/edit/:id", upload.single("ImagePath"), async (req, res) => {
