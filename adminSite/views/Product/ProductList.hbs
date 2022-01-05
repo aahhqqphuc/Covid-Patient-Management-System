@@ -1,4 +1,4 @@
-<div class="row" style="padding-top: 60px;">
+<div class="row mb-3 mt-5">
     <div class="col-6">
         <h1> Danh sách nhu yếu phẩm</h1>
     </div>
@@ -6,7 +6,7 @@
         <a href="/product/add" type="button" class="btn btn-primary align-self-center">Create New Product</a>
     </div>
 </div>
-<table class="table table-bordered" id="datatablesSimple" data-filter-control='true' data-filter-show-clear='true'>
+<table class="table table-bordered w-100 ">
     <thead class="thead-dark">
         <tr>
             <th scope="col" data-filter-control='select'>Tên nhu yếu phẩm</th>
@@ -36,3 +36,7 @@
 
     </tbody>
 </table>
+
+<nav aria-label="Page navigation example">
+    {{{paginateHelper pagination paginationClass="pagination"}}}
+</nav>

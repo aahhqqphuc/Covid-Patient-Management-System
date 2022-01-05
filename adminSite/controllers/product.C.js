@@ -5,11 +5,13 @@ module.exports = router;
 const upload = require("../middlewares/upload");
 const fs = require("fs-extra");
 router.get("/", async (req, res) => {
-  const data = await productM.all();
+  const page = +req.query.page || 1;
+  const data = await productM.getPaging(page);
+  const total = await productM.count();
   res.render("product/productList", {
-    layout: "adminLayout",
+    layout: "managerLayout",
     products: data,
-    script: ["../product/productList.js"],
+    pagination: { page: parseInt(page), limit: 7, totalRows: total },
   });
 });
 router.get("/add", async (req, res) => {
