@@ -1,0 +1,71 @@
+<div class="container-fluid mt-5">
+    <h1 class="mt-4">Chỉnh sửa Nhu Yếu Phẩm</h1>
+    <a href="/product">
+        <button type="button" class="btn btn-lg btn-secondary align-self-center mb-3" onclick="goBack()">Trở
+            lại</button>
+    </a>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post" action="/product/edit/{{product.id_nhu_yeu_pham}}" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Tên Nhu yếu phẩm</label>
+                    <input type="text" class="form-control" id="title" name="ten_sanpham"
+                        value='{{product.ten_sanpham}}'>
+                </div>
+                <div class="form-group">
+                    <label for="basePrice">Giá</label>
+                    <input type="number" class="form-control" id="basePrice" name="gia_tien" value={{product.gia_tien}}>
+                </div>
+                <div class="form-group">
+                    <label for="basePrice">Đơn vị</label>
+                    <input class="form-control" readonly id="basePrice" value='VND'>
+                </div>
+                <div class="form-group">
+                    <label for="description">Mô tả</label>
+                    <textarea class="form-control" id="description" rows="3" name="mo_ta">{{product.mo_ta}}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="description">Số lượng còn lại</label>
+                    <input type="number" class="form-control" name="con_lai" value={{product.con_lai}}>
+                </div>
+                <label for="description">Hình ảnh</label>
+                <div class="form-group card-group row row-cols-1 row-cols-md-3 d-flex align-items-stretch">
+
+                    {{#each images}}
+                    <div class="col-md-2 mb-4">
+                        <div class="card mr-2 border-0">
+                            <img src=" {{url}}" class="mr-5 rounded border border-primary" width="100%" height="200px">
+                            <div class="card-body pl-0">
+                                <a href="/product/image/delete/{{id_hinh_anh}}"><button type="button"
+                                        class="btn btn-lg btn-danger align-self-center " data-toggle="modal"
+                                        data-target="#removeModal">Xóa</button></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{/each}}
+                </div>
+                <label for="description">Thêm Hình ảnh</label>
+                <div class="col mb-4">
+                    <div class="card mr-2 border-0" width="80%" height="300px">
+                        <div class=" form-floating ">
+                            <input data-preview-file-type=" text" class='file' type="file" required type="text"
+                                class="form-control" id='image' name="ImagePath" multiple>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex ">
+                    <button type="submit" class="btn btn-lg btn-primary align-self-center mr-5">Cập nhật</button>
+                </div>
+            </form>
+
+
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function goBack() {
+        window.history.back();
+    }
+</script>

@@ -24,6 +24,8 @@ app.use("/address", require("./controllers/address.C"));
 
 app.use("/product", require("./controllers/product.C"));
 
+app.use("/product-package", require("./controllers/product-package.C"));
+
 app.use("/admin", require("./controllers/admin.C"));
 
 app.use("/statistic", require("./controllers/statistic.C"));

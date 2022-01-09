@@ -50,7 +50,6 @@ router.post("/add", upload.array("ImagePath"), async (req, res) => {
     ten_sanpham: data.ten_sanpham,
     gia_tien: data.gia_tien,
     con_lai: data.con_lai,
-    mo_ta: data.mo_ta,
   };
   const rs = await productM.add(product);
   const newId = rs[0].id_nhu_yeu_pham;
@@ -84,35 +83,17 @@ router.get("/edit/:id", async (req, res) => {
     images: data.images,
   });
 });
-router.post("/edit/:id", upload.array("ImagePath"), async (req, res) => {
-  let data = req.body;
-  let id = req.params.id;
-  var product = {
-    id_nhu_yeu_pham: id,
-    ten_sanpham: data.ten_sanpham,
-    gia_tien: data.gia_tien,
-    con_lai: data.con_lai,
-    mo_ta: data.mo_ta,
-  };
+router.post("/edit/:id", async (req, res) => {
+  let product = req.body;
   const rs = await productM.edit(product);
-  console.log(rs);
-  if (rs) {
-    req.files.forEach(async (item) => {
-      try {
-        await productM.addImg({ id_nhu_yeu_pham: id, url: "/img/" + item.filename });
-      } catch (error) {
-        console.log("add pro error", error);
-      }
-    });
-  }
-  res.redirect("/product");
+  res.redirect("/");
 });
 
 router.get("/delete/:id", async (req, res) => {
   const id = req.params.id;
   let data = await productM.getById(id);
   const rs = await productM.delete(id);
-  if (rs) {
+  if (1) {
     data.images.forEach(async (item) => {
       try {
         await fs.remove("public" + item.url);
@@ -122,18 +103,4 @@ router.get("/delete/:id", async (req, res) => {
     });
   }
   res.redirect("/product");
-});
-
-router.get("/image/delete/:id", async (req, res) => {
-  const id = req.params.id;
-  const img = await productM.deleteImg(id);
-  console.log("hình", img);
-  if (img) {
-    try {
-      await fs.remove("public" + img[0].url);
-    } catch (err) {
-      console.error("delete image file error", err);
-    }
-  }
-  res.redirect("/product/edit/" + img[0].id_nhu_yeu_pham);
 });
