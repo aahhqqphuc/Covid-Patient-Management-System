@@ -33,6 +33,7 @@ function checkId() {
     case "idCard":
       reg = /[0-9]{9}/;
       if (!reg.test(id)) {
+        $("#id-danger").text("CMND không đúng định dạng");
         $("#id-danger").attr("hidden", false);
         return false;
       }
@@ -40,6 +41,7 @@ function checkId() {
     case "citiIdCard":
       reg = /[0-9]{12}/;
       if (!reg.test(id)) {
+        $("#id-danger").text("CCCD không đúng định dạng");
         $("#id-danger").attr("hidden", false);
         return false;
       }
@@ -155,5 +157,33 @@ function checkPlace() {
   }
 
   $("#place-danger").attr("hidden", true);
+  return true;
+}
+
+async function checkIdNumber(idNumber) {
+  $("#id-danger").attr("hidden", true);
+  let check;
+
+  await $.ajax({
+    url: "/patient/check-id-number",
+    method: "get",
+    data: {
+      idNumber: idNumber,
+    },
+    success: function (response) {
+      check = response.check;
+    },
+    error: function (response) {
+      alert("server error");
+    },
+  });
+
+  if (check == true) {
+    $("#id-danger").text("CCCD/CCCD đã tồn tại");
+    $("#id-danger").attr("hidden", false);
+    console.log(check);
+    return false;
+  }
+  $("#id-danger").attr("hidden", true);
   return true;
 }

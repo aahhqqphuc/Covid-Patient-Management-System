@@ -29,7 +29,6 @@ module.exports = {
   },
 
   edit: async (id) => {
-    console.log("fd");
     var query = `update public.lich_su_trang_thai_benh_nhan
     set status = 0
     where id_benh_nhan = ${id} and status = 1`;

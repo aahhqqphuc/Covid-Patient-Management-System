@@ -4,6 +4,9 @@ yob.setAttribute("max", curYear);
 yob.setAttribute("value", curYear);
 
 $("#add-patient-form").submit(function () {
+  console.log("dfdfsdf" + checkIdNumber("273701796"));
+  console.log("rel: " + checkRelatedCommune());
+
   if (
     checkName() &&
     checkId() &&
@@ -11,8 +14,13 @@ $("#add-patient-form").submit(function () {
     checkDistrict() &&
     checkCommune() &&
     checkRelatedPatient() &&
-    checkState()
+    checkState() &&
+    checkRelatedProvince() &&
+    checkRelatedDistrict() &&
+    checkRelatedCommune() &&
+    checkIdNumber($("#id").val())
   ) {
+    console.log("toi");
     return true;
   } else {
     return false;

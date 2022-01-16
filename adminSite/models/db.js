@@ -97,3 +97,25 @@ exports.runQuery = async (query) => {
     console.log("error db/runQuery :", error);
   }
 };
+
+exports.tableName = {
+  benh_nhan_covid: "benh_nhan_covid",
+  chi_tiet_hoa_don: "chi_tiet_hoa_don",
+  chi_tiet_nhu_yeu_pham: "chi_tiet_nhu_yeu_pham",
+  danh_sach_nhu_yeu_pham: "danh_sach_nhu_yeu_pham",
+  giao_dich: "giao_dich",
+  goi_nhu_yeu_pham: "goi_nhu_yeu_pham",
+  han_muc: "han_muc",
+  hinh_anh_san_pham: "hinh_anh_san_pham",
+  hoa_don: "hoa_don",
+  huyen: "huyen",
+  lich_su_dieu_tri: "lich_su_dieu_tri",
+  nguoi_lien_quan: "nguoi_lien_quan",
+  nhu_yeu_pham: "nhu_yeu_pham",
+  noi_dieu_tri: "noi_dieu_tri",
+  tai_khoan: "tai_khoan",
+  tai_khoan_thanh_toan: "tai_khoan_thanh_toan",
+  tinh: "tinh",
+  trang_thai_benh_nhan: "trang_thai_benh_nhan",
+  xa: "xa",
+};

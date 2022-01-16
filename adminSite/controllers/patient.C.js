@@ -7,6 +7,7 @@ const stateM = require("../models/state.M");
 const relatedPatientM = require("../models/relatedPatient.M");
 const treatmentHistoryM = require("../models/treatmentHistory.M");
 const treatmentPlaceM = require("../models/treatmentPlace.M");
+const { createAccount } = require("../utils/account");
 
 router.get("/add", async (req, res) => {
   let patient = await patientM.all();
@@ -49,6 +50,10 @@ router.post("/add", async (req, res) => {
     noi_tiep_xuc_xa: req.body["related-commune"],
   };
   await relatedPatientM.add(relatedPatient);
+
+  const user = await createAccount(req.body.id);
+
+  console.log(user);
 
   res.render("patient/patientList");
 });
@@ -131,6 +136,17 @@ router.get("/detail", async (req, res) => {
     trailDown: patientTrailDown,
     trailUp: patientTrailUp,
     script: ["../patient/patientList.js"],
+  });
+});
+
+router.get("/check-id-number", async (req, res) => {
+  const idNumber = req.query.idNumber;
+
+  const check = await patientM.checkExistsIdNumber(idNumber);
+
+  res.json({
+    msg: "success",
+    check: check,
   });
 });
 
