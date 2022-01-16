@@ -113,7 +113,7 @@ router.get("/all", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const data = await patientM.all();
+  const data = await patientM.get();
   res.render("patient/patientList", {
     patients: data,
     script: ["../patient/patientList.js"],

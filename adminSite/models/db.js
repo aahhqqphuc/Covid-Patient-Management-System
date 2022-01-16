@@ -97,3 +97,21 @@ exports.runQuery = async (query) => {
     console.log("error db/runQuery :", error);
   }
 };
+
+
+
+module.exports.addnew = async (tbName,tbCol,valueStr) =>{
+  console.log(valueStr);
+  var table  = new pgPromise.helpers.TableName({table: tbName,schema: schema});
+  var qStr = pgPromise.as.format(`INSERT INTO  $1(${tbCol}) VALUES (${valueStr})`,table);
+  try{
+      await db.any(qStr);
+      
+      return ["success"];
+  }
+  catch(error)
+  {
+      return ["error",error];
+  }
+  
+}
