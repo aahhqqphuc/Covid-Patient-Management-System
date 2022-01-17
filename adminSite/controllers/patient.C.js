@@ -55,7 +55,7 @@ router.post("/add", async (req, res) => {
   };
   await relatedPatientM.add(relatedPatient);
 
-  const user = await createAccount(req.body.cmnd);
+  const user = await createAccount(req.body.cmnd, req.body.cmnd);
 
   await accountM.add(user);
 
@@ -123,7 +123,7 @@ router.get("/all", async (req, res) => {
   res.send(data);
 });
 
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   const data = await patientM.get();
   res.render("patient/patientList", {
     patients: data,
