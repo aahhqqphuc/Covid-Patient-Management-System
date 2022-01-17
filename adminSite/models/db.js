@@ -56,7 +56,7 @@ exports.add = async (tbName, entity) => {
     const res = await db.any(query);
     return res;
   } catch (error) {
-    console.log("error db/add :", error);
+    console.log("error db/add :", query);
   }
 };
 
