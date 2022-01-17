@@ -1,11 +1,10 @@
 const bcrypt = require("bcrypt");
-const passport = require("passport");
 const saltRounds = 10;
 
 async function createAccount(identityNumber) {
   const passwordHashed = await bcrypt.hash(identityNumber, saltRounds);
   const user = {
-    user_name: identityNumber,
+    username: identityNumber,
     password: passwordHashed,
     role: "user",
     status: 0,
@@ -13,4 +12,8 @@ async function createAccount(identityNumber) {
   return user;
 }
 
-module.exports = { createAccount };
+async function compare(password, hashPassword) {
+  return await bcrypt.compare(password, hashPassword);
+}
+
+module.exports = { createAccount, compare };

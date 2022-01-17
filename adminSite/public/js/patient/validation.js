@@ -160,30 +160,25 @@ function checkPlace() {
   return true;
 }
 
-async function checkIdNumber(idNumber) {
-  $("#id-danger").attr("hidden", true);
-  let check;
-
-  await $.ajax({
+function checkIdNumber(idNumber, callback) {
+  $.ajax({
     url: "/patient/check-id-number",
     method: "get",
     data: {
       idNumber: idNumber,
     },
     success: function (response) {
-      check = response.check;
+      console.log("check inside: " + response.check);
+      if (response.check == true) {
+        $("#id-danger").text("CCCD/CCCD đã tồn tại");
+        $("#id-danger").attr("hidden", false);
+      } else {
+        $("#id-danger").attr("hidden", true);
+        callback();
+      }
     },
     error: function (response) {
       alert("server error");
     },
   });
-
-  if (check == true) {
-    $("#id-danger").text("CCCD/CCCD đã tồn tại");
-    $("#id-danger").attr("hidden", false);
-    console.log(check);
-    return false;
-  }
-  $("#id-danger").attr("hidden", true);
-  return true;
 }

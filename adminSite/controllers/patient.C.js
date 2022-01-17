@@ -7,7 +7,9 @@ const stateM = require("../models/state.M");
 const relatedPatientM = require("../models/relatedPatient.M");
 const treatmentHistoryM = require("../models/treatmentHistory.M");
 const treatmentPlaceM = require("../models/treatmentPlace.M");
+const accountM = require("../models/account.M");
 const { createAccount } = require("../utils/account");
+const { auth } = require("../utils/auth");
 
 router.get("/add", async (req, res) => {
   let patient = await patientM.all();
@@ -25,7 +27,7 @@ router.post("/add", async (req, res) => {
 
   let patient = {
     ho_ten: req.body.name,
-    cmnd: req.body.id,
+    cmnd: req.body.cmnd,
     nam_sinh: req.body.yob,
     tinh: req.body.province,
     huyen: req.body.district,
@@ -44,16 +46,16 @@ router.post("/add", async (req, res) => {
 
   let relatedPatient = {
     id_nguoi_lay: req.body["related-patient"],
-    id_nguoi_lien_quan: result[0].id_benh_nhan,
+    id_nguoi_bi_lay: result[0].id_benh_nhan,
     noi_tiep_xuc_tinh: req.body["related-province"],
     noi_tiep_xuc_huyen: req.body["related-district"],
     noi_tiep_xuc_xa: req.body["related-commune"],
   };
   await relatedPatientM.add(relatedPatient);
 
-  const user = await createAccount(req.body.id);
+  const user = await createAccount(req.body.cmnd);
 
-  console.log(user);
+  await accountM.add(user);
 
   res.render("patient/patientList");
 });
@@ -117,7 +119,7 @@ router.get("/all", async (req, res) => {
   res.send(data);
 });
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   const data = await patientM.all();
   res.render("patient/patientList", {
     patients: data,
@@ -144,7 +146,7 @@ router.get("/check-id-number", async (req, res) => {
 
   const check = await patientM.checkExistsIdNumber(idNumber);
 
-  res.json({
+  res.status(200).json({
     msg: "success",
     check: check,
   });

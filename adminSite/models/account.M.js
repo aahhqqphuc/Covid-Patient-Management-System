@@ -5,4 +5,8 @@ module.exports = {
     const res = await db.add(db.tableName.tai_khoan, user);
     return res;
   },
+  findByUsername: async (username) => {
+    const res = await db.get(db.tableName.tai_khoan, "username", username);
+    return res;
+  },
 };

@@ -3,10 +3,8 @@ var curYear = new Date().getFullYear();
 yob.setAttribute("max", curYear);
 yob.setAttribute("value", curYear);
 
-$("#add-patient-form").submit(function () {
-  console.log("dfdfsdf" + checkIdNumber("273701796"));
-  console.log("rel: " + checkRelatedCommune());
-
+$("#add-patient-form").submit(function (e) {
+  e.preventDefault();
   if (
     checkName() &&
     checkId() &&
@@ -17,13 +15,33 @@ $("#add-patient-form").submit(function () {
     checkState() &&
     checkRelatedProvince() &&
     checkRelatedDistrict() &&
-    checkRelatedCommune() &&
-    checkIdNumber($("#id").val())
+    checkRelatedCommune()
   ) {
-    console.log("toi");
-    return true;
-  } else {
-    return false;
+    checkIdNumber($("#id").val(), () => {
+      $.ajax({
+        url: "/patient/add",
+        method: "post",
+        data: {
+          ho_ten: $("#name").val(),
+          cmnd: $("#id").val(),
+          nam_sinh: $("#yob").val(),
+          tinh: $("#province").val(),
+          huyen: $("#district").val(),
+          xa: $("#commune").val(),
+          id_trang_thai: $("#state").val(),
+          id_nguoi_lay: $("#related-patient").val(),
+          noi_tiep_xuc_tinh: $("#related-province").val(),
+          noi_tiep_xuc_huyen: $("#related-district").val(),
+          noi_tiep_xuc_xa: $("#related-commune").val(),
+        },
+        success: function (response) {
+          location.href = "/patient";
+        },
+        error: function (response) {
+          alert("server error");
+        },
+      });
+    });
   }
 });
 
