@@ -3,7 +3,7 @@ const router = express.Router();
 const productM = require("../models/product.M");
 module.exports = router;
 const upload = require("../middlewares/upload");
-const fs = require("fs-extra");
+
 router.get("/", async (req, res) => {
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 5;
@@ -31,7 +31,12 @@ router.get("/filter", async (req, res) => {
     price: priceFrom,
     sortby: sortby,
     asc: asc,
-    pagination: { page: parseInt(page), limit: pagesize, totalRows: result.total, queryParams: { price: priceFrom, search: search, sortby: sortby, asc: asc } },
+    pagination: {
+      page: parseInt(page),
+      limit: pagesize,
+      totalRows: result.total,
+      queryParams: { price: priceFrom, search: search, sortby: sortby, asc: asc },
+    },
   });
 });
 
@@ -69,6 +74,7 @@ router.get("/detail/:id", async (req, res) => {
     images: data.images,
   });
 });
+
 router.get("/edit/:id", async (req, res) => {
   let id = req.params.id;
   let data = await productM.getById(id);

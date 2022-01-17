@@ -1,10 +1,10 @@
 const express = require("express");
-const communeM = require("../models/commune.M");
-const districtM = require("../models/district.M");
+const addressM = require("../models/address.M");
 const router = express.Router();
 
 router.post("/get-district", async (req, res) => {
-  let data = await districtM.getByProvince(req.body.provinceId);
+  let data = await addressM.getDistrictByProvinceId(req.body.provinceId);
+
   res.json({
     msg: "success",
     data: data,
@@ -12,7 +12,7 @@ router.post("/get-district", async (req, res) => {
 });
 
 router.post("/get-commune", async (req, res) => {
-  let data = await communeM.getByDistrict(req.body.districtId);
+  let data = await addressM.getCommuneByDistrictId(req.body.districtId);
   res.json({
     msg: "success",
     data: data,

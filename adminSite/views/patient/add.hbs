@@ -27,7 +27,7 @@
   <div class="col-3">
     <div class="form-floating mb-3">
       <input required type="text" class="form-control" name="id" id="id" />
-      <span class="text-danger" hidden id="id-danger">CMND/CCCD không đúng định dạng</span>
+      <span class="text-danger" hidden id="id-danger"></span>
     </div>
   </div>
   <div class="col-6">
@@ -75,7 +75,7 @@
       <select name="state" id="state" required>
         <option value="state-empty">---Chọn trạng thái---</option>
         {{#each states}}
-          <option value={{id_trang_thai}}>{{trang_thai}}</option>
+          <option value={{id_trang_thai}}>{{ten_trang_thai}}</option>
         {{/each}}
       </select>
       <br />
