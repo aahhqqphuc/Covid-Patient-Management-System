@@ -20,21 +20,27 @@ router.get("/patient", async (req, res) => {
   const pf0 = pStatus.filter((per) => {
     return per.trang_thai == 'F0';
   });
+
   const pf1 = pStatus.filter((per) => {
     return per.trang_thai == 'F1';
   });
+
   const pf2 = pStatus.filter((per) => {
     return per.trang_thai == 'F2';
   });
+
   const pf3 = pStatus.filter((per) => {
     return per.trang_thai == 'F3';
   });
+
   const pCured = pStatusNow.filter((per) => {
     return per.trang_thai == -1;
   });
+
   const pMove = treatmentHistory.filter((per) => {
     return per.ngay_cap_nhat.toString().includes(dateNow);
   });
+
   const totalCured = pStatus.filter((per) => {
     return per.trang_thai == -1;
   });
@@ -85,9 +91,27 @@ router.get("/product/:time", async (req, res) => {
   });
 });
 
+
 router.get("/product", (req, res) => {
   res.redirect('/statistic/product/today');
 }),
+
+router.get("/payment", async (req, res) => {
+  axios({
+    method: "get",
+    url: "",
+    responseType: "json",
+  })
+    .then(function (response) {
+      const orders = response.data;
+
+      res.render("statictis/paymentStatistic", { orders });
+    })
+    .catch(function (err) {
+      console.log("err /payment ", err);
+    });
+});
+
 
 router.get("/payment", async (req, res) => {
   axios({

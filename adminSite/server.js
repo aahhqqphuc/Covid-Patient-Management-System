@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 
 
+const cookieParser = require("cookie-parser");
+
 const express = require("express"),
   app = express(),
   exphbs = require("express-handlebars");
@@ -22,13 +24,13 @@ app.use(
   })
 );
 
+app.use(cookieParser());
+
 app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
 });
-
-app.use(cookieParser());
 
 app.use(session({
     secret: 'keyboard cat',
@@ -52,7 +54,10 @@ app.use("/admin", require("./controllers/admin.C"));
 app.use("/statistic", require("./controllers/statistic.C"));
 
 app.use("/payment", require("./controllers/payment.C"));
+
 app.use("/payment-system", require("./controllers/paymentSystem.C"));
+
+app.use("/account", require("./controllers/account.C"));
 
 app.get("/", (req, res) => {
   res.render("home", {});
