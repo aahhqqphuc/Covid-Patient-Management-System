@@ -5,8 +5,16 @@ const idFieldName = "mavitri";
 const tbCol = `mavitri,tennoidieutri,tinh,huyen,xa,succhua,soluonghientai`
 module.exports = {
   all: async () => {
-    const res = await db.all();
+    try{
+    const res = await db.getDb.any('Select * from public.noi_dieu_tri')
     return res;
+    }
+    catch (error) {
+      console.log("error db/filter :", error);
+      console.log("query  :", query);
+    }
+
+    
   },
 
   get: async (fieldName, value) => {

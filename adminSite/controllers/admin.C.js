@@ -18,10 +18,10 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/hospital", async (req, res) => {
-  const data = await TreatmentPlacemodel.get();
+  const data = await TreatmentPlacemodel.all();
   res.render("admin/adminHospital", {
     layout: 'adminLayout',
-    admin: data,
+    hospital: data,
     script: ["../js/adminList.js"],
   });
 });
