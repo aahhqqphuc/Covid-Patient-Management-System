@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const pStatusM = require("../models/patientStatus.M");
 const treatmentHistoryM = require("../models/treatmentHistory.M");
-const db = require("../models/db");
+const orderM = require("../models/order.M");
 const axios = require("axios");
 
 // get time
@@ -18,19 +18,19 @@ router.get("/patient", async (req, res) => {
   });
 
   const pf0 = pStatus.filter((per) => {
-    return per.trang_thai == 0;
+    return per.trang_thai == 'F0';
   });
 
   const pf1 = pStatus.filter((per) => {
-    return per.trang_thai == 1;
+    return per.trang_thai == 'F1';
   });
 
   const pf2 = pStatus.filter((per) => {
-    return per.trang_thai == 2;
+    return per.trang_thai == 'F2';
   });
 
   const pf3 = pStatus.filter((per) => {
-    return per.trang_thai == 3;
+    return per.trang_thai == 'F3';
   });
 
   const pCured = pStatusNow.filter((per) => {
@@ -45,7 +45,8 @@ router.get("/patient", async (req, res) => {
     return per.trang_thai == -1;
   });
 
-  res.render("statictis/patientStatistic", {
+  res.render("statistic/patientStatistic", {
+    layout: "managerLayout",
     timeUpdate: dateNow,
     f0: pf0.length,
     f1: pf1.length,
@@ -58,31 +59,42 @@ router.get("/patient", async (req, res) => {
   });
 });
 
-router.get("/product", async (req, res) => {
-  const query = `select ct.id_san_pham, n.ten_sanpham, sum(ct.so_luong) so_luong
-    from public.chi_tiet_nhu_cau_yeu_pham ct, public.nhu_yeu_pham n where ct.id_san_pham = n.id_nhu_yeu_pham
-    group by ct.id_san_pham, n.ten_sanpham
-    order by so_luong desc`;
+router.get("/product/:time", async (req, res) => {
+  let timeLine = req.params.time || 'today';
 
-  const query1 = `select ct.id_goi_nhu_cau_yeu_pham, n.ten_goi, count(*) so_luong
-    from public.chi_tiet_hoa_don ct, public.goi_nhu_yeu_pham n where ct.id_goi_nhu_cau_yeu_pham = n.id_goi_nhu_yeu_pham
-    group by ct.id_goi_nhu_cau_yeu_pham, n.ten_goi
-    order by so_luong desc`;
+  const productDetail = await orderM.getOrderProductDetail(timeLine);
+  const packageDetail = await orderM.getOrderPackageDetail(timeLine);
 
-  const proDetail = await db.runQuery(query);
-  const packageDetail = await db.runQuery(query1);
+  const numProduct = await orderM.countOrderProductDetail(timeLine);
+  const numPackage = await orderM.countOrderPackageDetail(timeLine);
 
-  const numProd = proDetail.reduce((sum, item) => sum + parseInt(item.so_luong), 0);
-  const numPack = packageDetail.reduce((sum, item) => sum + parseInt(item.so_luong), 0);
+  if(timeLine == 'today'){
+    timeLine = `ngày ${dateNow}`;
+  }
+  else if(timeLine == 'this-month'){
+    timeLine = `tháng ${dnow.getMonth() + 1}/${dnow.getFullYear()}`
+  }
+  else if(timeLine == 'this-year'){
+    timeLine = `năm ${dnow.getFullYear()}`
+  }else {
+    timeLine = 'toàn thời gian'
+  }
 
-  res.render("statictis/productStatistic", {
+  res.render("statistic/productStatistic", {
+    time: timeLine,
+    layout: "managerLayout",
     timeUpdate: dateNow,
     packages: packageDetail,
-    products: proDetail,
-    numPackage: numPack,
-    numProd: numProd,
+    products: productDetail,
+    numPackage: numPackage,
+    numProd: numProduct,
   });
 });
+
+
+router.get("/product", (req, res) => {
+  res.redirect('/statistic/product/today');
+}),
 
 router.get("/payment", async (req, res) => {
   axios({
@@ -100,38 +112,27 @@ router.get("/payment", async (req, res) => {
     });
 });
 
-router.get("/minPayment", async (req, res) => {
+
+router.get("/payment", async (req, res) => {
   axios({
     method: "get",
-    url: "",
+    url: "http://127.0.0.1:3000/payment-system/payment-account",
     responseType: "json",
   })
     .then(function (response) {
-      const level = response.data;
+      const paymentAccounts = response.data;
 
-      res.render("payment/minPayment", { level });
+      const debtTotal = paymentAccounts.reduce((sum, item) => sum + parseInt(item.du_no), 0);
+
+      res.render("statistic/paymentStatistic", {
+        layout: "managerLayout",
+        debtTotal,
+        paymentAccounts 
+      });
     })
     .catch(function (err) {
-      console.log("err /minPayment ", err);
+      console.log("err /payment ", err);
     });
-});
-
-router.post("/minPayment", async (req, res) => {
-  axios({
-    method: "post",
-    url: "",
-    data: req.body,
-  })
-    .then(function (response) {
-      res.redirect();
-    })
-    .catch(function (err) {
-      console.log("err /minPayment ", err);
-    });
-});
-
-router.get("/paymentManagement", async (req, res) => {
-  res.render("payment/paymentManagement");
 });
 
 module.exports = router;
