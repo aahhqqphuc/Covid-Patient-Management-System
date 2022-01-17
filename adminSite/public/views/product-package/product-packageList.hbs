@@ -1,0 +1,87 @@
+<div class="row mb-3 mt-5">
+    <div class="col-6">
+        <h1> Danh sách gói nhu yếu phẩm</h1>
+    </div>
+</div>
+<div class="row mb-3 mt-5">
+    <div class="row">
+        <form action="/product-package/filter?page=1" method="GET" class="form-inline md-form">
+            <div class="col-2 m-0 pl-0">
+                <input class="form-control mr-sm-2 border border-secondary " type="text" placeholder="Search"
+                    aria-label="Search" name="search" value="{{search}}" style="width: 100%;">
+            </div>
+            <div class="col-3">
+                <select name="period" class="form-select form-select-md border border-secondary ">
+                    <option {{#cond period -1}} selected {{/cond}} value="-1">Thời gian: Tất cả</option>
+                    <option {{#cond period 0}} selected {{/cond}} value="0">Thời gian: Ngày</option>
+                    <option {{#cond period 1}} selected {{/cond}}value="1">Thời gian: Tuần</option>
+                    <option {{#cond period 2}} selected {{/cond}}value="2">Thời gian: Tháng</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="sortby" class="form-select form-select-md border border-secondary ">
+                    <option {{#cond sortby "id_goi_nhu_yeu_pham" }} selected {{/cond}} value="id_goi_nhu_yeu_pham">Sắp
+                        xếp: Mặc
+                        định
+                    </option>
+                    <option {{#cond sortby "ten_goi" }} selected {{/cond}}value="ten_goi">Sắp xếp: Tên</option>
+                    <option {{#cond sortby "so_luong_san_pham" }} selected {{/cond}}value="so_luong_san_pham">Sắp xếp:
+                        Số nhu yếu
+                        phẩm</option>
+                    <option {{#cond sortby "thoi_gian_tinh_toan" }} selected {{/cond}}value="thoi_gian_tinh_toan">Sắp
+                        xếp: Thời gian
+                    </option>
+                </select>
+            </div>
+            <div class="col-2">
+                <select name="asc" class="form-select form-select-md border border-secondary">
+                    <option {{#cond asc "asc" }} selected {{/cond}} value="asc">Tăng dần</option>
+                    <option {{#cond asc "desc" }} selected {{/cond}}value="desc">Giảm dần</option>
+                </select>
+            </div>
+            <div class="col-1">
+                <button class="btn btn-outline-primary align-self-center" type="submit"><i class="fa fa-search fa-lg"
+                        aria-hidden="true"></i></button>
+            </div>
+            <div class="col-1 d-flex flex-row-reverse d-inline" style="width:111%">
+                <a href="/product-package/add">
+                    <button type="button" class="btn btn-primary d-flex "><i style="margin-top: 5px;"
+                            class="fas fa-plus mr-2"></i>Thêm</button>
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <table class="table table-bordered ml-2" style="width:95%">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" data-filter-control='select'>Tên gói nhu yếu phẩm</th>
+                <th scope="col">Hình ảnh đại diện</th>
+                <th scope="col">Số lượng loại sản phẩm</th>
+                <th scope="col">Thời gian tối thiếu đặt hàng</th>
+                <th scope="col" class="text-end"></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {{#each packages}}
+            <tr>
+                <td class="pt-5"> {{ten_goi}}</td>
+                <td><img style="width: 100px; height:100px" src={{url}}></td>
+                <td class="pt-5">{{so_luong_san_pham}}</td>
+                <td class="pt-5">{{thoi_gian}} {{muc_gioi_han_goi_string}}</td>
+                <td style="padding-top: 40px;">
+                    <a href="/product-package/detail/{{id_goi_nhu_yeu_pham}}" type="button"
+                        class="btn btn-light btn-small"><i class="bi bi-eye"></i>
+                        Chi tiết</a>
+                </td>
+            </tr>
+            {{/each}}
+
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        {{{paginateHelper pagination paginationClass="pagination"}}}
+    </nav>
+</div>

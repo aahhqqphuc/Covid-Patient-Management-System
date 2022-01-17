@@ -7,13 +7,16 @@ const stateM = require("../models/state.M");
 const relatedPatientM = require("../models/relatedPatient.M");
 const treatmentHistoryM = require("../models/treatmentHistory.M");
 const treatmentPlaceM = require("../models/treatmentPlace.M");
+const accountM = require("../models/account.M");
+const { createAccount } = require("../utils/account");
+const { auth } = require("../utils/auth");
 
 router.get("/add", async (req, res) => {
   let patient = await patientM.all();
   let province = await provinceM.all();
   let state = await stateM.all();
   res.render("patient/add", {
-    layout:'managerLayout',
+    layout: "managerLayout",
     patients: patient,
     provinces: province,
     states: state,
@@ -25,7 +28,7 @@ router.post("/add", async (req, res) => {
 
   let patient = {
     ho_ten: req.body.name,
-    cmnd: req.body.id,
+    cmnd: req.body.cmnd,
     nam_sinh: req.body.yob,
     tinh: req.body.province,
     huyen: req.body.district,
@@ -44,13 +47,17 @@ router.post("/add", async (req, res) => {
 
   let relatedPatient = {
     id_nguoi_lay: req.body["related-patient"],
-    id_nguoi_lien_quan: result[0].id_benh_nhan,
+    id_nguoi_bi_lay: result[0].id_benh_nhan,
     noi_tiep_xuc_tinh: req.body["related-province"],
     noi_tiep_xuc_huyen: req.body["related-district"],
     noi_tiep_xuc_xa: req.body["related-commune"],
-    layout:'managerLayout',
+    layout: "managerLayout",
   };
   await relatedPatientM.add(relatedPatient);
+
+  const user = await createAccount(req.body.cmnd);
+
+  await accountM.add(user);
 
   res.render("patient/patientList");
 });
@@ -64,7 +71,7 @@ router.get("/change-state/:id", async (req, res) => {
     id: id,
     patient_state: patient_state.trang_thai,
     states: states,
-    layout:'managerLayout',
+    layout: "managerLayout",
   });
 });
 
@@ -80,7 +87,7 @@ router.post("/change-state/:id", async (req, res) => {
   };
   await stateHistoryM.add(stateHistory);
 
-  res.render("patient/patientList", {layout:'managerLayout',});
+  res.render("patient/patientList", { layout: "managerLayout" });
 });
 
 router.get("/change-place/:id", async (req, res) => {
@@ -92,7 +99,7 @@ router.get("/change-place/:id", async (req, res) => {
     id: id,
     cur_placce: cur_placce.tennoidieutri,
     places: places,
-    layout:'managerLayout',
+    layout: "managerLayout",
   });
 });
 
@@ -108,7 +115,7 @@ router.post("/change-place/:id", async (req, res) => {
   };
   await treatmentHistoryM.add(treatmentHistory);
 
-  res.render("patient/patientList", {layout:'managerLayout',});
+  res.render("patient/patientList", { layout: "managerLayout" });
 });
 
 router.get("/all", async (req, res) => {
@@ -116,12 +123,12 @@ router.get("/all", async (req, res) => {
   res.send(data);
 });
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   const data = await patientM.get();
   res.render("patient/patientList", {
     patients: data,
-    
-    layout:'managerLayout',
+
+    layout: "managerLayout",
   });
 });
 
@@ -135,8 +142,19 @@ router.get("/detail", async (req, res) => {
     detail: data,
     trailDown: patientTrailDown,
     trailUp: patientTrailUp,
-    
-    layout:'managerLayout',
+
+    layout: "managerLayout",
+  });
+});
+
+router.get("/check-id-number", async (req, res) => {
+  const idNumber = req.query.idNumber;
+
+  const check = await patientM.checkExistsIdNumber(idNumber);
+
+  res.status(200).json({
+    msg: "success",
+    check: check,
   });
 });
 

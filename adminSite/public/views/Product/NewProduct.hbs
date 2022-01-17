@@ -1,55 +1,46 @@
-<head>
-    <style>
-        input {
-            width: auto;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="row" style="padding-top: 60px;">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Create New Product</li>
-            </ol>
-        </nav>
+<div class="container-fluid mt-5">
+    <h1 class="mt-4">Thêm Nhu Yếu Phẩm</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post" action="/product/add" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Tên Nhu yếu phẩm</label>
+                    <input type="text" class="form-control" id="title" name="ten_sanpham">
+                </div>
+                <div class="form-group">
+                    <label for="basePrice">Giá</label>
+                    <input type="number" class="form-control" id="basePrice" name="gia_tien">
+                </div>
+                <div class="form-group">
+                    <label for="basePrice">Đơn vị</label>
+                    <input class="form-control" readonly id="basePrice" value='VND'>
+                </div>
+                <div class="form-group">
+                    <label for="description">Mô tả</label>
+                    <textarea class="form-control" id="description" rows="3" name="mo_ta"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="description">Số lượng còn lại</label>
+                    <input type="number" class="form-control" id="basePrice" name="con_lai">
+                </div>
+                <div class="col-6">
+                    <label for="floatingInput"> Hình ảnh </label>
+                    <div class="form-floating mb-3">
+                        <input data-preview-file-type="text" class='file' type="file" required type="text"
+                            class="form-control" id='image' name="ImagePath" multiple>
+                    </div>
+                </div>
+                <a href="/product">
+                    <button type="button" class="btn btn-lg btn-primary align-self-center" onclick="goBack()">Trở
+                        lại</button>
+                </a>
+                <button type="submit" class="btn btn-lg btn-primary align-self-center">Tạo</button>
+            </form>
+        </div>
     </div>
-    <form method="post" action="/product/add" enctype="multipart/form-data">
-        <div class="col-6">
-            <label for="floatingInput">Tên nhu yếu phẩm</label>
-            <div class="form-floating mb-3">
-                <input required type="text" class="form-control p-0" name="ten_sanpham" />
-            </div>
-        </div>
-        <div class="col-6">
-            <label for="floatingInput"> Giá tiền </label>
-            <div class="form-floating mb-3">
-                <input required type="text" class="form-control" name="gia_tien" />
-            </div>
-        </div>
-        <div class="col-6">
-            <label for="floatingInput"> Đơn vị </label>
-            <div class="form-floating mb-3">
-                <input type="text" readonly type="text" class="form-control" value="VND" />
-            </div>
-        </div>
-        <div class="col-6">
-            <label for="floatingInput"> Số lượng </label>
-            <div class="form-floating mb-3">
-                <input type="number" required type="text" class="form-control" name="con_lai" />
-            </div>
-        </div>
-        <div class="col-6">
-            <label for="floatingInput"> Image </label>
-            <div class="form-floating mb-3">
-                <input data-preview-file-type="text" id="fileup" class='file' type="file" required type="text"
-                    class="form-control" id='image' name="ImagePath" multiple data-browse-on-zone-click="true" />
-            </div>
-        </div>
-        <div class="col-12 d-grid">
-            <button class="btn btn-primary" style="width: 10%;" type="submit">Create</button>
-        </div>
-    </form>
-</body>
+</div>
+<script type="text/javascript">
+    function goBack() {
+        window.history.back();
+    }
+</script>
