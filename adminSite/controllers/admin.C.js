@@ -98,10 +98,28 @@ router.post("/register", async (req, res) => {
             role: role,
             status: 1,
         };
-        console.log(user);
         const rs = await model.adduser(user);
         res.redirect('/admin')
     }
     
 });
 
+
+
+
+router.get("/hospital-register", async (req, res) => {
+  res.render("admin/adminHospitalRegister", {
+    layout: 'adminLayout',
+    display:`none`
+  });
+});
+
+
+router.post("/hospital-register", async (req, res) => {
+  console.log(req.body);
+
+  
+  const rs = await TreatmentPlacemodel.addnew(req.body);
+
+  res.redirect('/admin/hospital')
+});
