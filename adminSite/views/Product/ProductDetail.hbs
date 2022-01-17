@@ -1,9 +1,7 @@
 <div class="container-fluid mt-5">
     <h1 class="mt-4">Chi tiết Nhu Yếu Phẩm</h1>
-    <a href="/product">
-        <button type="button" class="btn btn-lg btn-secondary align-self-center mb-3" onclick="goBack()">Trở
-            lại</button>
-    </a>
+    <button type="button" class="btn btn-lg btn-secondary align-self-center mb-3" onclick="goBack()">Trở
+        lại</button>
     <div class="card mb-4">
         <div class="card-body">
             <form method="get" action="/product/edit/{{product.id_nhu_yeu_pham}}">
@@ -39,20 +37,20 @@
                     <button type="submit" class="btn btn-lg btn-primary align-self-center mr-5">Chỉnh
                         sửa</button>
                     <button type="button" class="btn btn-lg btn-danger align-self-center mr-5" data-toggle="modal"
-                        data-target="#removeModal">Xóa</button>
+                        data-target="#removeModal">Vô hiệu hóa</button>
                     <!-- Modal -->
                     <div class="modal fade" id="removeModal" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">Xóa nhu yếu phẩm</h5>
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Vô hiệu hóa nhu yếu phẩm</h5>
                                     <button type="button" class="btn-danger" data-dismiss="modal" aria-label="Close">
                                         <span class="fa fa-times" aria-hidden="true"></span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    Bạn có muốn xóa nhu yếu phẩm này không ?
+                                    Bạn có muốn vô hiệu hóa nhu yếu phẩm này không ?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Không</button>

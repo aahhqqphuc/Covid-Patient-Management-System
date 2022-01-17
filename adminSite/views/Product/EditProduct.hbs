@@ -26,7 +26,11 @@
                 </div>
                 <div class="form-group">
                     <label for="description">Số lượng còn lại</label>
-                    <input type="number" class="form-control" name="con_lai" value={{product.con_lai}}>
+                    <input type="number" readonly class="form-control" value={{product.con_lai}}>
+                </div>
+                <div class="form-group">
+                    <label for="description">Thêm số lượng</label>
+                    <input type="number" class="form-control" name="con_lai">
                 </div>
                 <label for="description">Hình ảnh</label>
                 <div class="form-group card-group row row-cols-1 row-cols-md-3 d-flex align-items-stretch">
@@ -49,7 +53,7 @@
                 <div class="col mb-4">
                     <div class="card mr-2 border-0" width="80%" height="300px">
                         <div class=" form-floating ">
-                            <input data-preview-file-type=" text" class='file' type="file" required type="text"
+                            <input data-preview-file-type=" text" class='file' type="file" type="text"
                                 class="form-control" id='image' name="ImagePath" multiple>
                         </div>
                     </div>

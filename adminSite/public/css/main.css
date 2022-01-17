@@ -12198,3 +12198,9 @@ body {
   padding-left: 18px !important;
   padding-right: 34px !important;
 }
+button {
+  cursor: pointer;
+}
+a {
+  cursor: pointer;
+}

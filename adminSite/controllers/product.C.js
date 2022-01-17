@@ -7,37 +7,31 @@ const fs = require("fs-extra");
 router.get("/", async (req, res) => {
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 5;
-  const data = await productM.getPaging(page, pagesize);
-  const total = await productM.count();
-  console.log(total);
+  const result = await productM.getPaging(page, pagesize);
   res.render("product/productList", {
     layout: "managerLayout",
-    products: data,
-    pagination: { page: parseInt(page), limit: pagesize, totalRows: total },
+    products: result.data,
+    pagination: { page: parseInt(page), limit: pagesize, totalRows: result.total },
   });
 });
-router.get("/search", async (req, res) => {
-  const page = +req.query.page || 1;
-  const search = req.query.search || "";
-  const pagesize = +req.query.pagesize || 5;
-  const data = await productM.search(search, page, pagesize);
-  const total = await productM.countSearch(search);
-  res.render("product/productList", {
-    layout: "managerLayout",
-    products: data,
-    pagination: { page: parseInt(page), limit: pagesize, totalRows: total, queryParams: { search: search } },
-  });
-});
+
 router.get("/filter", async (req, res) => {
   const page = +req.query.page || 1;
-  const price = +req.query.price || 0;
+  const priceFrom = +req.query.price || 0;
+  const priceTo = priceFrom != 0 ? priceFrom + 100000 : 100000000;
   const pagesize = +req.query.pagesize || 5;
-  const data = await productM.filter(price, page, pagesize);
-  const total = await productM.countFilter(price);
+  const search = req.query.search || "";
+  const sortby = req.query.sortby || "id_nhu_yeu_pham";
+  const asc = req.query.asc;
+  const result = await productM.filter(priceFrom, priceTo, sortby, asc, search, page, pagesize);
   res.render("product/productList", {
     layout: "managerLayout",
-    products: data,
-    pagination: { page: parseInt(page), limit: pagesize, totalRows: total, queryParams: { price: price } },
+    products: result.data,
+    search: search,
+    price: priceFrom,
+    sortby: sortby,
+    asc: asc,
+    pagination: { page: parseInt(page), limit: pagesize, totalRows: result.total, queryParams: { price: priceFrom, search: search, sortby: sortby, asc: asc } },
   });
 });
 
@@ -91,11 +85,10 @@ router.post("/edit/:id", upload.array("ImagePath"), async (req, res) => {
     id_nhu_yeu_pham: id,
     ten_sanpham: data.ten_sanpham,
     gia_tien: data.gia_tien,
-    con_lai: data.con_lai,
+    con_lai: +data.con_lai || 0,
     mo_ta: data.mo_ta,
   };
   const rs = await productM.edit(product);
-  console.log(rs);
   if (rs) {
     req.files.forEach(async (item) => {
       try {
@@ -127,7 +120,6 @@ router.get("/delete/:id", async (req, res) => {
 router.get("/image/delete/:id", async (req, res) => {
   const id = req.params.id;
   const img = await productM.deleteImg(id);
-  console.log("hình", img);
   if (img) {
     try {
       await fs.remove("public" + img[0].url);

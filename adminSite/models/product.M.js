@@ -6,68 +6,31 @@ module.exports = {
     from nhu_yeu_pham p left join hinh_anh_san_pham img 
 		on p.id_nhu_yeu_pham = img.id_nhu_yeu_pham 
 		order by p.id_nhu_yeu_pham limit ${pagesize} offset ${pagesize * (page - 1)}; `;
+    const qtotal = `select count(*) from nhu_yeu_pham `;
     try {
-      const res = await db.any(query);
-      return res;
+      const r1 = await db.any(query);
+      const r2 = await db.any(qtotal);
+      return { data: r1, total: r2[0].count };
     } catch (error) {
-      console.log("error db/add :", error);
+      console.log("error db/all :", error);
     }
   },
-  search: async (search, page, pagesize) => {
-    const query = `select distinct on (p.id_nhu_yeu_pham) p.id_nhu_yeu_pham, p.ten_sanpham,p.gia_tien,p.don_vi,p.con_lai,url 
+  filter: async (priceFrom, priceTo, sortby, asc, search, page, pagesize) => {
+    const query = `select * from 
+    (select distinct on (p.id_nhu_yeu_pham) p.id_nhu_yeu_pham, p.ten_sanpham,p.gia_tien,p.don_vi,p.con_lai,url 
     from nhu_yeu_pham p left join hinh_anh_san_pham img 
 		on p.id_nhu_yeu_pham = img.id_nhu_yeu_pham 
-		where ten_sanpham like '%${search}%' 
-    order by p.id_nhu_yeu_pham 
-    limit ${pagesize} offset ${pagesize * (page - 1)}; `;
+		where  ten_sanpham like '%${search}%' and
+    gia_tien between ${priceFrom} and ${priceTo} ) data order by ${sortby} ${asc}
+    limit ${pagesize} offset ${pagesize * (page - 1)}`;
+    const qtotal = `select count(*) from nhu_yeu_pham 
+    where gia_tien between ${priceFrom} and ${priceTo} and ten_sanpham like '%${search}%' `;
     try {
-      const res = await db.any(query);
-      return res;
+      const r1 = await db.any(query);
+      const r2 = await db.any(qtotal);
+      return { data: r1, total: r2[0].count };
     } catch (error) {
-      console.log("error db/add :", error);
-    }
-  },
-  countSearch: async (search) => {
-    const query = `select count(*) from nhu_yeu_pham 
-    where ten_sanpham like '%${search}%'`;
-    try {
-      const res = await db.any(query);
-      return res[0].count;
-    } catch (error) {
-      console.log("error db/add :", error);
-    }
-  },
-  countFilter: async (price) => {
-    const query = `select count(*) from nhu_yeu_pham 
-    where gia_tien between ${price} and ${price + 100000} `;
-    try {
-      const res = await db.any(query);
-      return res[0].count;
-    } catch (error) {
-      console.log("error db/add :", query);
-    }
-  },
-  filter: async (price, page, pagesize) => {
-    const query = `select distinct on (p.id_nhu_yeu_pham) p.id_nhu_yeu_pham, p.ten_sanpham,p.gia_tien,p.don_vi,p.con_lai,url 
-    from nhu_yeu_pham p left join hinh_anh_san_pham img 
-		on p.id_nhu_yeu_pham = img.id_nhu_yeu_pham 
-		where  gia_tien between ${price} and ${price + 100000}
-    order by p.id_nhu_yeu_pham 
-    limit ${pagesize} offset ${pagesize * (page - 1)}; `;
-    try {
-      const res = await db.any(query);
-      return res;
-    } catch (error) {
-      console.log("error db/add :", error);
-    }
-  },
-  count: async () => {
-    const query = `select count(*) from nhu_yeu_pham `;
-    try {
-      const res = await db.any(query);
-      return res[0].count;
-    } catch (error) {
-      console.log("error db/add :", error);
+      console.log("error db/all :", error);
     }
   },
   getById: async (id) => {
@@ -103,9 +66,8 @@ module.exports = {
   },
   edit: async (pro) => {
     const query = `update Nhu_Yeu_Pham 
-                  set ten_sanpham = '${pro.ten_sanpham}',gia_tien = ${pro.gia_tien}, con_lai = ${pro.con_lai}
+                  set ten_sanpham = '${pro.ten_sanpham}',gia_tien = ${pro.gia_tien}, con_lai = con_lai + ${pro.con_lai}
                   where id_nhu_yeu_pham = ${pro.id_nhu_yeu_pham};`;
-    console.log(query);
     try {
       return await db.any(query);
     } catch (error) {
