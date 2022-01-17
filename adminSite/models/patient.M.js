@@ -23,7 +23,7 @@ module.exports = {
     return res;
   },
 
-  get: async (fieldName, value) => {
+  get: async () => {
     var query = `SELECT bn.*,tt.trang_thai, vt.tennoidieutri  
       FROM public.benh_nhan_covid bn join public.trang_thai_benh_nhan tt on bn.id_benh_nhan = tt.id_benh_nhan 
         join lich_su_dieu_tri ls on ls.id_benh_nhan = bn.id_benh_nhan join noi_dieu_tri vt on vt.mavitri = ls.mavitri 

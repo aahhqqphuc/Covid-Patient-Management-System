@@ -8,7 +8,7 @@
     <div class ="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="/patient">Home</a>
+            <a class="navbar-brand ps-3" href="/admin">Home</a>
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
@@ -54,14 +54,16 @@
             <tr>
                 <td>{{user_name}}</td>
                 <td>{{role}}</td>
-                <td>{{last_action}}</td>
+                <td>{{action_name}}</td>
                 <td>{{action_date}}</td>
                 <td>{{status}}</td>
                 <td class="text-end">
-                    <a href="/patient/detail?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small"><i class="bi bi-eye"></i>
+                    <a href="/admin/detail?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small"><i class="bi bi-eye"></i>
                         </a>
-                    <a href="/patient/detail?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small"><i class="bi bi-lock-fill"></i>
+                    <a href="/admin/lock?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small"><i class="bi bi-lock-fill"></i>
                         </a>
+                    <a href="/admin/unlock?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small"><i class="bi bi-lock-fill"></i>
+                    </a>
                 </td>
             </tr>
             {{/each}}

@@ -16,6 +16,7 @@ router.get("/add", async (req, res) => {
   let province = await provinceM.all();
   let state = await stateM.all();
   res.render("patient/add", {
+    layout: "managerLayout",
     patients: patient,
     provinces: province,
     states: state,
@@ -50,6 +51,7 @@ router.post("/add", async (req, res) => {
     noi_tiep_xuc_tinh: req.body["related-province"],
     noi_tiep_xuc_huyen: req.body["related-district"],
     noi_tiep_xuc_xa: req.body["related-commune"],
+    layout: "managerLayout",
   };
   await relatedPatientM.add(relatedPatient);
 
@@ -69,6 +71,7 @@ router.get("/change-state/:id", async (req, res) => {
     id: id,
     patient_state: patient_state.trang_thai,
     states: states,
+    layout: "managerLayout",
   });
 });
 
@@ -84,7 +87,7 @@ router.post("/change-state/:id", async (req, res) => {
   };
   await stateHistoryM.add(stateHistory);
 
-  res.render("patient/patientList", {});
+  res.render("patient/patientList", { layout: "managerLayout" });
 });
 
 router.get("/change-place/:id", async (req, res) => {
@@ -96,6 +99,7 @@ router.get("/change-place/:id", async (req, res) => {
     id: id,
     cur_placce: cur_placce.tennoidieutri,
     places: places,
+    layout: "managerLayout",
   });
 });
 
@@ -111,7 +115,7 @@ router.post("/change-place/:id", async (req, res) => {
   };
   await treatmentHistoryM.add(treatmentHistory);
 
-  res.render("patient/patientList", {});
+  res.render("patient/patientList", { layout: "managerLayout" });
 });
 
 router.get("/all", async (req, res) => {
@@ -120,10 +124,11 @@ router.get("/all", async (req, res) => {
 });
 
 router.get("/", auth, async (req, res) => {
-  const data = await patientM.all();
+  const data = await patientM.get();
   res.render("patient/patientList", {
     patients: data,
-    script: ["../patient/patientList.js"],
+
+    layout: "managerLayout",
   });
 });
 
@@ -137,7 +142,8 @@ router.get("/detail", async (req, res) => {
     detail: data,
     trailDown: patientTrailDown,
     trailUp: patientTrailUp,
-    script: ["../patient/patientList.js"],
+
+    layout: "managerLayout",
   });
 });
 

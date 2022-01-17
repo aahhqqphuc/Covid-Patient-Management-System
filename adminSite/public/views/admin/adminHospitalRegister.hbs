@@ -1,0 +1,52 @@
+<head>
+    <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 col-xl-9 mx-auto">
+        <div class="card flex-row my-5 border-0 shadow rounded-3 overflow-hidden">
+          
+          <div class="card-body p-4 p-sm-5">
+            <h5 class="card-title text-center mb-5 fw-light fs-5">Tạo nơi điều trị mới cho bệnh nhân</h5>
+            <h4 class="alert alert-danger" role="alert" style="display: {{display}};">{{message}}</h4>
+            <form method="post">
+
+              <div class="form-floating mb-3">
+                <input name="tennoidieutri" ype="text" class="form-control" id="floatingInputUsername" placeholder="" required autofocus>
+                <label for="floatingInputUsername">Tên nơi điều trị</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input name="tinh" type="text" class="form-control" id="floatingInputEmail" placeholder="" required>
+                <label for="floatingInputEmail">Tỉnh</label>
+              </div>
+              
+              <div class="form-floating mb-3">
+                <input name="huyen" type="text" class="form-control" id="floatingInputEmail" placeholder="" required>
+                <label for="floatingInputEmail">Huyện</label>
+              </div>
+              
+              <div class="form-floating mb-3">
+                <input name="xa" type="text" class="form-control" id="floatingInputEmail" placeholder="" required>
+                <label for="floatingInputEmail">Xã</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input name="succhua" type="number" class="form-control" id="floatingInputEmail" placeholder="" required>
+                <label for="floatingInputEmail">Sức chứa tổng</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input name="soluonghientai" type="number" class="form-control" id="floatingInputEmail" placeholder="" required>
+                <label for="floatingInputEmail">Số lượng người hiện tại</label>
+              </div>
+              <hr>
+              <div class="d-grid mb-2">
+                <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase" type="submit">Mở thêm</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
