@@ -1,5 +1,5 @@
 const db = require("./db");
-const tbName = "lich_su_trang_thai_benh_nhan";
+const tbName = "trang_thai_benh_nhan";
 const idFieldName = "id_benh_nhan";
 
 module.exports = {
@@ -29,7 +29,6 @@ module.exports = {
   },
 
   edit: async (id) => {
-    console.log("fd");
     var query = `update public.lich_su_trang_thai_benh_nhan
     set status = 0
     where id_benh_nhan = ${id} and status = 1`;

@@ -5,12 +5,12 @@ const idFieldName = "id_trang_thai";
 module.exports = {
   all: async () => {
     const res = await db.load(tbName);
-    return res.length > 0 ? res : null;
+    return res;
   },
 
   get: async (id) => {
     const res = await db.get(tbName, idFieldName, id);
-    return res.length > 0 ? res[0] : null;
+    return res;
   },
 
   add: async (state) => {

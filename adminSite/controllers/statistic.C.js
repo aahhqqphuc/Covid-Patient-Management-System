@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const pStatusM = require("../models/patientStatus.M");
-const patientM = require("../models/patient.M");
 const treatmentHistoryM = require("../models/treatmentHistory.M");
 const db = require("../models/db");
 const axios = require("axios");
@@ -21,21 +20,27 @@ router.get("/patient", async (req, res) => {
   const pf0 = pStatus.filter((per) => {
     return per.trang_thai == 0;
   });
+
   const pf1 = pStatus.filter((per) => {
     return per.trang_thai == 1;
   });
+
   const pf2 = pStatus.filter((per) => {
     return per.trang_thai == 2;
   });
+
   const pf3 = pStatus.filter((per) => {
     return per.trang_thai == 3;
   });
+
   const pCured = pStatusNow.filter((per) => {
     return per.trang_thai == -1;
   });
+
   const pMove = treatmentHistory.filter((per) => {
     return per.ngay_cap_nhat.toString().includes(dateNow);
   });
+
   const totalCured = pStatus.filter((per) => {
     return per.trang_thai == -1;
   });
@@ -93,10 +98,6 @@ router.get("/payment", async (req, res) => {
     .catch(function (err) {
       console.log("err /payment ", err);
     });
-
-  // orders.forEach((order) => {
-  //     order.ngay_mua = order.ngay_mua.getDate() + " / " + (order.ngay_mua.getMonth() + 1) + " / " + order.ngay_mua.getFullYear();
-  // })
 });
 
 router.get("/minPayment", async (req, res) => {
