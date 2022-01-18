@@ -5,7 +5,7 @@ const idFieldName = "id_benh_nhan";
 module.exports = {
   all: async () => {
     const res = await db.load(tbName);
-    return res.length > 0 ? res : null;
+    return res ? res : null;
   },
 
   get: async (fieldName, value) => {
@@ -25,7 +25,7 @@ module.exports = {
     where ls.id_benh_nhan = ${id} and ls.status = 1`;
 
     const res = await db.runQuery(query);
-    return res.length > 0 ? res[0] : null;
+    return res ? res[0] : null;
   },
 
   edit: async (id) => {
@@ -33,7 +33,7 @@ module.exports = {
     set status = 0
     where id_benh_nhan = ${id} and status = 1`;
     const res = await db.runQuery(query);
-    return res.length > 0 ? res[0] : null;
+    return res ? res[0] : null;
   },
 
   delete: async (id) => {
