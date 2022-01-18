@@ -6,7 +6,7 @@ module.exports = {
     return res;
   },
   findByUsername: async (username) => {
-    const res = await db.get(db.tableName.tai_khoan, "username", username);
+    const res = await db.get(db.tableName.tai_khoan, "user_name", username);
     return res;
   },
 };

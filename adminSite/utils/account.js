@@ -4,7 +4,7 @@ const saltRounds = 10;
 async function createAccount(username, password) {
   const passwordHashed = await bcrypt.hash(password, saltRounds);
   const user = {
-    username: username,
+    user_name: username,
     password: passwordHashed,
     role: "user",
     status: 0,

@@ -3,6 +3,7 @@ const moment = require("moment");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
+const { authLogin } = require("./utils/auth");
 
 const express = require("express"),
   app = express(),
@@ -62,9 +63,10 @@ app.use("/payment-system", require("./controllers/paymentSystem.C"));
 
 app.use("/account", require("./controllers/account.C"));
 
-app.get("/", (req, res) => {
+app.get("/", authLogin, (req, res) => {
   res.render("home", {});
 });
+
 hbs.handlebars.registerHelper("paginateHelper", paginateHelper.createPagination);
 hbs.handlebars.registerHelper("cond", function (v1, v2, options) {
   if (v1 === v2) {

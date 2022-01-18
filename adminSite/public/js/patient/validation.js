@@ -168,7 +168,6 @@ function checkIdNumber(idNumber, callback) {
       idNumber: idNumber,
     },
     success: function (response) {
-      console.log("check inside: " + response.check);
       if (response.check == true) {
         $("#id-danger").text("CCCD/CCCD đã tồn tại");
         $("#id-danger").attr("hidden", false);

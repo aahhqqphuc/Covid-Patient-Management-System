@@ -3,7 +3,6 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { compare } = require("../utils/account");
 const accountM = require("../models/account.M");
-const { auth } = require("../utils/auth");
 
 router.post("/login", async (req, res) => {
   //Check Exist Account
@@ -24,7 +23,7 @@ router.post("/login", async (req, res) => {
     });
   }
 
-  const token = jwt.sign({ username: user[0].username, role: user[0].role }, process.env.TOKEN_SECRET, {
+  const token = jwt.sign({ username: user[0].user_name, role: user[0].role }, process.env.TOKEN_SECRET, {
     expiresIn: 86400,
   });
 
@@ -32,6 +31,7 @@ router.post("/login", async (req, res) => {
     success: true,
     msg: token,
     expiresIn: 86400,
+    role: user[0].role,
   });
 });
 
