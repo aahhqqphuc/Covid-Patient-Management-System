@@ -1,7 +1,6 @@
 const db = require("./db");
 
 const tbName = "lich_su_dieu_tri";
-const idFieldName = "id_lich_su_dieu_tri";
 
 module.exports = {
   all: async () => {
@@ -21,19 +20,18 @@ module.exports = {
 
   get_cur: async (id) => {
     var query = `SELECT tennoidieutri
-    FROM public.lich_su_dieu_tri ls
-    join public.noi_dieu_tri ndt on ls.mavitri = ndt.mavitri
-    where ls.id_benh_nhan = ${id} and ls.status = 1`;
-
-    const res = await db.runQuery(query);
-    return res.length > 0 ? res[0] : null;
+      FROM public.lich_su_dieu_tri ls
+      join public.noi_dieu_tri ndt on ls.mavitri = ndt.mavitri
+      where ls.id_benh_nhan = ${id} and ls.status = 1`;
+    const res = await db.getSingleResut(query);
+    return res;
   },
 
   edit: async (id) => {
     var query = `update public.lich_su_dieu_tri
-    set status = 0
-    where id_benh_nhan = ${id} and status = 1`;
+      set status = 0
+      where id_benh_nhan = ${id} and status = 1`;
     const res = await db.runQuery(query);
-    return res.length > 0 ? res[0] : null;
+    return res;
   },
 };

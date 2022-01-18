@@ -67,7 +67,7 @@ router.get("/change-state/:id", async (req, res) => {
 
   res.render("patient/change-state", {
     id: id,
-    patient_state: patient_state.trang_thai,
+    state: patient_state.ten_trang_thai,
     states: states,
   });
 });
@@ -89,12 +89,12 @@ router.post("/change-state/:id", async (req, res) => {
 
 router.get("/change-place/:id", async (req, res) => {
   let id = req.params.id;
-  let cur_placce = await treatmentHistoryM.get_cur(id);
+  let cur_place = await treatmentHistoryM.get_cur(id);
   let places = await treatmentPlaceM.all();
 
   res.render("patient/change-place", {
     id: id,
-    cur_placce: cur_placce.tennoidieutri,
+    place: cur_place.tennoidieutri,
     places: places,
   });
 });
@@ -119,7 +119,7 @@ router.get("/all", async (req, res) => {
   res.send(data);
 });
 
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   const data = await patientM.all();
   res.render("patient/patientList", {
     patients: data,

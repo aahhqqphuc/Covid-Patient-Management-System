@@ -1,3 +1,5 @@
+const { query } = require("express");
+
 require("dotenv").config();
 
 const pgPromise = require("pg-promise")({
@@ -95,6 +97,15 @@ exports.runQuery = async (query) => {
     return res;
   } catch (error) {
     console.log("error db/runQuery :", error);
+  }
+};
+
+exports.getSingleResut = async (query) => {
+  try {
+    const res = await db.one(query);
+    return res;
+  } catch (error) {
+    console.log("error db/getSingleResut :", error);
   }
 };
 
