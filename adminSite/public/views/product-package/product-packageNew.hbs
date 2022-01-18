@@ -11,7 +11,7 @@
                 </div>
                 <div class="form-group">
                     <label for="basePrice">Thời gian tối thiểu đặt hàng</label>
-                    <input type="text" required class="form-control" value='{{thoi_gian}}' name="thoi_gian">
+                    <input type="number" min="1" required class="form-control" value='{{thoi_gian}}' name="thoi_gian">
                 </div>
                 <div class="form-group w-25">
                     <label for="basePrice">Đơn vị thời gian</label>
@@ -86,7 +86,8 @@
 
                             {{#each products_selected}}
                             <tr>
-                                <td class="d-flex justify-content-between pt-5">{{ten_sanpham}}</td>
+                                <td class="d-flex justify-content-between pt-5" name="products_selected"
+                                    value={{id_nhu_yeu_pham}}>{{ten_sanpham}}</td>
                                 <td><img style="width: 100px; height:100px" src={{url}}></td>
                                 <td><input required type="number" min="1" class=" form-control input-lg border-0 w-100"
                                         style="height: 100px;" name="gioi_han"></td>

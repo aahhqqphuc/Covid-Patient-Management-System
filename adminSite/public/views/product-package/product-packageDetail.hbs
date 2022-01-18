@@ -26,7 +26,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
                             {{#each products}}
                             <tr>
                                 <td>{{ten_sanpham}}</td>
@@ -43,8 +42,9 @@
                     </table>
                 </div>
                 <div class="d-flex ">
-                    <button type="submit" class="btn btn-lg btn-primary align-self-center mr-5">Chỉnh
-                        sửa</button>
+                    <a type="button" href="/product-package/edit/{{package.id_goi_nhu_yeu_pham}}"
+                        class="btn btn-lg btn-primary align-self-center mr-5">Chỉnh
+                        sửa</a>
                     <button type="button" class="btn btn-lg btn-danger align-self-center mr-5" data-toggle="modal"
                         data-target="#removeModal">Xóa</button>
                     <!-- Modal -->
@@ -53,17 +53,18 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">Xóa nhu yếu phẩm</h5>
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Vô hiệu hóa nhu yếu phẩm</h5>
                                     <button type="button" class="btn-danger" data-dismiss="modal" aria-label="Close">
                                         <span class="fa fa-times" aria-hidden="true"></span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    Bạn có muốn xóa nhu yếu phẩm này không ?
+                                    Bạn có muốn vô hiệu hóa gói nhu yếu phẩm này không ?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Không</button>
-                                    <a class="btn btn-danger " href="/product/delete/{{product.id_nhu_yeu_pham}}">Có</a>
+                                    <a class="btn btn-danger "
+                                        href="/product-package/delete/{{package.id_goi_nhu_yeu_pham}}">Có</a>
                                 </div>
                             </div>
                         </div>

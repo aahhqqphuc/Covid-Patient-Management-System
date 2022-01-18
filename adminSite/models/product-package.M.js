@@ -30,14 +30,15 @@ module.exports = {
             to_string(g.muc_gioi_han_goi) muc_gioi_han_goi_string,
             c.count as So_luong_san_pham, calculate_time(g.thoi_gian,g.muc_gioi_han_goi) thoi_gian_tinh_toan
             FROM goi_nhu_yeu_pham g 
-            join danh_sach_nhu_yeu_pham ds on g.id_goi_nhu_yeu_pham = ds.id_goi
-            join nhu_yeu_pham nyp on ds.id_sanpham = nyp.id_nhu_yeu_pham
-            join hinh_anh_san_pham img on nyp.id_nhu_yeu_pham = img.id_nhu_yeu_pham
-            join (select count( id_goi ) as count ,id_goi 
+            left join danh_sach_nhu_yeu_pham ds on g.id_goi_nhu_yeu_pham = ds.id_goi
+            left join nhu_yeu_pham nyp on ds.id_sanpham = nyp.id_nhu_yeu_pham
+            left join hinh_anh_san_pham img on nyp.id_nhu_yeu_pham = img.id_nhu_yeu_pham
+            left join (select count( id_goi ) as count ,id_goi 
                 from danh_sach_nhu_yeu_pham group by id_goi) c on ds.id_goi = c.id_goi) data
                 where ten_goi like '%${search}%' `;
     query += period != -1 ? `and muc_gioi_han_goi = ${period}` : "";
     query += `order by ${sortby} ${asc} limit ${pagesize} offset ${pagesize * (page - 1)}; `;
+
     let qtotal = `select count(*) from goi_nhu_yeu_pham where ten_goi like '%${search}%' `;
     qtotal += period != -1 ? `and muc_gioi_han_goi = ${period}` : "";
     try {
@@ -67,7 +68,7 @@ module.exports = {
   },
   add: async (package) => {
     const query = `INSERT INTO Goi_Nhu_Yeu_Pham 
-    VALUES(default,'${package.ten_goi}',${package.thoi_gian},${package.muc_gioi_han});`;
+    VALUES(default,'${package.ten_goi}',${package.thoi_gian},${package.muc_gioi_han}) returning id_goi_nhu_yeu_pham;`;
     try {
       var rs = await db.any(query);
       return rs;
@@ -75,28 +76,28 @@ module.exports = {
       console.log("error db/add :", error);
     }
   },
-  edit: async (package) => {
-    const query = `update Goi_Nhu_Yeu_Pham 
-                  set ten_goi = '${package.ten_goi}',thoi_gian = ${package.thoi_gian}, 
-                  muc_gioi_han_goi = ${package.muc_gioi_han_goi}
-                  where id_goi_nhu_yeu_pham = ${package.id_goi_nhu_yeu_pham};`;
-    console.log(query);
-    try {
-      return await db.any(query);
-    } catch (error) {
-      console.log("error edit  :", error);
-    }
-  },
-  addProduct: async (product) => {
+  addProduct: async (id_goi, id_sanpham, gioi_han) => {
     const query = `INSERT INTO danh_sach_nhu_yeu_pham VALUES(default,'${id_goi}',${id_sanpham},${gioi_han});`;
     try {
       const rs = await db.any(query);
       return rs;
     } catch (error) {
       console.log("error db/add :", error);
+      console.log("insert", query);
     }
   },
-  updateProduct: async (id, gioi_han) => {
+  edit: async (package) => {
+    const query = `update Goi_Nhu_Yeu_Pham 
+                  set ten_goi = '${package.ten_goi}',thoi_gian = ${package.thoi_gian}, 
+                  muc_gioi_han_goi = ${package.muc_gioi_han_goi}
+                  where id_goi_nhu_yeu_pham = ${package.id_goi_nhu_yeu_pham};`;
+    try {
+      return await db.any(query);
+    } catch (error) {
+      console.log("error edit  :", error);
+    }
+  },
+  editProduct: async (id, gioi_han) => {
     const query = `update danh_sach_nhu_yeu_pham set gioi_han_san_pham = ${gioi_han} 
                     where id_danh_sach_goi = ${id}`;
     try {
@@ -106,18 +107,33 @@ module.exports = {
       console.log("error db/add :", error);
     }
   },
+
   deleteProduct: async (id) => {
-    const query = `delete from danh_sach_nhu_yeu_pham where id_danh_sach_goi = ${id}`;
+    const query = `delete from danh_sach_nhu_yeu_pham where id_danh_sach_goi = ${id} returning id_goi`;
     try {
       var rs = await db.any(query);
+      return rs;
     } catch (error) {
       console.log("delete pro error :", error);
     }
   },
-  getAllProducts: async () => {
-    const query = `select distinct on (p.id_nhu_yeu_pham) p.id_nhu_yeu_pham, p.ten_sanpham,p.gia_tien,p.don_vi,p.con_lai,url 
-                  from nhu_yeu_pham p left join hinh_anh_san_pham img 
+  getPackageId: async (id) => {
+    const query = `select id_goi from danh_sach_nhu_yeu_pham where id_danh_sach_goi = ${id}`;
+    try {
+      var rs = await db.any(query);
+      return rs;
+    } catch (error) {
+      console.log("delete pro error :", error);
+    }
+  },
+  getElseProducts: async (packageId) => {
+    const query = `select distinct on (p.id_nhu_yeu_pham) p.id_nhu_yeu_pham, p.ten_sanpham,p.gia_tien,p.don_vi,p.con_lai,url
+                  from nhu_yeu_pham p 
+				  left join hinh_anh_san_pham img 
                   on p.id_nhu_yeu_pham = img.id_nhu_yeu_pham 
+				  where p.id_nhu_yeu_pham not in 
+          ( SELECT id_sanpham FROM public.danh_sach_nhu_yeu_pham where id_goi = ${packageId} )
+				  and p.status = 1
                   order by p.id_nhu_yeu_pham`;
     try {
       var rs = await db.any(query);

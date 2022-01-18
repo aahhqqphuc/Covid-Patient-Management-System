@@ -3,11 +3,12 @@ const router = express.Router();
 const productM = require("../models/product.M");
 module.exports = router;
 const upload = require("../middlewares/upload");
+const manager = 1;
 
 router.get("/", async (req, res) => {
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 5;
-  const result = await productM.getPaging(page, pagesize);
+  const result = await productM.getPaging(page, pagesize, manager);
   res.render("product/productList", {
     layout: "managerLayout",
     products: result.data,
