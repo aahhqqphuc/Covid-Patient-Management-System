@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const orderM = require("../models/order.M");
-const orderDetailM = require("../models/orderDetail.M");
 const packageM = require("../models/package.M");
-const packageDetailM = require("../models/packageDetail.M");
+const notifyM = require("../models/notify.M");
 
 const axios = require("axios");
 
@@ -53,10 +52,8 @@ router.post("/min-payment", async (req, res) => {
   })
     .then(function (response) {
       if(response.data.status == 'success'){
-        req.flash('success', 'success')
         res.redirect('/payment/min-payment')
       }else{
-        req.flash('error', 'error')
         res.redirect('/payment/min-payment')
       }
     })
@@ -67,10 +64,8 @@ router.post("/min-payment", async (req, res) => {
 
 router.post("/purchase", async (req, res) => {
   try {
-
     const packageId = req.body.packageId;
     const productQuantity = req.body.product;
-    const opt = req.body.paymentOpt;
 
     const package = await packageM.get(packageId);
 
@@ -101,7 +96,7 @@ router.post("/purchase", async (req, res) => {
       total: total
     }
     // thêm vào chi tiết hóa đơn
-    const orderDetailId = await orderDetailM.add(orderDetail);
+    const orderDetailId = await orderM.addOrderDetail(orderDetail);
 
     for (let i in packageProducts) {
       if(productQuantity[i] != 0){
@@ -113,19 +108,14 @@ router.post("/purchase", async (req, res) => {
         }
         
         //  thêm vào chi tiết nhu cầu yếu phẩm
-        const re = await packageDetailM.add(packageDetail);
+        const re = await packageM.addPackageDetail(packageDetail);
       }
     }
-
-    // const pay = {
-    //   money: total,
-    //   options: opt
-    // }
 
     // axios({
     //   method: "post",
     //   url: "",
-    //   data: pay,
+    //   data: total,
     // })
     //   .then(function (response) {
     //     res.redirect('/payment/min-payment');
@@ -137,6 +127,22 @@ router.post("/purchase", async (req, res) => {
     //   });
   } catch (error) {
     console.log("puchase", error);
+  }
+});
+
+router.get("/notify/:id", async (req, res) => {
+  const id = req.params.id;
+  const noftify = {
+    id_benh_nhan: id,
+    noi_dung: `Vui lòng thanh toán dư nợ của bạn`,
+    trang_thai: 0,
+    ngay_tao: new Date()
+  }
+  try {
+    await notifyM.add(noftify);
+    res.redirect('/payment/manage');
+  } catch (error) {
+    res.redirect('/payment/manage');
   }
 });
 

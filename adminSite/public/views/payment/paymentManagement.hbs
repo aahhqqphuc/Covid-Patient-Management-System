@@ -14,7 +14,7 @@
                         <th scope="col">Dư nợ</th>
                         <th scope="col">Ngày giao dịch gần nhất</th>
                         <th scope="col">Trạng thái</th>
-                        <th scope="col">Thông báo<a href="" class="p-2 ml-2"><i class="far fa-bell fs-5"></i></a></th>
+                        <th scope="col">Thông báo<a href="/payment/notify/all" class="p-2 ml-2"><i class="far fa-bell fs-5"></i></a></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,7 +24,7 @@
                         <td>{{formatMoney du_no}}</td>
                         <td>{{formatDate ngay_giao_dich_gan_nhat "long"}}</td>
                         <td>{{trang_thai}}</td>
-                        <td class="text-center"><a href="" class="p-2"><i class="far fa-bell fs-4"></i></a></td>
+                        <td class="text-center"><a href="/payment/notify/{{id_benh_nhan}}" class="p-2"><i class="far fa-bell fs-4"></i></a></td>
                     </tr>
                     {{/each}}
                 </tbody>

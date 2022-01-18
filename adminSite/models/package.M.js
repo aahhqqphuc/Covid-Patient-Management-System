@@ -1,17 +1,19 @@
 const db = require("./db");
 
-const tbName = "goi_nhu_yeu_pham";
-const idFieldName = "id_goi_nhu_yeu_pham";
+const tbNamePackage = "goi_nhu_yeu_pham";
+const idFieldNamePackage = "id_goi_nhu_yeu_pham";
+const tbNamePackageDetail = "chi_tiet_nhu_cau_yeu_pham";
+const idFieldNamePackageDetail = "id_chi_tiet_nhu_cau_yeu_pham";
 const ngay_tao = ngay_mua = ngay_cap_nhat = new Date();
 
 module.exports = {
   all: async () => {
-    const res = await db.load(tbName);
+    const res = await db.load(tbNamePackage);
     return res;
   },
 
   get: async (id) => {
-    const res = await db.get(tbName, idFieldName, id);
+    const res = await db.get(tbNamePackage, idFieldNamePackage, id);
     return res;
   },
 
@@ -23,6 +25,28 @@ module.exports = {
       return rs;
     } catch (error) {
       console.log("error package/get_package_product :", error);
+    }
+  },
+
+  // ------------------- Package Detail ----------------------------
+  allPackageDetail: async () => {
+    const res = await db.load(tbNamePackageDetail);
+    return res;
+  },
+  
+  getPackageDetail: async (fieldName, value) => {
+    const res = await db.get(tbNamePackageDetail, fieldName, value);
+    return res;
+  },
+
+  addPackageDetail: async (pDetail)=>{
+    const query = `INSERT INTO ${tbNamePackageDetail}
+    VALUES(default,'${pDetail.id_chi_tiet_hoa_don}','${pDetail.id_san_pham}', ${pDetail.so_luong},${pDetail.don_gia}) returning id_chi_tiet_nhu_cau_yeu_pham;`;
+    try {
+      var rs = await db.runQuery(query);
+      return rs;
+    } catch (error) {
+      console.log("error packageDetail/add :", error);
     }
   }
 };
