@@ -1,0 +1,34 @@
+<div id="content" class="content-statistical mt-5">
+
+    <div class="statistic-info container-fluid col-lg-10 col-md-12 col-sm-12">
+        <!-- Page Heading -->
+        <div class="d-sm-flex justify-content-center py-2">
+            <h1 class="h2 mb-0 text-gray-800 text-center">Quản lý thông tin thanh toán</h1>
+        </div>
+
+        <div class="mt-2 mb-4">
+            <h3>Tổng dư nợ: <span class="badge rounded-pill bg-info text-dark m-2">{{formatMoney debtTotal}}</span></h3>
+
+            <table class="table table-bordered text-center" id="payment-Managerment-Table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Id bệnh nhân</th>
+                        <th scope="col">Dư nợ</th>
+                        <th scope="col">Ngày giao dịch gần nhất</th>
+                        <th scope="col">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each paymentAccounts}}
+                    <tr>
+                        <td><a href="/patient/detail?id={{id_benh_nhan}}">{{id_benh_nhan}}</a></td>
+                        <td>{{formatMoney du_no}}</td>
+                        <td>{{formatDate ngay_giao_dich_gan_nhat "long"}}</td>
+                        <td>{{trang_thai}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

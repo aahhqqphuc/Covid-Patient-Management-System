@@ -1,0 +1,53 @@
+<div class="pt-5 mb-3">
+    {{#if success}}
+    <div class="alert alert-success w-50 text-center m-auto" role="alert" id="success-alert">
+        <strong>Thành công!</strong> Cập nhật thành công.
+    </div>
+    {{/if}}
+    {{#if error}}
+    <div class="alert alert-success w-50 text-center m-auto" role="alert" id="success-alert">
+        <strong>Thất bại</strong> cập nhật không thành công.
+    </div>
+    {{/if}}
+
+</div>
+<div class="container">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <!-- Modal content-->
+        <div class="modal-content rounded-4">
+            <div class="modal-header">
+                <h4 class="modal-title text-left">Hạn mức thanh toán</h4>
+            </div>
+            <div class="modal-body">
+                {{#with level}}
+                <form class="form-change-payment" action="/payment/min-payment" method="POST">
+                    <div class="form-group mb-3">
+                        <label for="minPercent" class="form-label">Phần trăm thanh toán tối thiểu</label>
+                        <input type="number" class="form-control" id="minPercent" value="{{phan_tram_han_muc}}" min="0"
+                            max="100" name="minPercent" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="minMoney" class="form-label">Số tiền thanh toán tối thiểu</label>
+                        <input type="number" class="form-control" id="minMoney" min="0" name="minMoney"
+                            value="{{so_tien_thanh_toan_toi_thieu}}" required>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <button type="submit" class="btn btn-success mb-3 w-100 f-btn">Save changes</button>
+                    </div>
+                </form>
+                {{/with}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#success-alert").slideDown();
+        window.setTimeout(function () {
+            $("#success-alert").slideUp(500);
+        }, 2000);
+    });
+</script>

@@ -1,0 +1,75 @@
+<div class="container-fluid mt-5">
+    <h1 class="mt-4">Chi tiết Nhu Yếu Phẩm</h1>
+    <button type="button" class="btn btn-lg btn-secondary align-self-center mb-3" onclick="goBack()">Trở
+        lại</button>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" action="/product/edit/{{product.id_nhu_yeu_pham}}">
+                <div class="form-group">
+                    <label for="title">Tên Nhu yếu phẩm</label>
+                    <input type="text" class="form-control" readonly id="title" value='{{product.ten_sanpham}}'>
+                </div>
+                <div class="form-group">
+                    <label for="basePrice">Giá</label>
+                    <input type="number" class="form-control" readonly id="basePrice" value={{product.gia_tien}}>
+                </div>
+                <div class="form-group">
+                    <label for="basePrice">Đơn vị</label>
+                    <input class="form-control" readonly id="basePrice" value='{{product.don_vi}}'>
+                </div>
+                <div class="form-group">
+                    <label for="description">Mô tả</label>
+                    <textarea class="form-control" readonly id="description" rows="3">{{product.mo_ta}}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="description">Số lượng còn lại</label>
+                    <input type="number" class="form-control" readonly id="basePrice" value={{product.con_lai}}>
+                </div>
+                <div class="form-group">
+                    <label for="description">Hình ảnh</label>
+                    <div class="d-flex w-50  ">
+                        {{#each images}}
+                        <img src="{{url}}" class="mr-5 rounded" width="120" height="120">
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="d-flex mt-5">
+                    <button type="submit" class="btn btn-lg btn-primary align-self-center mr-5">Chỉnh
+                        sửa</button>
+                    <button type="button" class="btn btn-lg btn-danger align-self-center mr-5" data-toggle="modal"
+                        data-target="#removeModal">Vô hiệu hóa</button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="removeModal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Vô hiệu hóa nhu yếu phẩm</h5>
+                                    <button type="button" class="btn-danger" data-dismiss="modal" aria-label="Close">
+                                        <span class="fa fa-times" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Bạn có muốn vô hiệu hóa nhu yếu phẩm này không ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Không</button>
+                                    <a class="btn btn-danger " href="/product/delete/{{product.id_nhu_yeu_pham}}">Có</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function goBack() {
+        window.history.back();
+    }
+</script>

@@ -1,0 +1,60 @@
+
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Tables - SB Admin</title>
+        {{#each script}}
+        <script src = "{{this}}"></script>
+        {{/each}}
+    </head>
+            <div id="layoutSidenav_content" style="margin-top: 60px;">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">Tables</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Thông tin hoạt động của tài khoản <b> {{account.user_name}}</b></li>
+                        </ol>
+                        <div style="text-align:end">
+                            <a href="/admin/lock?id={{account.id_tai_khoan}}"type="button" class="btn btn-primary" >Khoá tài khoản</a>
+                            <a href="/admin/unlock?id={{account.id_tai_khoan}}"type="button" class="btn btn-primary" >Mở khoá tài khoản</a>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Thông tin hoạt động của tài khoản</b>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered" id="action_log">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tên hoạt động</th>
+                                            <th>Thời gian</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each detail}}
+                                            <tr>
+                                                <td>{{id_action}}</td>
+                                                <td>{{action_name}}</td>
+                                                <td>{{action_date}}</td>
+                                                <td class="text-end">
+                                                    <a href="/admin/detail/delete?id={{id_action}}" type="button" class="btn btn-light btn-small"><i class="bi bi-eye"></i>
+                                                        </a>
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+               
+       
+    </body>

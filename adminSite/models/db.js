@@ -58,7 +58,7 @@ exports.add = async (tbName, entity) => {
     const res = await db.any(query);
     return res;
   } catch (error) {
-    console.log("error db/add :", error);
+    console.log("error db/add :", query);
   }
 };
 
@@ -109,6 +109,18 @@ exports.getSingleResut = async (query) => {
   }
 };
 
+module.exports.addnew = async (tbName, tbCol, valueStr) => {
+  console.log(valueStr);
+  var table = new pgPromise.helpers.TableName({ table: tbName, schema: schema });
+  var qStr = pgPromise.as.format(`INSERT INTO  $1(${tbCol}) VALUES (${valueStr})`, table);
+  try {
+    await db.any(qStr);
+
+    return ["success"];
+  } catch (error) {
+    return ["error", error];
+  }
+};
 exports.tableName = {
   benh_nhan_covid: "benh_nhan_covid",
   chi_tiet_hoa_don: "chi_tiet_hoa_don",

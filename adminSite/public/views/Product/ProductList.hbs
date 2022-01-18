@@ -1,0 +1,88 @@
+<div class="row mb-3 mt-5">
+    <div class="col-6">
+        <h1> Danh sách nhu yếu phẩm</h1>
+    </div>
+</div>
+<div class="row mb-3 mt-5">
+    <div class="row">
+        <form action="/product/filter?page=1" method="GET" class="form-inline md-form">
+            <div class="col-2 m-0 pl-0">
+                <input class="form-control mr-sm-2 border border-secondary " type="text" placeholder="Search"
+                    aria-label="Search" name="search" value="{{search}}" style="width: 100%;">
+            </div>
+            <div class="col-3">
+                <select name="price" class="form-select form-select-md border border-secondary ">
+                    <option {{#cond price 0}} selected {{/cond}} value="0">Giá: Tất cả</option>
+                    <option {{#cond price 1}} selected {{/cond}} value="1">Giá: 1 - 100000</option>
+                    <option {{#cond price 100000}} selected {{/cond}}value="100000">Giá: 100000 - 200000</option>
+                    <option {{#cond price 200000}} selected {{/cond}}value="200000">Giá: 200000 - 300000</option>
+                    <option {{#cond price 300000}} selected {{/cond}}value="300000">Giá: 300000 - 400000</option>
+                    <option {{#cond price 400000}} selected {{/cond}}value="400000">Giá: 400000 - 50000</option>
+                    <option {{#cond price 500000}} selected {{/cond}}value="500000">Giá: 500000 - 600000</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <select name="sortby" class="form-select form-select-md border border-secondary ">
+                    <option {{#cond sortby "id_nhu_yeu_pham" }} selected {{/cond}} value="id_nhu_yeu_pham">Sắp xếp: Mặc
+                        định
+                    </option>
+                    <option {{#cond sortby "gia_tien" }} selected {{/cond}}value="gia_tien">Sắp xếp: Giá tiền</option>
+                    <option {{#cond sortby "ten_sanpham" }} selected {{/cond}}value="ten_sanpham">Sắp xếp: Tên</option>
+                    <option {{#cond sortby "con_lai" }} selected {{/cond}}value="con_lai">Sắp xếp: Số lượng</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <select name="asc" class="form-select form-select-md border border-secondary">
+                    <option {{#cond asc "asc" }} selected {{/cond}} value="asc">Tăng dần</option>
+                    <option {{#cond asc "desc" }} selected {{/cond}}value="desc">Giảm dần</option>
+                </select>
+            </div>
+            <div class="col-1">
+                <button class="btn btn-outline-primary align-self-center" type="submit"><i class="fa fa-search fa-lg"
+                        aria-hidden="true"></i></button>
+            </div>
+            <div class="col-1 d-flex flex-row-reverse d-inline">
+                <a href="/product/add">
+                    <button type="button" class="btn btn-primary d-flex "><i style="margin-top: 5px;"
+                            class="fas fa-plus mr-2"></i>Thêm
+                    </button>
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <table class="table table-bordered ml-2" style="width:95%">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" data-filter-control='select'>Tên nhu yếu phẩm</th>
+                <th scope="col">Hình ảnh</th>
+                <th scope="col">Giá tiền</th>
+                <th scope="col">Đơn vị</th>
+                <th scope="col">Số lượng </th>
+                <th scope="col" class="text-end"></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {{#each products}}
+            <tr>
+                <td class="pt-5">{{ten_sanpham}}</td>
+                <td><img style="width: 100px; height:100px" src={{url}}></td>
+                <td class="pt-5">{{gia_tien}}</td>
+                <td class="pt-5">{{don_vi}}</td>
+                <td class="pt-5">{{con_lai}}</td>
+                <td style="padding-top: 40px;">
+                    <a href="/product/detail/{{id_nhu_yeu_pham}}" type="button"
+                        class="btn btn-light btn-small border-0"><i class="bi bi-eye"></i>
+                        Chi tiết</a>
+                </td>
+            </tr>
+            {{/each}}
+
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        {{{paginateHelper pagination paginationClass="pagination"}}}
+    </nav>
+</div>

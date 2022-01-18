@@ -1,10 +1,10 @@
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-async function createAccount(identityNumber) {
-  const passwordHashed = await bcrypt.hash(identityNumber, saltRounds);
+async function createAccount(username, password) {
+  const passwordHashed = await bcrypt.hash(password, saltRounds);
   const user = {
-    username: identityNumber,
+    username: username,
     password: passwordHashed,
     role: "user",
     status: 0,

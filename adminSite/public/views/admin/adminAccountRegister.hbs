@@ -1,0 +1,47 @@
+<head>
+    <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 col-xl-9 mx-auto">
+        <div class="card flex-row my-5 border-0 shadow rounded-3 overflow-hidden">
+          
+          <div class="card-body p-4 p-sm-5">
+            <h5 class="card-title text-center mb-5 fw-light fs-5">Mở tài khoản</h5>
+            <h4 class="alert alert-danger" role="alert" style="display: {{display}};">{{message}}</h4>
+            <form method="post">
+
+              <div class="form-floating mb-3">
+                <input name="user_name" type="text" class="form-control" id="floatingInputUsername" placeholder="myusername" required autofocus>
+                <label for="floatingInputUsername">Username</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input name="role" type="text" class="form-control" id="floatingInputEmail" placeholder="Admin" required>
+                <label for="floatingInputEmail">Role</label>
+              </div>
+
+              <hr>
+
+              <div class="form-floating mb-3">
+                <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+                <label for="floatingPassword">Password</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input name="confpassword" type="password" class="form-control" id="floatingPasswordConfirm" placeholder="Confirm Password" required>
+                <label for="floatingPasswordConfirm">Confirm Password</label>
+              </div>
+
+              <div class="d-grid mb-2">
+                <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase" type="submit">Đăng ký</button>
+              </div>
+              <hr class="my-4">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

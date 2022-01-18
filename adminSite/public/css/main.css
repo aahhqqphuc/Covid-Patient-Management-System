@@ -5160,7 +5160,10 @@ fieldset:disabled .btn {
 .breadcrumb-item.active {
   color: #6c757d;
 }
-
+label {
+  font-size: 20px;
+  font-weight: bold;
+}
 /* .pagination, .dataTable-pagination ul {
   display: flex;
   padding-left: 0;
@@ -5168,6 +5171,7 @@ fieldset:disabled .btn {
 } */
 .pagination {
   display: inline-block;
+  right: 0;
 }
 
 .pagination li {
@@ -5179,7 +5183,7 @@ fieldset:disabled .btn {
 }
 
 .pagination li.active {
-  background: linear-gradient(40deg, #2096ff, #05ffa3);
+  background: var(--bs-blue);
   border-radius: 5px;
 }
 
@@ -12193,4 +12197,10 @@ body {
 .dataTable-selector {
   padding-left: 18px !important;
   padding-right: 34px !important;
+}
+button {
+  cursor: pointer;
+}
+a {
+  cursor: pointer;
 }
