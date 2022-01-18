@@ -1,17 +1,14 @@
 require("dotenv").config();
 const moment = require("moment");
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-const flash = require('connect-flash');
-
-
+const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
 
 const express = require("express"),
   app = express(),
   exphbs = require("express-handlebars");
 const hbs = exphbs.create({
-  defaultLayout:'main',
+  defaultLayout: "main",
   extname: "hbs",
 });
 app.engine("hbs", hbs.engine);
@@ -19,7 +16,7 @@ app.set("view engine", "hbs");
 app.set("views", "./public/views");
 
 var paginateHelper = require("express-handlebars-paginate");
-app.use(express.json())
+app.use(express.json());
 app.use(
   express.urlencoded({
     extended: "true",
@@ -28,18 +25,20 @@ app.use(
 
 app.use(cookieParser());
 
-app.all('/*', function(req, res, next) {
+app.all("/*", function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
 });
 
-app.use(session({
-    secret: 'keyboard cat',
+app.use(
+  session({
+    secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }
-}))
+    cookie: { secure: true },
+  })
+);
 
 app.use(flash());
 
@@ -74,21 +73,20 @@ hbs.handlebars.registerHelper("cond", function (v1, v2, options) {
 });
 
 hbs.handlebars.registerHelper("formatMoney", function (value) {
-  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + 'đ';
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ";
 });
 
 const DateFormats = {
   short: "DD MMMM - YYYY",
-  long: "dddd DD-MM-YYYY HH:mm"
+  long: "dddd DD-MM-YYYY HH:mm",
 };
 
-hbs.handlebars.registerHelper("formatDate", function(datetime, format) {
+hbs.handlebars.registerHelper("formatDate", function (datetime, format) {
   if (moment) {
     // can use other formats like 'lll' too
     format = DateFormats[format] || format;
     return moment(datetime).format(format);
-  }
-  else {
+  } else {
     return datetime;
   }
 });

@@ -1,7 +1,9 @@
 const db = require("./db");
 
-const tbName = "hoa_don";
-const idFieldName = "id_hoa_don";
+const tbNameOrder = "hoa_don";
+const idFieldNameOrder = "id_hoa_don";
+const tbNameOrderDetail = "chi_tiet_hoa_don";
+const idFieldNameOrderDetail = "id_chi_tiet";
 
 const today = new Date();
 const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -10,17 +12,17 @@ const dateTime = date+' '+time;
 
 module.exports = {
   all: async () => {
-    const res = await db.load(tbName);
+    const res = await db.load(tbNameOrder);
     return res;
   },
 
   get: async (fieldName, value) => {
-    const res = await db.get(tbName, fieldName, value);
+    const res = await db.get(tbNameOrder, fieldName, value);
     return res;
   },
 
   add: async (order)=>{
-    const query = `INSERT INTO ${tbName}
+    const query = `INSERT INTO ${tbNameOrder}
     VALUES(default,'${order.id_nguoi_mua}',${order.total},'${dateTime}',${order.trang_thai}, '${dateTime}', '${dateTime}') returning id_hoa_don`;
     try {
       const rs = await db.runQuery(query);
@@ -31,7 +33,7 @@ module.exports = {
   },
 
   updateStatus: async (trang_thai, id) => {
-    const query = `Update ${tbName}
+    const query = `Update ${tbNameOrder}
     set trang_thai = '${trang_thai}', ngay_cap_nhat = '${ngay_cap_nhat}' where id_hoa_don = '${id}' returning *`;
     try {
       const rs = await db.runQuery(query);
@@ -43,7 +45,7 @@ module.exports = {
 
   getOrderProductDetail : async (timeLine) => {
     let query = `select ct.id_san_pham, n.ten_sanpham, sum(ct.so_luong) so_luong
-    from public.${tbName} h, public.chi_tiet_nhu_cau_yeu_pham ct, public.chi_tiet_hoa_don cthd, public.nhu_yeu_pham n where ct.id_san_pham = n.id_nhu_yeu_pham and ct.id_chi_tiet_hoa_don = cthd.id_chi_tiet and h.id_hoa_don = cthd.id_hoa_don and h.trang_thai = 1`
+    from public.${tbNameOrder} h, public.chi_tiet_nhu_cau_yeu_pham ct, public.chi_tiet_hoa_don cthd, public.nhu_yeu_pham n where ct.id_san_pham = n.id_nhu_yeu_pham and ct.id_chi_tiet_hoa_don = cthd.id_chi_tiet and h.id_hoa_don = cthd.id_hoa_don and h.trang_thai = 1`
 
     if(timeLine == 'today'){
       query += ` and ngay_mua::date = now()::date`
@@ -65,7 +67,7 @@ module.exports = {
 
   getOrderPackageDetail : async (timeLine) => {
     let query = `select ct.id_goi_nhu_cau_yeu_pham, n.ten_goi, count(*) so_luong
-    from public.${tbName} h, public.chi_tiet_hoa_don ct, public.goi_nhu_yeu_pham n where ct.id_goi_nhu_cau_yeu_pham = n.id_goi_nhu_yeu_pham and h.id_hoa_don = ct.id_hoa_don and h.trang_thai = 1`;
+    from public.${tbNameOrder} h, public.chi_tiet_hoa_don ct, public.goi_nhu_yeu_pham n where ct.id_goi_nhu_cau_yeu_pham = n.id_goi_nhu_yeu_pham and h.id_hoa_don = ct.id_hoa_don and h.trang_thai = 1`;
 
     if(timeLine == 'today'){
       query += ` and ngay_mua::date = now()::date`
@@ -87,7 +89,7 @@ module.exports = {
 
   countOrderProductDetail : async (timeLine) => {
     let query = `select sum(ct.so_luong) so_luong
-    from public.${tbName} h, public.chi_tiet_nhu_cau_yeu_pham ct, public.chi_tiet_hoa_don cthd, public.nhu_yeu_pham n where ct.id_san_pham = n.id_nhu_yeu_pham and ct.id_chi_tiet_hoa_don = cthd.id_chi_tiet and h.id_hoa_don = cthd.id_hoa_don and h.trang_thai = 1`
+    from public.${tbNameOrder} h, public.chi_tiet_nhu_cau_yeu_pham ct, public.chi_tiet_hoa_don cthd, public.nhu_yeu_pham n where ct.id_san_pham = n.id_nhu_yeu_pham and ct.id_chi_tiet_hoa_don = cthd.id_chi_tiet and h.id_hoa_don = cthd.id_hoa_don and h.trang_thai = 1`
 
     if(timeLine == 'today'){
       query += ` and ngay_mua::date = now()::date`
@@ -105,7 +107,7 @@ module.exports = {
 
   countOrderPackageDetail : async (timeLine) => {
     let query = `select count(*) so_luong
-    from public.${tbName} h, public.chi_tiet_hoa_don ct, public.goi_nhu_yeu_pham n where ct.id_goi_nhu_cau_yeu_pham = n.id_goi_nhu_yeu_pham and h.id_hoa_don = ct.id_hoa_don and h.trang_thai = 1`;
+    from public.${tbNameOrder} h, public.chi_tiet_hoa_don ct, public.goi_nhu_yeu_pham n where ct.id_goi_nhu_cau_yeu_pham = n.id_goi_nhu_yeu_pham and h.id_hoa_don = ct.id_hoa_don and h.trang_thai = 1`;
 
     if(timeLine == 'today'){
       query += ` and ngay_mua::date = now()::date`
@@ -120,4 +122,25 @@ module.exports = {
     const res = await db.runQuery(query);
     return res[0].so_luong || 0;
   },
+
+  // ------- order detail -------------------------------------------------------------
+  allOrderDetail: async () => {
+    const res = await db.load(tbNameOrderDetail);
+    return res;
+  },
+  
+  getOrderDetail: async (fieldName, value) => {
+    const res = await db.get(tbNameOrderDetail, fieldName, value);
+    return res;
+  },
+  addOrderDetail: async (oDetail)=>{
+    const query = `INSERT INTO ${tbNameOrderDetail}
+    VALUES(default,'${oDetail.id_hoa_don}','${oDetail.id_goi_nhu_cau_yeu_pham}',${oDetail.total}) returning id_chi_tiet;`;
+    try {
+      const rs = await db.runQuery(query);
+      return rs[0];
+    } catch (error) {
+      console.log("error orderDetail/add :", error);
+    }
+  }
 };

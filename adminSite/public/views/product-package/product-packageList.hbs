@@ -74,6 +74,9 @@
                     <a href="/product-package/detail/{{id_goi_nhu_yeu_pham}}" type="button"
                         class="btn btn-light btn-small"><i class="bi bi-eye"></i>
                         Chi tiết</a>
+                    <button type="button" class="btn btn-info btn-lg btn-request-form btn-sm" data-toggle="modal"
+                        data-target="#myModal">Mua</button>
+                    <input type="text" name="packageID" value="{{id_goi_nhu_yeu_pham}}" hidden>
                 </td>
             </tr>
             {{/each}}
@@ -85,3 +88,65 @@
         {{{paginateHelper pagination paginationClass="pagination"}}}
     </nav>
 </div>
+
+
+{{!-- Model --}}
+<link rel="stylesheet" href="/css/cart.css">
+<div class="modal fade cart" id="myModal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content rounded-4">
+            <!-- <div class="modal-header">
+                    <h4 class="modal-title text-left">Cart</h4>
+                </div> -->
+            <div class="modal-body">
+                <h2>Shopping Cart</h2>
+                <h4><span class="badge rounded-pill bg-light text-dark package-name">---</span></h4>
+
+                <div class="shopping-cart p-2">
+
+                    <div class="column-labels">
+                        <label class="product-image">Image</label>
+                        <label class="product-details">Product</label>
+                        <label class="product-price">Price</label>
+                        <label class="product-quantity">Quantity</label>
+                        <!-- <label class="product-removal">Remove</label> -->
+                        <label class="product-line-price">Total</label>
+                    </div>
+
+                    <form action="http://127.0.0.1:3000/payment/purchase" method="post">
+                        <input type="text" name="packageId" value="0" hidden>
+
+                        <div class="list-product">
+                            <img src="https://www.freecodecamp.org/news/content/images/2020/05/loading-animation.gif"
+                                alt="Đang tải..." class="w-100">
+                        </div>
+
+                        <div class="totals row">
+                            <div class="pl-4 col-lg-4 col-md-6 col-mb-6 ml-auto">
+                                <div class="totals-item text-right">
+                                    <label>Subtotal </label>
+                                    <div class="totals-value" id="cart-subtotal">0</div>
+                                </div>
+                                <button class="checkout" type="submit">Checkout</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer mt-2">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="./js/jquery-3.6.0.min.js"></script>
+<script src="/js/cart.js"></script>
+
+<script type="text/javascript">
+    function goBack() {
+        window.history.back();
+    }
+
+</script>

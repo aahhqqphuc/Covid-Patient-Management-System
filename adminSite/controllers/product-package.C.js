@@ -65,3 +65,21 @@ router.post("/add", async (req, res) => {
   console.log("error");
   return res.render("product-package/product-packageNew", { layout: "managerLayout", products: pros });
 });
+
+// API for puchase
+const db = require("../models/db");
+
+router.get("/package-detail/:id", async (req, res) => {
+  try {
+      const result = await model.getPackageProducts(req.params.id);
+      console.log(result);
+      const data = {
+          'info': result.package,
+          'products': result.packageProducts
+      }
+      res.json(data);
+  } catch (error) {
+      res.status(404, error.message);
+  }
+});
+

@@ -33,6 +33,7 @@ module.exports = {
     set status = 0
     where id_benh_nhan = ${id} and status = 1`;
     const res = await db.runQuery(query);
+    
     return res;
   },
 
