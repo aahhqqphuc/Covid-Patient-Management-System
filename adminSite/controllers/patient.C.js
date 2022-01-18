@@ -15,6 +15,7 @@ router.get("/add", async (req, res) => {
   let patient = await patientM.all();
   let province = await provinceM.all();
   let state = await stateM.all();
+
   res.render("patient/add", {
     layout: "managerLayout",
     patients: patient,
@@ -28,38 +29,40 @@ router.post("/add", async (req, res) => {
 
   let patient = {
     ho_ten: req.body.name,
-    cmnd: req.body.cmnd,
+    cmnd: req.body.id,
     nam_sinh: req.body.yob,
     tinh: req.body.province,
     huyen: req.body.district,
     xa: req.body.commune,
-    ngay_tao: createdDate,
+    createddate: createdDate,
   };
   let result = await patientM.add(patient);
 
   let stateHistory = {
     id_benh_nhan: result[0].id_benh_nhan,
-    id_trang_thai: req.body.state,
+    trang_thai: req.body.state,
     ngay_tao: createdDate,
+    ngay_cap_nhat: createdDate,
     status: 1,
   };
   await stateHistoryM.add(stateHistory);
 
   let relatedPatient = {
-    id_nguoi_lay: req.body["related-patient"],
+    id_nguoi_lay: req.body.related_patient,
     id_nguoi_bi_lay: result[0].id_benh_nhan,
-    noi_tiep_xuc_tinh: req.body["related-province"],
-    noi_tiep_xuc_huyen: req.body["related-district"],
-    noi_tiep_xuc_xa: req.body["related-commune"],
-    layout: "managerLayout",
+    noi_tiep_xuc_tinh: req.body.related_province,
+    noi_tiep_xuc_huyen: req.body.related_district,
+    noi_tiep_xuc_xa: req.body.related_commune,
   };
   await relatedPatientM.add(relatedPatient);
 
-  const user = await createAccount(req.body.cmnd, req.body.cmnd);
+  const user = await createAccount(req.body.id, req.body.id);
 
   await accountM.add(user);
 
-  res.render("patient/patientList");
+  res.render("patient/patientList", {
+    layout: "managerLayout",
+  });
 });
 
 router.get("/change-state/:id", async (req, res) => {
