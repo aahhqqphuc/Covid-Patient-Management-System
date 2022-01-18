@@ -154,4 +154,20 @@ module.exports = {
       console.log("get all pro error :", error);
     }
   },
+
+  getPackageProducts: async (id) => {
+    const packageQuery = `select id_goi_nhu_yeu_pham, ten_goi
+    from public.goi_nhu_yeu_pham where id_goi_nhu_yeu_pham = '${id}'`;
+
+    const packageProductsQuery = `select distinct on (n.id_nhu_yeu_pham) n.id_nhu_yeu_pham, n.ten_sanpham, d.so_luong, d.gioi_han_san_pham, n.gia_tien, h.url
+    from public.danh_sach_nhu_yeu_pham d, public.nhu_yeu_pham n left join public.hinh_anh_san_pham h on(n.id_nhu_yeu_pham = h.id_nhu_yeu_pham) where n.id_nhu_yeu_pham = d.id_sanpham and d.id_goi = '${id}'`;
+
+    try {
+      const package = await db.any(packageQuery);
+      const packageProducts = await db.any(packageProductsQuery);
+      return {package, packageProducts}
+    } catch (error) {
+      console.log("err at getPackageProduct", error);
+    }
+  }
 };
