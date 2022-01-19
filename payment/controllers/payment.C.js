@@ -39,12 +39,13 @@ router.get("/limit", auth, async (req, res) => {
 
   res.status(200).json({
     msg: "success",
-    han_muc: limit.phan_tram_han_muc,
+    han_muc: limit,
   });
 });
 
 // thay đổi hạn mức
 router.put("/limit", auth, async (req, res) => {
+<<<<<<< HEAD
   if (req.user.role != "manager") {
     return res.status(401).json({
       msg: "unauthorized",
@@ -53,6 +54,9 @@ router.put("/limit", auth, async (req, res) => {
 
   const result = await limitM.changeLimit(req.body.newLimit);
 
+=======
+  const result = await limitM.changeLimit(req.body);
+>>>>>>> develop
   res.status(200).json({
     msg: "success",
     result: result,

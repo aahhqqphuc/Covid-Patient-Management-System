@@ -37,11 +37,17 @@ app.use(
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
   })
 );
 
 app.use(flash());
+
+app.use(function (req, res, next) {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.info = req.flash("info");
+    next();
+});
 
 app.use(express.static(__dirname + "/public"));
 
@@ -58,8 +64,6 @@ app.use("/admin", require("./controllers/admin.C"));
 app.use("/statistic", require("./controllers/statistic.C"));
 
 app.use("/payment", require("./controllers/payment.C"));
-
-app.use("/payment-system", require("./controllers/paymentSystem.C"));
 
 app.use("/account", require("./controllers/account.C"));
 
