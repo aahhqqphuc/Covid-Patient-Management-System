@@ -1,18 +1,12 @@
 require("dotenv").config();
 
 const cookieParser = require("cookie-parser");
-const { auth } = require("./utils/auth");
+
+const bodyParser = require("body-parser");
 
 const express = require("express"),
-  app = express(),
-  exphbs = require("express-handlebars");
-const hbs = exphbs.create({
-  extname: "hbs",
-});
-app.engine("hbs", hbs.engine);
-app.set("view engine", "hbs");
-app.set("views", "./views");
-var paginateHelper = require("express-handlebars-paginate");
+  app = express();
+
 app.use(
   express.urlencoded({
     extended: "true",
@@ -21,25 +15,10 @@ app.use(
 
 app.use(cookieParser());
 
-app.use(express.static(__dirname + "/public"));
+app.use(bodyParser.urlencoded({ extended: false }));
 
-// app.use("/patient", require("./controllers/patient.C"));
+app.use(bodyParser.json());
 
-// app.use("/address", require("./controllers/address.C"));
+app.use("/payment", require("./controllers/payment.C"));
 
-// app.use("/product", require("./controllers/product.C"));
-
-// app.use("/admin", require("./controllers/admin.C"));
-
-// app.use("/statistic", require("./controllers/statistic.C"));
-
-app.get("/", auth, (req, res) => {
-  res.render("home", {});
-});
-hbs.handlebars.registerHelper("paginateHelper", paginateHelper.createPagination);
-hbs.handlebars.registerHelper("cond", function (v1, v2, options) {
-  if (v1 === v2) {
-    return options.fn(this);
-  }
-});
 app.listen(process.env.PORT);

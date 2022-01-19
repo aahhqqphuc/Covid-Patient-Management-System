@@ -7,7 +7,8 @@ async function createAccount(username, password) {
     user_name: username,
     password: passwordHashed,
     role: "user",
-    status: 0,
+    status: 1,
+    active: 0,
   };
   return user;
 }

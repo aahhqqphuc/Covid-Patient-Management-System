@@ -1,13 +1,13 @@
 const jwt = require("jsonwebtoken");
 
 function auth(req, res, next) {
-  const token = req.cookies.jwt;
-
-  console.log(token);
+  let token = req.headers["x-access-token"] || req.headers["authorization"];
 
   if (!token) {
-    return res.redirect("/");
+    return res.status(401).send("Unauthorized");
   }
+
+  token = token.replace(/^Bearer\s+/, "");
 
   try {
     const verified = jwt.verify(token, process.env.TOKEN_SECRET);
@@ -18,4 +18,4 @@ function auth(req, res, next) {
   }
 }
 
-module.exports.auth = auth;
+module.exports = { auth };

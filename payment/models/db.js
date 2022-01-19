@@ -97,3 +97,28 @@ exports.runQuery = async (query) => {
     console.log("error db/runQuery :", error);
   }
 };
+
+exports.getSingleResut = async (query) => {
+  try {
+    const res = await db.one(query);
+    return res;
+  } catch (error) {
+    console.log("error db/getSingleResut :", error);
+  }
+};
+
+exports.update = async (query) => {
+  try {
+    await db.any(query);
+    return true;
+  } catch (error) {
+    console.log("error db/update :", error);
+    return false;
+  }
+};
+
+exports.tableName = {
+  giao_dich: "giao_dich",
+  han_muc: "han_muc",
+  tai_khoan_thanh_toan: "tai_khoan_thanh_toan",
+};
