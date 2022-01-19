@@ -9,14 +9,14 @@
     <label for="floatingInput">Mã bệnh nhân: {{id}}</label>
   </div>
   <div class="col-3">
-    <label for="floatingInput">Trạng thái cũ: {{patient_state}}</label>
+    <label for="floatingInput">Trạng thái cũ: {{state}}</label>
   </div>
   <div class="col-6">
     <label for="floatingInput">Trạng thái mới: </label>
     <select name="state" id="state" required>
       <option value="state-empty">---Chọn trạng thái---</option>
       {{#each states}}
-        <option value={{id_trang_thai}}>{{trang_thai}}</option>
+        <option value={{id_trang_thai}}>{{ten_trang_thai}}</option>
       {{/each}}
     </select>
     <br />

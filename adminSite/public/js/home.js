@@ -14,7 +14,14 @@ $("#login-form").submit(function (e) {
         d.setTime(d.getTime() + response.expiresIn);
         let expires = "expires=" + d.toUTCString();
         document.cookie = "jwt =" + response.msg + ";" + expires + ";path=/";
-        location.href = "/patient";
+
+        if (response.role == "user") {
+          location.href = "/product";
+        } else if (response.role == "admin") {
+          location.href = "/admin";
+        } else {
+          location.href = "/product-package";
+        }
       } else {
         $("#alert").text(response.msg);
         $("#alert").attr("hidden", true);

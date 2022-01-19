@@ -5,7 +5,7 @@ const idFieldName = "id_benh_nhan";
 module.exports = {
   all: async () => {
     const res = await db.load(tbName);
-    return res ? res : null;
+    return res;
   },
 
   get: async (fieldName, value) => {
@@ -19,21 +19,22 @@ module.exports = {
   },
 
   get_cur: async (id) => {
-    var query = `SELECT tt.trang_thai
-    FROM public.lich_su_trang_thai_benh_nhan ls
-    join public.trang_thai tt on ls.id_trang_thai = tt.id_trang_thai
-    where ls.id_benh_nhan = ${id} and ls.status = 1`;
+    var query = `SELECT tt.ten_trang_thai
+      FROM public.trang_thai_benh_nhan ttbn
+      join public.trang_thai tt on ttbn.trang_thai = tt.id_trang_thai
+      where ttbn.id_benh_nhan = ${id} and ttbn.status = 1`;
 
-    const res = await db.runQuery(query);
-    return res ? res[0] : null;
+    const res = await db.getSingleResut(query);
+    return res;
   },
 
   edit: async (id) => {
-    var query = `update public.lich_su_trang_thai_benh_nhan
+    var query = `update public.trang_thai_benh_nhan
     set status = 0
     where id_benh_nhan = ${id} and status = 1`;
     const res = await db.runQuery(query);
-    return res ? res[0] : null;
+    
+    return res;
   },
 
   delete: async (id) => {
