@@ -11,14 +11,13 @@ router.get("/limit", auth, async (req, res) => {
 
   res.status(200).json({
     msg: "success",
-    han_muc: limit.phan_tram_han_muc,
+    han_muc: limit,
   });
 });
 
 // thay đổi hạn mức
 router.put("/limit", auth, async (req, res) => {
-  const result = await limitM.changeLimit(req.body.newLimit);
-
+  const result = await limitM.changeLimit(req.body);
   res.status(200).json({
     msg: "success",
     result: result,

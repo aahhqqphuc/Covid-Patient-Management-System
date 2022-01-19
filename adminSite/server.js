@@ -59,8 +59,6 @@ app.use("/statistic", require("./controllers/statistic.C"));
 
 app.use("/payment", require("./controllers/payment.C"));
 
-app.use("/payment-system", require("./controllers/paymentSystem.C"));
-
 app.use("/account", require("./controllers/account.C"));
 
 app.get("/", authLogin, (req, res) => {
