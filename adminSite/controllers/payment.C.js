@@ -13,14 +13,14 @@ router.get("/manage", async (req, res) => {
     method: "get",
     url: "http://127.0.0.1:3000/payment-system/payment-account",
     responseType: "json",
-    headers: { Authorization: `Bearer ${req.cookies.jwt}` }
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
   })
     .then(function (response) {
       const paymentAccounts = response.data;
 
       res.render("payment/paymentManagement", {
         layout: "managerLayout",
-        paymentAccounts
+        paymentAccounts,
       });
     })
     .catch(function (err) {
@@ -33,7 +33,7 @@ router.get("/min-payment", async (req, res) => {
     method: "get",
     url: "http://127.0.0.1:3001/payment/limit",
     responseType: "json",
-    headers: { Authorization: `Bearer ${req.cookies.jwt}` }
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
   })
     .then(function (response) {
       const level = response.data;
@@ -47,11 +47,10 @@ router.get("/min-payment", async (req, res) => {
       console.log("payment/min-payment/get", err);
 
       let info;
-      if(err.response.status == '401'){
-        info = 'Lỗi xác thực'
-      }
-      else{
-        info = 'Lỗi hệ thống'
+      if (err.response.status == "401") {
+        info = "Lỗi xác thực";
+      } else {
+        info = "Lỗi hệ thống";
       }
 
       res.render("payment/minPayment", {
@@ -67,34 +66,32 @@ router.post("/min-payment", async (req, res) => {
     url: "http://127.0.0.1:3001/payment/limit",
     data: {
       phan_tram_han_muc: req.body.minPercent,
-      so_tien_thanh_toan_toi_thieu: req.body.minMoney
+      so_tien_thanh_toan_toi_thieu: req.body.minMoney,
     },
-    headers: { Authorization: `Bearer ${req.cookies.jwt}` }
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
   })
     .then(function (response) {
-      if (response.status == '200') {
-        req.flash('success', 'Cập nhật thành công.');
-        res.redirect('/payment/min-payment')
+      if (response.status == "200") {
+        req.flash("success", "Cập nhật thành công.");
+        res.redirect("/payment/min-payment");
       } else {
-        req.flash('error', 'Cập nhật không thành công.');
-        res.redirect('/payment/min-payment')
+        req.flash("error", "Cập nhật không thành công.");
+        res.redirect("/payment/min-payment");
       }
     })
     .catch(function (err) {
       console.log("payment/min-payment/post", err);
-      if(err.response.status == '401'){
-        req.flash('info', 'Lỗi xác thực.');
+      if (err.response.status == "401") {
+        req.flash("info", "Lỗi xác thực.");
+      } else {
+        req.flash("error", "Cập nhật không thành công.");
       }
-      else{
-        req.flash('error', 'Cập nhật không thành công.');
-      }
-      return res.redirect('/payment/min-payment')
+      return res.redirect("/payment/min-payment");
     });
 });
 
 router.post("/purchase", async (req, res) => {
   try {
-
     const packageId = req.body.packageId;
     const productQuantity = req.body.product;
     const opt = req.body.paymentOpt;
@@ -103,7 +100,7 @@ router.post("/purchase", async (req, res) => {
 
     for (let p of productQuantity) {
       if (p > package.gioi_han_san_pham) {
-        return res.redirect('/');
+        return res.redirect("/");
       }
     }
 
@@ -119,13 +116,12 @@ router.post("/purchase", async (req, res) => {
       id_nguoi_mua: account.id_tai_khoan,
       total: null,
       trang_thai: 1,
-    }
+    };
 
     axios({
       method: "post",
       url: "",
       data: total,
-
     })
       .then(async function (response) {
         // thêm vào hóa đơn
@@ -134,8 +130,8 @@ router.post("/purchase", async (req, res) => {
         const orderDetail = {
           id_hoa_don: orderId.id_hoa_don,
           id_goi_nhu_cau_yeu_pham: packageId,
-          total: total
-        }
+          total: total,
+        };
         // thêm vào chi tiết hóa đơn
         const orderDetailId = await orderM.addOrderDetail(orderDetail);
         // tạo chi tiết nhu cầu yếu phẩm
@@ -145,13 +141,13 @@ router.post("/purchase", async (req, res) => {
               id_chi_tiet_hoa_don: orderDetailId.id_chi_tiet,
               id_san_pham: packageProducts[i].id_nhu_yeu_pham,
               so_luong: productQuantity[i],
-              don_gia: packageProducts[i].gia_tien
-            }
+              don_gia: packageProducts[i].gia_tien,
+            };
             // thêm vào chi tiết nhu cầu yếu phẩm
             const re = await packageM.addPackageDetail(packageDetail);
           }
         }
-        res.redirect('/product');
+        res.redirect("/product");
       })
       .catch(async function (err) {
         console.log("paying", err);
@@ -169,8 +165,8 @@ router.get("/payment-debt", async (req, res) => {
   } catch (error) {
     return res.render("payment/debtPayment", {
       layout: "managerLayout",
-      error: 'Lỗi hệ thống'
-    })
+      error: "Lỗi hệ thống",
+    });
   }
 
   const so_du = parseInt(pAccount.so_du);
@@ -194,12 +190,12 @@ router.get("/payment-debt", async (req, res) => {
     from,
     to,
     isEqual,
-  }
+  };
 
   res.render("payment/debtPayment", {
     layout: "managerLayout",
-    dataPay
-  })
+    dataPay,
+  });
 });
 
 router.post("/payment-debt", async (req, res) => {
@@ -208,8 +204,8 @@ router.post("/payment-debt", async (req, res) => {
   const validPass = await compare(password, user[0].password);
 
   if (!validPass) {
-    req.flash('error', 'Mật khẩu không đúng')
-    return res.redirect("/payment/payment-debt")
+    req.flash("error", "Mật khẩu không đúng");
+    return res.redirect("/payment/payment-debt");
   }
 
   // axios({
@@ -226,7 +222,6 @@ router.post("/payment-debt", async (req, res) => {
   //     req.flash('error', 'Thanh toán không thành công.')
   //     res.redirect('/payment/payment-debt');
   //   });
-
 });
 
 router.get("/notify/:id", async (req, res) => {
@@ -234,12 +229,12 @@ router.get("/notify/:id", async (req, res) => {
     ID_Benh_Nhan: req.params.id,
     Thong_Bao: `Vui lòng thanh toán dư nợ của bạn`,
     status: 0,
-  }
+  };
   try {
     await notifyM.add(noftify);
-    res.redirect('/payment/manage');
+    res.redirect("/payment/manage");
   } catch (error) {
-    res.redirect('/payment/manage');
+    res.redirect("/payment/manage");
   }
 });
 
