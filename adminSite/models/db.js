@@ -141,4 +141,5 @@ exports.tableName = {
   tinh: "tinh",
   trang_thai_benh_nhan: "trang_thai_benh_nhan",
   xa: "xa",
+  thong_bao: "thong_bao",
 };

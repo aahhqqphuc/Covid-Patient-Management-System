@@ -32,7 +32,7 @@ function runChart(node, objData, max) {
     data: {
       labels: objData.labels,
       datasets: [{
-        label: "Revenue",
+        label: "Số lượng",
         backgroundColor: "rgba(2,117,216,1)",
         borderColor: "rgba(2,117,216,1)",
         data: objData.data,
