@@ -30,6 +30,16 @@ module.exports = {
     }
   },
 
+  delete: async (id)=>{
+    const query = `delete from ${tbNameOrder} where ${idFieldNameOrder} = ${id}`;
+    try {
+      const rs = await db.runQuery(query);
+      return rs;
+    } catch (error) {
+      console.log("error order/add :", error);
+    }
+  },
+
   updateStatus: async (trang_thai, id) => {
     const query = `Update ${tbName}
     set trang_thai = '${trang_thai}', ngay_cap_nhat = '${ngay_cap_nhat}' where id_hoa_don = '${id}' returning *`;

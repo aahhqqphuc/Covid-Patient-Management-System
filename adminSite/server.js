@@ -33,13 +33,28 @@ app.all('/*', function(req, res, next) {
 });
 
 app.use(session({
+<<<<<<< Updated upstream
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: true }
 }))
+=======
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+>>>>>>> Stashed changes
 
 app.use(flash());
+
+app.use(function (req, res, next) {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.info = req.flash("info");
+    next();
+});
 
 app.use(express.static(__dirname + "/public"));
 

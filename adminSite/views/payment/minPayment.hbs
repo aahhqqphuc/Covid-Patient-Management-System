@@ -1,15 +1,19 @@
 <div class="pt-5 mb-3">
     {{#if success}}
     <div class="alert alert-success w-50 text-center m-auto" role="alert" id="success-alert">
-        <strong>Thành công!</strong> Cập nhật thành công.
+        <strong>Thành công!</strong> {{success}}.
     </div>
     {{/if}}
     {{#if error}}
-    <div class="alert alert-success w-50 text-center m-auto" role="alert" id="success-alert">
-        <strong>Thất bại</strong> cập nhật không thành công.
+    <div class="alert alert-danger w-50 text-center m-auto" role="alert" id="success-alert">
+        <strong>Thất bại</strong> {{error}}
     </div>
     {{/if}}
-
+    {{#if info}}
+    <div class="alert alert-danger w-50 text-center m-auto" role="alert" id="success-alert">
+        <strong>lỗi!</strong> {{info}}
+    </div>
+    {{/if}}
 </div>
 <div class="container">
 
@@ -43,6 +47,7 @@
     </div>
 </div>
 
+<script src="/js/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
         $("#success-alert").slideDown();
