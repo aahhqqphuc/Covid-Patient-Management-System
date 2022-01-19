@@ -9,6 +9,7 @@ const treatmentHistoryM = require("../models/treatmentHistory.M");
 const treatmentPlaceM = require("../models/treatmentPlace.M");
 const accountM = require("../models/account.M");
 const { createAccount } = require("../utils/account");
+const axios = require("axios");
 const { auth } = require("../utils/auth");
 
 router.get("/add", async (req, res) => {
@@ -24,7 +25,7 @@ router.get("/add", async (req, res) => {
   });
 });
 
-router.post("/add", async (req, res) => {
+router.post("/add", auth, async (req, res) => {
   let createdDate = new Date();
 
   let patient = {
@@ -58,11 +59,29 @@ router.post("/add", async (req, res) => {
 
   const user = await createAccount(req.body.id, req.body.id);
 
+  user.id_benh_nhan = result[0].id_benh_nhan;
+
   await accountM.add(user);
 
-  res.render("patient/patientList", {
-    layout: "managerLayout",
-  });
+  axios({
+    method: "post",
+    url: "http://localhost:3001/payment/add",
+    responseType: "json",
+    data: {
+      patientId: result[0].id_benh_nhan,
+    },
+    headers: {
+      Authorization: "Bearer " + req.cookies.jwt,
+    },
+  })
+    .then(function (response) {
+      res.status(200).json({
+        msg: "success",
+      });
+    })
+    .catch(function (err) {
+      console.log("err /payment/add", err);
+    });
 });
 
 router.get("/change-state/:id", async (req, res) => {

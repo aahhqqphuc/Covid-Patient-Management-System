@@ -23,9 +23,13 @@ router.post("/login", async (req, res) => {
     });
   }
 
-  const token = jwt.sign({ username: user[0].user_name, role: user[0].role }, process.env.TOKEN_SECRET, {
-    expiresIn: 86400,
-  });
+  const token = jwt.sign(
+    { username: user[0].user_name, role: user[0].role, patientId: user[0].id_benh_nhan },
+    process.env.TOKEN_SECRET,
+    {
+      expiresIn: 86400,
+    }
+  );
 
   return res.status(200).json({
     success: true,

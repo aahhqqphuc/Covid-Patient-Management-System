@@ -17,7 +17,7 @@ router.get("/manage", async (req, res) => {
 
       res.render("payment/paymentManagement", {
         layout: "managerLayout",
-        paymentAccounts
+        paymentAccounts,
       });
     })
     .catch(function (err) {
@@ -49,12 +49,15 @@ router.post("/min-payment", async (req, res) => {
     method: "POST",
     url: "http://127.0.0.1:3000/payment-system/level",
     data: req.body,
+    headers: {
+      Authorization: "Bearer",
+    },
   })
     .then(function (response) {
-      if(response.data.status == 'success'){
-        res.redirect('/payment/min-payment')
-      }else{
-        res.redirect('/payment/min-payment')
+      if (response.data.status == "success") {
+        res.redirect("/payment/min-payment");
+      } else {
+        res.redirect("/payment/min-payment");
       }
     })
     .catch(function (err) {
@@ -71,7 +74,7 @@ router.post("/purchase", async (req, res) => {
 
     for (let p of productQuantity) {
       if (p > package.muc_gioi_han_san_pham) {
-        return res.redirect('/');
+        return res.redirect("/");
       }
     }
 
@@ -83,7 +86,7 @@ router.post("/purchase", async (req, res) => {
       id_nguoi_mua: 1,
       total: null,
       trang_thai: 1,
-    }
+    };
     // thêm vào hóa đơn
     const orderId = await orderM.add(order);
 
@@ -93,20 +96,20 @@ router.post("/purchase", async (req, res) => {
     const orderDetail = {
       id_hoa_don: orderId.id_hoa_don,
       id_goi_nhu_cau_yeu_pham: packageId,
-      total: total
-    }
+      total: total,
+    };
     // thêm vào chi tiết hóa đơn
     const orderDetailId = await orderM.addOrderDetail(orderDetail);
 
     for (let i in packageProducts) {
-      if(productQuantity[i] != 0){
+      if (productQuantity[i] != 0) {
         let packageDetail = {
           id_chi_tiet_hoa_don: orderDetailId.id_chi_tiet,
           id_san_pham: packageProducts[i].id_nhu_yeu_pham,
           so_luong: productQuantity[i],
-          don_gia: packageProducts[i].gia_tien
-        }
-        
+          don_gia: packageProducts[i].gia_tien,
+        };
+
         //  thêm vào chi tiết nhu cầu yếu phẩm
         const re = await packageM.addPackageDetail(packageDetail);
       }
@@ -136,13 +139,13 @@ router.get("/notify/:id", async (req, res) => {
     id_benh_nhan: id,
     noi_dung: `Vui lòng thanh toán dư nợ của bạn`,
     trang_thai: 0,
-    ngay_tao: new Date()
-  }
+    ngay_tao: new Date(),
+  };
   try {
     await notifyM.add(noftify);
-    res.redirect('/payment/manage');
+    res.redirect("/payment/manage");
   } catch (error) {
-    res.redirect('/payment/manage');
+    res.redirect("/payment/manage");
   }
 });
 
