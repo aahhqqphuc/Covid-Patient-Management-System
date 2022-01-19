@@ -184,14 +184,14 @@ router.get("/debt-patient", auth, async (req, res) => {
 });
 
 // khóa tài khoản / mở khóa tài khoản
-router.post("/change-state", auth, async (req, res) => {
+router.put("/change-state", auth, async (req, res) => {
   if (req.user.role != "manager") {
     return res.status(401).json({
       msg: "unauthorized",
     });
   }
 
-  await paymentAccountM.setState(req.user.patientId, req.body.trang_thai);
+  await paymentAccountM.setState(req.user.patientId, req.body.state);
 
   res.status(200).json({
     msg: "success",
