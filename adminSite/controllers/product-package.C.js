@@ -3,10 +3,11 @@ const router = express.Router();
 const model = require("../models/product-package.M");
 module.exports = router;
 let products_selected = [];
+const manager = -1;
 router.get("/", async (req, res) => {
   const page = +req.query.page || 1;
-  const pagesize = +req.query.pagesize || 5;
-  const result = await model.getAll(page, pagesize);
+  const pagesize = +req.query.pagesize || 8;
+  const result = await model.getAll(page, pagesize, manager);
   res.render("product-package/product-packageList", {
     layout: "managerLayout",
     packages: result.data,
@@ -16,7 +17,7 @@ router.get("/", async (req, res) => {
 router.get("/filter", async (req, res) => {
   const page = +req.query.page || 1;
   const period = req.query.period || -1;
-  const pagesize = +req.query.pagesize || 5;
+  const pagesize = +req.query.pagesize || 8;
   const search = req.query.search || "";
   const sortby = req.query.sortby || "id_goi_nhu_yeu_pham";
   const asc = req.query.asc;
@@ -140,21 +141,29 @@ router.post("/edit/:id", async (req, res) => {
   }
   return res.redirect(`/product-package/detail/${id}`);
 });
+router.get("/disable/:id", async (req, res) => {
+  const id = req.params.id;
+  const rs = await model.disable(id);
+  res.redirect("/product-package/detail/" + id);
+});
+router.get("/enable/:id", async (req, res) => {
+  const id = req.params.id;
+  const rs = await model.enable(id);
+  res.redirect("/product-package/detail/" + id);
+});
 
 // API for puchase
-const db = require("../models/db");
 
 router.get("/package-detail/:id", async (req, res) => {
   try {
-      const result = await model.getPackageProducts(req.params.id);
-      console.log(result);
-      const data = {
-          'info': result.package,
-          'products': result.packageProducts
-      }
-      res.json(data);
+    const result = await model.getPackageProducts(req.params.id);
+    console.log(result);
+    const data = {
+      info: result.package,
+      products: result.packageProducts,
+    };
+    res.json(data);
   } catch (error) {
-      res.status(404, error.message);
+    res.status(404, error.message);
   }
 });
-

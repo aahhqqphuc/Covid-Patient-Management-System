@@ -1,8 +1,20 @@
 const db = require("./db").getDb;
-
+function getOpposite(status) {
+  switch (status) {
+    case -1:
+      return -1;
+    case 0:
+      return 1;
+    case 1:
+      return 0;
+    default:
+      return -1;
+  }
+}
 module.exports = {
-  getAll: async (page, pagesize) => {
-    const query = `SELECT distinct on (g.id_goi_nhu_yeu_pham) g.id_goi_nhu_yeu_pham, 
+  getAll: async (page, pagesize, status) => {
+    const opposite = getOpposite(status);
+    const query = `SELECT distinct on (g.id_goi_nhu_yeu_pham) g.id_goi_nhu_yeu_pham, g.status,
         g.ten_goi,img.url,g.thoi_gian,
         to_string(g.muc_gioi_han_goi) muc_gioi_han_goi_string,
         c.count as So_luong_san_pham
@@ -12,8 +24,9 @@ module.exports = {
         join hinh_anh_san_pham img on nyp.id_nhu_yeu_pham = img.id_nhu_yeu_pham
         join (select count( id_goi ) as count ,id_goi 
         from danh_sach_nhu_yeu_pham group by id_goi) c on ds.id_goi = c.id_goi 
+        where g.status != ${opposite}
         order by g.id_goi_nhu_yeu_pham limit ${pagesize} offset ${pagesize * (page - 1)}; `;
-    const qtotal = `select count(*) from goi_nhu_yeu_pham `;
+    const qtotal = `select count(*) from goi_nhu_yeu_pham where status != ${opposite}`;
     try {
       const r1 = await db.any(query);
       const r2 = await db.any(qtotal);
@@ -23,9 +36,10 @@ module.exports = {
       console.log("query  :", query);
     }
   },
-  filter: async (period, sortby, asc, search, page, pagesize) => {
+  filter: async (period, sortby, asc, search, page, pagesize, status) => {
+    const opposite = getOpposite(status);
     let query = `select * from 
-            (SELECT distinct on (g.id_goi_nhu_yeu_pham) g.id_goi_nhu_yeu_pham, 
+            (SELECT distinct on (g.id_goi_nhu_yeu_pham) g.id_goi_nhu_yeu_pham, g.status,
             g.ten_goi,img.url,g.thoi_gian,g.muc_gioi_han_goi,
             to_string(g.muc_gioi_han_goi) muc_gioi_han_goi_string,
             c.count as So_luong_san_pham, calculate_time(g.thoi_gian,g.muc_gioi_han_goi) thoi_gian_tinh_toan
@@ -35,11 +49,11 @@ module.exports = {
             left join hinh_anh_san_pham img on nyp.id_nhu_yeu_pham = img.id_nhu_yeu_pham
             left join (select count( id_goi ) as count ,id_goi 
                 from danh_sach_nhu_yeu_pham group by id_goi) c on ds.id_goi = c.id_goi) data
-                where ten_goi like '%${search}%' `;
+                where ten_goi like '%${search}%' and status != ${opposite} `;
     query += period != -1 ? `and muc_gioi_han_goi = ${period}` : "";
     query += `order by ${sortby} ${asc} limit ${pagesize} offset ${pagesize * (page - 1)}; `;
 
-    let qtotal = `select count(*) from goi_nhu_yeu_pham where ten_goi like '%${search}%' `;
+    let qtotal = `select count(*) from goi_nhu_yeu_pham where ten_goi like '%${search}%' and status != ${opposite} `;
     qtotal += period != -1 ? `and muc_gioi_han_goi = ${period}` : "";
     try {
       const r1 = await db.any(query);
@@ -51,11 +65,12 @@ module.exports = {
     }
   },
   getById: async (id) => {
-    const q1 = `SELECT id_goi_nhu_yeu_pham, 
+    const q1 = `SELECT id_goi_nhu_yeu_pham, status,
             ten_goi,thoi_gian,muc_gioi_han_goi,
             to_string(muc_gioi_han_goi) muc_gioi_han_goi_string
            FROM public.goi_nhu_yeu_pham where id_goi_nhu_yeu_pham = ${id}`;
-    const q2 = `select distinct on (p.id_nhu_yeu_pham) ds.id_danh_sach_goi, p.id_nhu_yeu_pham, p.ten_sanpham,url,gioi_han_san_pham
+    const q2 = `select distinct on (p.id_nhu_yeu_pham) ds.id_danh_sach_goi, 
+    p.id_nhu_yeu_pham, p.ten_sanpham,url,gioi_han_san_pham,p.gia_tien,p.status,p.mo_ta,p.con_lai
     from danh_sach_nhu_yeu_pham ds join nhu_yeu_pham p  on ds.id_sanpham = p.id_nhu_yeu_pham
 	left join hinh_anh_san_pham img on p.id_nhu_yeu_pham = img.id_nhu_yeu_pham where ds.id_goi = ${id}`;
     try {
@@ -68,7 +83,7 @@ module.exports = {
   },
   add: async (package) => {
     const query = `INSERT INTO Goi_Nhu_Yeu_Pham 
-    VALUES(default,'${package.ten_goi}',${package.thoi_gian},${package.muc_gioi_han}) returning id_goi_nhu_yeu_pham;`;
+    VALUES(default,'${package.ten_goi}',${package.muc_gioi_han},${package.thoi_gian},1) returning id_goi_nhu_yeu_pham;`;
     try {
       var rs = await db.any(query);
       return rs;
@@ -77,7 +92,7 @@ module.exports = {
     }
   },
   addProduct: async (id_goi, id_sanpham, gioi_han) => {
-    const query = `INSERT INTO danh_sach_nhu_yeu_pham VALUES(default,'${id_goi}',${id_sanpham},${gioi_han});`;
+    const query = `INSERT INTO danh_sach_nhu_yeu_pham VALUES(default,'${id_goi}',${id_sanpham},${gioi_han},${gioi_han});`;
     try {
       const rs = await db.any(query);
       return rs;
@@ -154,7 +169,26 @@ module.exports = {
       console.log("get all pro error :", error);
     }
   },
-
+  disable: async (id) => {
+    const query = `update goi_Nhu_Yeu_Pham 
+                  set status = 0
+                  where id_goi_nhu_yeu_pham = ${id};`;
+    try {
+      return await db.any(query);
+    } catch (error) {
+      console.log("error edit pro :", error);
+    }
+  },
+  enable: async (id) => {
+    const query = `update goi_Nhu_Yeu_Pham 
+                  set status = 1
+                  where id_goi_nhu_yeu_pham = ${id};`;
+    try {
+      return await db.any(query);
+    } catch (error) {
+      console.log("error edit pro :", error);
+    }
+  },
   getPackageProducts: async (id) => {
     const packageQuery = `select id_goi_nhu_yeu_pham, ten_goi
     from public.goi_nhu_yeu_pham where id_goi_nhu_yeu_pham = '${id}'`;
@@ -165,9 +199,9 @@ module.exports = {
     try {
       const package = await db.any(packageQuery);
       const packageProducts = await db.any(packageProductsQuery);
-      return {package, packageProducts}
+      return { package, packageProducts };
     } catch (error) {
       console.log("err at getPackageProduct", error);
     }
-  }
+  },
 };

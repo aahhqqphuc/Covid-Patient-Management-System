@@ -233,7 +233,7 @@ strong {
 
 small,
 .small {
-  font-size: 0.875em;
+  font-size: 1em;
 }
 
 mark,
@@ -4974,7 +4974,7 @@ fieldset:disabled .btn {
 .card-img,
 .card-img-top,
 .card-img-bottom {
-  width: 100%;
+  width: 110%;
 }
 
 .card-img,
@@ -5346,8 +5346,8 @@ label {
 .badge {
   display: inline-block;
   padding: 0.35em 0.65em;
-  font-size: 0.75em;
-  font-weight: 700;
+  font-size: 0.5em;
+  font-weight: 500;
   line-height: 1;
   color: #fff;
   text-align: center;
@@ -12244,7 +12244,7 @@ h2 {
 
 .card h5 {
   overflow: hidden;
-  height: 56px;
+  height: 55px;
   font-weight: 900;
   font-size: 1rem;
 }
@@ -12267,7 +12267,7 @@ h2 {
 
 .label-top {
   position: absolute;
-  background-color: #8bc34a;
+  background-color: #751c0c;
   color: #fff;
   top: 8px;
   right: 8px;
