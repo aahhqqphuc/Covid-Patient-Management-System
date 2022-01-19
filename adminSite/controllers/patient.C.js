@@ -146,26 +146,70 @@ router.get("/all", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const data = await patientM.get();
+  const page = +req.query.page || 1;
+  const pagesize = +req.query.pagesize || 5;
+  const result = await patientM.getPaging(page, pagesize);
+  const tinh_place = await patientM.getTinh();
   res.render("patient/patientList", {
-    patients: data,
-
+    patients: result.data,
     layout: "managerLayout",
+    tinh_place: tinh_place,
+    pagination: { page: parseInt(page), limit: pagesize, totalRows: result.total },
+  });
+});
+
+router.get("/filter", async (req, res) => {
+  console.log(req.query);
+  const page = +req.query.page || 1;
+  const tinh = req.query.tinh || "";
+  const pagesize = +req.query.pagesize || 5;
+  const search = req.query.search || "";
+  const sortby = req.query.sortby || "id_benh_nhan";
+  const asc = req.query.asc;
+  const trangthai = req.query.trangthai || -1;
+  const tinh_place = await patientM.getTinh();
+  console.log(tinh,trangthai,sortby,asc,search,page,pagesize);
+  var result;
+  if(trangthai == -1)
+    result = await patientM.filter1(tinh,sortby, asc, search, page, pagesize);
+  else
+    result = await patientM.filter(tinh,trangthai, sortby, asc, search, page, pagesize);
+  res.render("patient/patientList", {
+    layout: "managerLayout",
+    patients: result.data,
+    search: search,
+    tinh: tinh,
+    sortby: sortby,
+    tinh_place: tinh_place,
+    asc: asc,
+    trangthai:trangthai,
+    pagination: {
+      page: parseInt(page),
+      limit: pagesize,
+      totalRows: result.total,
+      queryParams: { tinh: tinh,trangthai:trangthai, search: search, sortby: sortby, asc: asc },
+    },
   });
 });
 
 router.get("/detail", async (req, res) => {
+  const page = +req.query.page || 1;
+  const pagesize = +req.query.pagesize || 5;
   const patient = await patientM.get_patient(req.query.id);
-  const data = await patientM.detail_treatHis(req.query.id);
-  const patientTrailDown = await patientM.viewPatientsDetail_PatientTrailDown(req.query.id);
-  const patientTrailUp = await patientM.viewPatientsDetail_PatientTrailUp(req.query.id);
+
+  const data = await patientM.detail_treatHis(req.query.id,page,pagesize);
+  const patientTrailDown = await patientM.viewPatientsDetail_PatientTrailDown(req.query.id,page,pagesize);
+  const patientTrailUp = await patientM.viewPatientsDetail_PatientTrailUp(req.query.id,page,pagesize);
+  
   res.render("patient/patientDetail", {
     patient: patient[0],
-    detail: data,
-    trailDown: patientTrailDown,
-    trailUp: patientTrailUp,
-
+    detail: data.data,
+    trailDown: patientTrailDown.data,
+    trailUp: patientTrailUp.data,
     layout: "managerLayout",
+    pagination1: { page: parseInt(page), limit: pagesize, totalRows: data.total },
+    pagination2: { page: parseInt(page), limit: pagesize, totalRows: patientTrailDown.total },
+    pagination3: { page: parseInt(page), limit: pagesize, totalRows: patientTrailUp.total },
   });
 });
 
