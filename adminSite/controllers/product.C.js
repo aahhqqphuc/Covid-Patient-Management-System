@@ -4,10 +4,12 @@ const productM = require("../models/product.M");
 module.exports = router;
 const upload = require("../middlewares/upload");
 const { isManager } = require("../utils/auth");
+
 router.get("/", isManager, async (req, res) => {
+  const role = req.user.role;
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 8;
-  const result = await productM.getPaging(page, pagesize, role);
+  const result = await productM.getPaging(page, pagesize);
   res.render("product/productList", {
     layout: role == "manager" ? "managerLayout" : "patientLayout",
     products: result.data,
@@ -43,6 +45,7 @@ router.get("/filter", isManager, async (req, res) => {
 router.get("/add", isManager, async (req, res) => {
   res.render("product/newProduct", { script: ["../product/upload.js"], layout: "managerLayout" });
 });
+
 router.post("/add", isManager, upload.array("ImagePath"), async (req, res) => {
   let data = req.body;
   var product = {
@@ -65,6 +68,7 @@ router.post("/add", isManager, upload.array("ImagePath"), async (req, res) => {
 
   res.redirect("/product");
 });
+
 router.get("/detail/:id", async (req, res) => {
   const role = req.user.role;
   let id = req.params.id;
@@ -88,6 +92,7 @@ router.get("/edit/:id", isManager, async (req, res) => {
     images: data.images,
   });
 });
+
 router.post("/edit/:id", isManager, upload.array("ImagePath"), async (req, res) => {
   let data = req.body;
   let id = req.params.id;
@@ -116,6 +121,7 @@ router.get("/disable/:id", isManager, async (req, res) => {
   const rs = await productM.disable(id);
   res.redirect("/product/detail/" + id);
 });
+
 router.get("/enable/:id", isManager, async (req, res) => {
   const id = req.params.id;
   const rs = await productM.enable(id);

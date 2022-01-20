@@ -121,6 +121,7 @@ module.exports.addnew = async (tbName, tbCol, valueStr) => {
     return ["error", error];
   }
 };
+
 exports.tableName = {
   benh_nhan_covid: "benh_nhan_covid",
   chi_tiet_hoa_don: "chi_tiet_hoa_don",

@@ -9,7 +9,6 @@ router.get("/", async (req, res) => {
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 8;
   const result = await model.getAll(page, pagesize, role);
-  console.log(role == "manager" ? "managerLayout" : "patientLayout");
   res.render("product-package/product-packageList", {
     layout: role == "manager" ? "managerLayout" : "patientLayout",
     packages: result.data,
@@ -47,7 +46,6 @@ router.get("/filter", async (req, res) => {
 router.get("/detail/:id", async (req, res) => {
   const role = req.user.role;
   let id = req.params.id;
-  console.log("id", id);
   let data = await model.getById(id);
   res.render("product-package/product-packageDetail", {
     layout: role == "manager" ? "managerLayout" : "patientLayout",
@@ -140,17 +138,13 @@ router.get("/delete-product/:id", isManager, async (req, res) => {
 router.post("/edit/:id", isManager, async (req, res) => {
   let id = req.params.id;
   let pros = await model.getElseProducts(id);
-  console.log("body", req.body);
   if (req.body.pre_add == "true") {
     products_selected = req.body.products_selected;
     for (let index = 0; index < products_selected.length; index++) {
-      console.log(index);
-
       await model.addProduct(id, products_selected[index], 1);
     }
     return res.redirect(`/product-package/edit/${id}`);
   } else if (req.body.main == "true") {
-    console.log("main");
     var package = {
       id_goi_nhu_yeu_pham: id,
       ten_goi: req.body.ten_goi,

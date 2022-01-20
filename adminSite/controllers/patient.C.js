@@ -11,7 +11,7 @@ const accountM = require("../models/account.M");
 const orderM = require("../models/order.M");
 const { createAccount } = require("../utils/account");
 const axios = require("axios");
-const { auth, isManager } = require("../utils/auth");
+const { isManager } = require("../utils/auth");
 
 router.get("/add", isManager, async (req, res) => {
   let patient = await patientM.all();
@@ -27,7 +27,6 @@ router.get("/add", isManager, async (req, res) => {
 });
 router.post("/add", isManager, async (req, res) => {
   let createdDate = new Date();
-  console.log("first");
   let patient = {
     ho_ten: req.body.name,
     cmnd: req.body.id,
@@ -57,8 +56,7 @@ router.post("/add", isManager, async (req, res) => {
   };
   await relatedPatientM.add(relatedPatient);
 
-  const user = await createAccount(req.body.id, req.body.id);
-  console.log(user);
+  const user = await createAccount(req.body.id, req.body.id, "user");
 
   user.id_benh_nhan = result[0].id_benh_nhan;
 
@@ -147,26 +145,68 @@ router.get("/all", isManager, async (req, res) => {
 });
 
 router.get("/", isManager, async (req, res) => {
-  const data = await patientM.get();
+  const page = +req.query.page || 1;
+  const pagesize = +req.query.pagesize || 5;
+  const result = await patientM.getPaging(page, pagesize);
+  const tinh = "";
+  const tinh_place = await patientM.getTinh(tinh);
   res.render("patient/patientList", {
-    patients: data,
-
+    patients: result.data,
+    tinhinput: "All",
     layout: "managerLayout",
+    tinh_place: tinh_place,
+    pagination: { page: parseInt(page), limit: pagesize, totalRows: result.total },
+  });
+});
+
+router.get("/filter", async (req, res) => {
+  const page = +req.query.page || 1;
+  const tinh = req.query.tinh || "";
+  const pagesize = +req.query.pagesize || 5;
+  const search = req.query.search || "";
+  const sortby = req.query.sortby || "id_benh_nhan";
+  const asc = req.query.asc;
+  const trangthai = req.query.trangthai || -1;
+  const tinh_place = await patientM.getTinh(tinh);
+  var result;
+  if (trangthai == -1) result = await patientM.filter1(tinh, sortby, asc, search, page, pagesize);
+  else result = await patientM.filter(tinh, trangthai, sortby, asc, search, page, pagesize);
+  res.render("patient/patientList", {
+    layout: "managerLayout",
+    patients: result.data,
+    search: search,
+    tinhinput: tinh,
+    sortby: sortby,
+    tinh_place: tinh_place,
+    asc: asc,
+    trangthai: trangthai,
+    pagination: {
+      page: parseInt(page),
+      limit: pagesize,
+      totalRows: result.total,
+      queryParams: { tinh: tinh, trangthai: trangthai, search: search, sortby: sortby, asc: asc },
+    },
   });
 });
 
 router.get("/detail", isManager, async (req, res) => {
+  const page = +req.query.page || 1;
+  const pagesize = +req.query.pagesize || 5;
   const patient = await patientM.get_patient(req.query.id);
-  const data = await patientM.detail_treatHis(req.query.id);
-  const patientTrailDown = await patientM.viewPatientsDetail_PatientTrailDown(req.query.id);
-  const patientTrailUp = await patientM.viewPatientsDetail_PatientTrailUp(req.query.id);
+
+  const data = await patientM.detail_treatHis(req.query.id, page, pagesize);
+  const patientTrailDown = await patientM.viewPatientsDetail_PatientTrailDown(req.query.id, page, pagesize);
+  const patientTrailUp = await patientM.viewPatientsDetail_PatientTrailUp(req.query.id, page, pagesize);
+
   res.render("patient/patientDetail", {
     patient: patient[0],
-    detail: data,
-    trailDown: patientTrailDown,
-    trailUp: patientTrailUp,
-
+    detail: data.data,
+    trailDown: patientTrailDown.data,
+    trailUp: patientTrailUp.data,
     layout: "managerLayout",
+    pagination1: { page: parseInt(page), limit: pagesize, totalRows: data.total },
+    pagination2: { page: parseInt(page), limit: pagesize, totalRows: patientTrailDown.total },
+    pagination3: { page: parseInt(page), limit: pagesize, totalRows: patientTrailUp.total },
   });
 });
 
@@ -180,31 +220,33 @@ router.get("/check-id-number", isManager, async (req, res) => {
     check: check,
   });
 });
+
 router.get("/order-history", async (req, res) => {
-  const patientId = 9;
+  const patientId = req.user.patientId;
   const data = await orderM.orderHistory(patientId);
-  console.log(data);
 
   res.render("patient/orderHistory", {
     layout: "patientLayout",
     orders: data,
   });
 });
+
 router.get("/order-history/:id", async (req, res) => {
   const id = req.params.id;
   const data = await orderM.orderHistoryDetail(id);
-  console.log(data);
   res.render("patient/orderHistoryDetail", {
     layout: "patientLayout",
     package: data.package[0],
     products: data.products,
   });
 });
+
 router.get("/self", async (req, res) => {
-  const page = +req.params.page || 1;
+  const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 5;
   const patient = await patientM.get_patient(req.query.id);
   const data = await patientM.detail_treatHis(req.query.id, page, pagesize);
+
   res.render("patient/patientTreatHis", {
     patient: patient[0],
     detail: data.data,
