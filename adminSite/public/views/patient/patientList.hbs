@@ -12,19 +12,19 @@
             </div>
             <div class="col-2">
                 <select name="tinh" class="form-select form-select-md border border-secondary ">
-                    <option {{#cond tinh "All"}} selected {{/cond}} value="">Tỉnh</option>
+                    <option {{#cond tinhinput "All"}} selected {{/cond}} value="">Tỉnh</option>
                     {{#each tinh_place}}
-                       <option {{#cond this.ten_tinh tinh}} selected {{/cond}}value="{{this.ten_tinh}}">{{this.ten_tinh}}</option>
+                       <option {{#cond this.ten_tinh this.curTinh}} selected {{/cond}}value="{{this.ten_tinh}}">{{this.ten_tinh}}</option>
                     {{/each}}
                 </select>
             </div>
             <div class="col-2">
                 <select name="trangthai" class="form-select form-select-md border border-secondary ">
-                    <option {{#cond trangthai -1}} selected {{/cond}} value="">Trạng thái</option>
-                    <option {{#cond trangthai 0}} selected {{/cond}} value="0">F0</option>
-                    <option {{#cond trangthai 1}} selected {{/cond}} value="1">F1</option>
-                    <option {{#cond trangthai 2}} selected {{/cond}} value="2">F2</option>
-                    <option {{#cond trangthai 3}} selected {{/cond}} value="3">F3</option>
+                    <option {{#cond trangthai '-1'}} selected {{/cond}} value="">Trạng thái</option>
+                    <option {{#cond trangthai '0'}} selected {{/cond}} value="0">F0</option>
+                    <option {{#cond trangthai '1'}} selected {{/cond}} value="1">F1</option>
+                    <option {{#cond trangthai '2'}} selected {{/cond}} value="2">F2</option>
+                    <option {{#cond trangthai '3'}} selected {{/cond}} value="3">F3</option>
                 </select>
             </div>
             <div class="col-2">

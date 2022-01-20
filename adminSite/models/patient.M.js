@@ -123,12 +123,17 @@ module.exports = {
       console.log("error db/all :", error);
     }
   },
-  getTinh: async () => {
+  getTinh: async (tinh) => {
     try{
-    var query = `SELECT *
-      FROM public.tinh
-      ORDER BY id_tinh ASC`;
+      if(tinh == '')
+      tinh = 'All';
+    var query = `SELECT t.*, null AS curTinh
+    FROM public.tinh t
+    ORDER BY id_tinh ASC`;
       const res = await db.runQuery(query);
+      res.forEach((element)=>{
+          element.curTinh = tinh;
+      });
       return res;
     } catch (error) {
       console.log("error db/all :", error);

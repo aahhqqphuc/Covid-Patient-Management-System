@@ -149,9 +149,11 @@ router.get("/", async (req, res) => {
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 5;
   const result = await patientM.getPaging(page, pagesize);
-  const tinh_place = await patientM.getTinh();
+  const tinh = '';
+  const tinh_place = await patientM.getTinh(tinh);
   res.render("patient/patientList", {
     patients: result.data,
+    tinhinput: "All",
     layout: "managerLayout",
     tinh_place: tinh_place,
     pagination: { page: parseInt(page), limit: pagesize, totalRows: result.total },
@@ -167,8 +169,9 @@ router.get("/filter", async (req, res) => {
   const sortby = req.query.sortby || "id_benh_nhan";
   const asc = req.query.asc;
   const trangthai = req.query.trangthai || -1;
-  const tinh_place = await patientM.getTinh();
+  const tinh_place = await patientM.getTinh(tinh);
   console.log(tinh,trangthai,sortby,asc,search,page,pagesize);
+  console.log(trangthai);
   var result;
   if(trangthai == -1)
     result = await patientM.filter1(tinh,sortby, asc, search, page, pagesize);
@@ -178,7 +181,7 @@ router.get("/filter", async (req, res) => {
     layout: "managerLayout",
     patients: result.data,
     search: search,
-    tinh: tinh,
+    tinhinput: tinh,
     sortby: sortby,
     tinh_place: tinh_place,
     asc: asc,
