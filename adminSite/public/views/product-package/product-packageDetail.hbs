@@ -1,4 +1,14 @@
 <div class="container-fluid mt-3">
+    {{#if success}}
+    <div class="alert alert-success w-50 text-center m-auto" role="alert" id="message-alert">
+        <strong>Thành công!</strong> {{success}}
+    </div>
+    {{/if}}
+    {{#if error}}
+    <div class="alert alert-danger w-50 text-center m-auto" role="alert" id="message-alert">
+        <strong>Thất bại!</strong> {{error}}
+    </div>
+    {{/if}}
     <h1 class="mt-4">Chi tiết Gói Nhu Yếu Phẩm</h1>
     <button type="button" class="btn btn-lg btn-secondary align-self-center mb-3" onclick="goBack()">Trở
         lại</button>
@@ -49,7 +59,7 @@
                         </div>
                     </div>
                 </div>
-                {{#cond role "manager"}}
+                {{#cond role "managers"}}
                 <div class="d-flex ">
                     <a type="button" href="/product-package/edit/{{package.id_goi_nhu_yeu_pham}}"
                         class="btn btn-lg btn-primary align-self-center mr-5">Chỉnh
@@ -109,11 +119,12 @@
                     </div>
                     {{/cond}}
 
-                    {{#cond role "patient"}}
-                    <div class="d-flex ">
-                        <a type="button" href="#" class="btn btn-lg btn-primary align-self-center mr-5 btn-request-form" data-toggle="modal" data-target="#myModal">Mua gói</a>
-                    </div>
-                    {{/cond}}
+                </div>
+                {{/cond}}
+                {{#cond role "user"}}
+                <div class="d-flex justify-content-end">
+                    <a type="button" href="#" class="btn btn-lg btn-primary align-self-center px-5 mr-5 btn-request-form"
+                        data-toggle="modal" data-target="#myModal">Mua gói</a>
                 </div>
                 {{/cond}}
             </form>
@@ -177,6 +188,13 @@
 <script src="/js/cart.js"></script>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        $("#message-alert").slideDown();
+        window.setTimeout(function () {
+            $("#message-alert").slideUp(500);
+        }, 1500);
+    });
+
     function goBack() {
         window.history.back();
     }

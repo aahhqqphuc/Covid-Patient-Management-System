@@ -192,7 +192,7 @@ module.exports = {
     const packageQuery = `select id_goi_nhu_yeu_pham, ten_goi
     from public.goi_nhu_yeu_pham where id_goi_nhu_yeu_pham = '${id}'`;
 
-    const packageProductsQuery = `select distinct on (n.id_nhu_yeu_pham) n.id_nhu_yeu_pham, n.ten_sanpham, d.so_luong, d.gioi_han_san_pham, n.gia_tien, h.url
+    const packageProductsQuery = `select distinct on (n.id_nhu_yeu_pham) n.id_nhu_yeu_pham, n.ten_sanpham, n.con_lai, n.mo_ta, d.so_luong, d.gioi_han_san_pham, n.gia_tien, h.url
     from public.danh_sach_nhu_yeu_pham d, public.nhu_yeu_pham n left join public.hinh_anh_san_pham h on(n.id_nhu_yeu_pham = h.id_nhu_yeu_pham) where n.id_nhu_yeu_pham = d.id_sanpham and d.id_goi = '${id}'`;
 
     try {
@@ -205,7 +205,7 @@ module.exports = {
   },
 
   checkPuchase: async (idPatient, idPackage) => {
-    const packageQuery = `SELECT * FROM hoa_don h, chi_tiet_hoa_don c
+    const query = `SELECT * FROM hoa_don h, chi_tiet_hoa_don c
     where h.id_nguoi_mua = ${idPatient}
      and c.id_goi_nhu_cau_yeu_pham = ${idPackage}
      and h.id_hoa_don = c.id_hoa_don

@@ -187,7 +187,7 @@ router.get("/package-detail/:id", async (req, res) => {
       return res.status(501).json({ info: "Vui lòng đăng nhập" });
     }
 
-    const checkPuchase = await models.checkPuchase(req.user.patientId, req.params.id);
+    const checkPuchase = await model.checkPuchase(req.user.patientId, req.params.id);
     if (checkPuchase.length) {
       return res.status(501).json({ info: "Bạn đã mua gói này trước đó <br> Vui lòng chọn mua Gói nhu yếu phẩm khác" });
     }

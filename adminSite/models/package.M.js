@@ -18,7 +18,7 @@ module.exports = {
   },
 
   get_package_product: async (packageId) => {
-    const query = `select distinct on (n.id_nhu_yeu_pham) n.id_nhu_yeu_pham, n.ten_sanpham, d.so_luong, n.gia_tien, h.url
+    const query = `select distinct on (n.id_nhu_yeu_pham) n.id_nhu_yeu_pham, n.ten_sanpham, d.so_luong, d.gioi_han_san_pham, n.gia_tien, n.con_lai, h.url
     from public.danh_sach_nhu_yeu_pham d, public.nhu_yeu_pham n left join public.hinh_anh_san_pham h on(n.id_nhu_yeu_pham = h.id_nhu_yeu_pham and h.mac_dinh = '1') where n.id_nhu_yeu_pham = d.id_sanpham and d.id_goi = '${packageId}'`;
     try {
       const rs = await db.runQuery(query);

@@ -50,9 +50,7 @@ router.put("/limit", auth, async (req, res) => {
       msg: "unauthorized",
     });
   }
-
-  const result = await limitM.changeLimit(req.body.newLimit);
-
+  const result = await limitM.changeLimit(req.body);
   res.status(200).json({
     msg: "success",
     result: result,
@@ -168,12 +166,13 @@ router.post("/payment-account/pay", auth, async (req, res) => {
 });
 
 // get list bệnh nhân hơn 30 ngày chưa trả nợ
-router.get("/debt-patient", async (req, res) => {
-  // if (req.user.role != "manager") {
-  //   return res.status(401).json({
-  //     msg: "unauthorized",
-  //   });
-  // }
+router.get("/debt-patient", auth, async (req, res) => {
+  if (req.user.role != "manager") {
+    return res.status(401).json({
+      msg: "unauthorized",
+    });
+  }
+
   const result = await paymentAccountM.getDebtPatient(req.body.time);
 
   res.status(200).json({

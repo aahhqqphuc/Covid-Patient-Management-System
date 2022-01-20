@@ -5,6 +5,7 @@ const packageM = require("../models/package.M");
 const notifyM = require("../models/notify.M");
 const { compare } = require("../utils/account");
 const accountM = require("../models/account.M");
+const productM = require("../models/product.M");
 
 const axios = require("axios");
 
@@ -51,7 +52,7 @@ router.get("/min-payment", async (req, res) => {
       console.log("payment/min-payment/get", err);
 
       let info;
-      if (err.response.status == "401") {
+      if (err.response?.status == "401") {
         info = "Lỗi xác thực";
       } else {
         info = "Lỗi hệ thống";
@@ -75,7 +76,7 @@ router.post("/min-payment", async (req, res) => {
     headers: { Authorization: `Bearer ${req.cookies.jwt}` },
   })
     .then(function (response) {
-      if (response.status == "200") {
+      if (response.status == "200" && response.data.result) {
         req.flash("success", "Cập nhật thành công.");
         res.redirect("/payment/min-payment");
       } else {
@@ -102,29 +103,31 @@ router.post("/purchase", async (req, res) => {
 
     const package = await packageM.get(packageId);
 
-    for (let p of productQuantity) {
-      if (p > package.gioi_han_san_pham) {
-        return res.redirect("/");
+    // Lấy chi tiết ds sản phẩm trong gói
+    const packageProducts = await packageM.get_package_product(packageId);
+    
+    // Kiểm tra ràng buộc số lượng
+    for (let i in productQuantity) {
+      if (productQuantity[i] > packageProducts[i].gioi_han_san_pham || productQuantity[i] > packageProducts[i].con_lai) {
+        req.flash('error', 'Số lượng sản phẩm không đáp ứng nhu cầu')
+        return res.redirect(`/product-package/detail/${packageId}`);
       }
     }
 
-    // Lấy chi tiết ds sản phẩm trong gói
-    const packageProducts = await packageM.get_package_product(packageId);
-
     // tính tổng tiền
     const amount = packageProducts.reduce((sum, item, index) => sum + item.gia_tien * productQuantity[index], 0);
-
     // tạo hóa đơn
     const order = {
-      id_nguoi_mua: res.user.patientID,
+      id_nguoi_mua: req.user.patientId,
       total: null,
       trang_thai: 1,
     };
 
     axios({
       method: "post",
-      url: "http://127.0.0.1:3001/payment-account/payment",
-      data: amount,
+      url: "http://127.0.0.1:3001/payment/payment-account/payment",
+      headers: { Authorization: `Bearer ${req.cookies.jwt}` },
+      data: {amount},
     })
       .then(async function (response) {
         // thêm vào hóa đơn
@@ -146,14 +149,20 @@ router.post("/purchase", async (req, res) => {
               so_luong: productQuantity[i],
               don_gia: packageProducts[i].gia_tien,
             };
+            // Cập nhật lại số lượng còn lại
+            let newAmount = packageProducts[i].con_lai - productQuantity[i];
+            const reUpdateAmount = await productM.updateAmount(packageProducts[i].id_nhu_yeu_pham, newAmount);
             // thêm vào chi tiết nhu cầu yếu phẩm
             const re = await packageM.addPackageDetail(packageDetail);
           }
         }
-        res.redirect("/product-package");
+        req.flash('success', 'Mua hàng thành công')
+        return res.redirect(`/product-package/detail/${packageId}`);
       })
       .catch(async function (err) {
         console.log("paying", err);
+        req.flash('error', 'Mua hàng không thành công')
+        return res.redirect(`/product-package/detail/${packageId}`);
       });
   } catch (error) {
     console.log("puchase", error);

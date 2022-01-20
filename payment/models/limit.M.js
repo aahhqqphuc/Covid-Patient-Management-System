@@ -9,8 +9,9 @@ module.exports = {
   },
 
   changeLimit: async (newLimit) => {
-    var query = `UPDATE public.${db.tableName.han_muc} SET phan_tram_han_muc = ${newLimit};`;
 
-    return await db.update(query);
+    var query = `UPDATE public.${db.tableName.han_muc} SET phan_tram_han_muc = ${newLimit.phan_tram_han_muc}, so_tien_thanh_toan_toi_thieu = ${newLimit.so_tien_thanh_toan_toi_thieu};`;
+
+    return await db.runQuery(query);
   },
 };

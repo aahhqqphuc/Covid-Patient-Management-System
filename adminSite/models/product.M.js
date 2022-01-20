@@ -118,4 +118,16 @@ module.exports = {
       console.log("delete img error :", error);
     }
   },
+
+  updateAmount: async (id, amount) => {
+    const query = `update Nhu_Yeu_Pham 
+                  set con_lai = ${amount}
+                  where id_nhu_yeu_pham = ${id} returning *`;
+    try {
+        const re = await db.any(query);
+        return rs;
+    } catch (error) {
+      console.log("delete img error :", error);
+    }
+  },
 };

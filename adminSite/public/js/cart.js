@@ -97,9 +97,9 @@ $('.btn-request-form').on("click", async function (e) {
     let html = '';
 
     package.products.forEach(e => {
-      const tong_tien = e.gia_tien * e.so_luong;
-
+      
       let so_luong = e.so_luong > e.gioi_han_san_pham? e.gioi_han_san_pham : e.so_luong;
+      const tong_tien = e.gia_tien * so_luong;
 
       html += `<div class="product">
       <div class="product-image">

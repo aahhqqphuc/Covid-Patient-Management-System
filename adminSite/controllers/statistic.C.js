@@ -101,6 +101,7 @@ router.get("/payment", async (req, res) => {
     method: "get",
     url: "http://127.0.0.1:3001/payment/debt-patient",
     responseType: "json",
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
   })
     .then(function (response) {
       const paymentAccounts = response.data.danh_sach;
