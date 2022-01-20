@@ -1,0 +1,63 @@
+<div class="container mt-5">
+    {{#if success}}
+    <div class="alert alert-success w-50 text-center m-auto" role="alert" id="message-alert">
+        <strong>Thành công!</strong> {{success}}
+    </div>
+    {{/if}}
+    {{#if error}}
+    <div class="alert alert-danger w-50 text-center m-auto" role="alert" id="message-alert">
+        <strong>Thất bại!</strong> {{error}}
+    </div>
+    {{/if}}
+    <div class="modal-dialog modal-dialog-centered">
+        <!-- Modal content-->
+        <div class="modal-content rounded-4">
+            <div class="modal-header">
+                <h4 class="modal-title text-left text-info">Thanh toán dư nợ</h4>
+            </div>
+            {{#with dataPay}}
+            <div class="modal-body px-4 debt-payment">
+                <h5 class="mb-2 text-info">Số dư hiện tại: <span
+                        class="badge bg-light p-2 text-danger money-available">{{moneyAvailable}}</span></h5>
+                <h5 class="mb-2 text-info">Số dư nợ: <span class="badge bg-light p-2 text-danger debt">{{debt}}</span>
+                </h5>
+                <h6 class="mb-2 text-success">Bạn cần{{#if isEqual}} thanh toán số tiền: <span class="badge bg-light p-2 text-danger">
+                        <span class="pay-from fs-6"> {{from}}</span> - <span class="pay-to fs-6">{{to}}</span>
+                    </span>hoặc{{/if}} thanh toán toàn bộ số dư nợ</h6>
+                <form class="form-payment-debt mt-4" action="/payment/payment-debt" method="POST">
+                    <div class="form-group mb-4">
+                        <label for="payment-amount" class="form-label text-dark">Số tiền thanh toán</label>
+                        <input type="number" class="form-control" id="payment-amount" min="0" max="{{debt}}" name="paymentAmount"
+                            value="{{debt}}" required>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="password" class="form-label text-dark">Mật khẩu tài khoản</label>
+                        <input type="password" class="form-control" id="password" min="0" name="password" required>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <p class="message text-danger"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success mb-3 w-100 payment-btn fw-bold">THANH
+                            TOÁN</button>
+                    </div>
+                </form>
+            </div>
+            {{/with}}
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery-3.6.0.min.js"></script>
+<script src="/js/debtPayment.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#message-alert").slideDown();
+        window.setTimeout(function () {
+            $("#message-alert").slideUp(500);
+        }, 1500);
+    });
+</script>

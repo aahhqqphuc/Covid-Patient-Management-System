@@ -1,11 +1,10 @@
-
  .product-image {
 	 float: left;
 	 width: 16%;
 }
  .product-details {
 	 float: left;
-	 width: 37%;
+	 width: 36%;
 }
  .product-price {
 	 float: left;
@@ -13,7 +12,7 @@
 }
  .product-quantity {
 	 float: left;
-	 width: 22%;
+	 width: 20%;
 	 text-align: center;
 }
 
@@ -34,7 +33,7 @@
 
  .product-line-price {
 	 float: right;
-	 width: 13%;
+	 width: 16%;
 	 text-align: right;
 }
 /* This is used as the traditional .clearfix class */
@@ -90,7 +89,8 @@
 	 text-align: center;
 }
  .product .product-image img {
-	 width: 80px;
+	 width: 88px;
+	 max-height: 90px
 }
  .product .product-details .product-title {
 	 margin-right: 20px;
@@ -218,5 +218,5 @@
 }
  
 .modal-dialog {
-	max-width: 680px !important;
+	max-width: 860px !important;
 }

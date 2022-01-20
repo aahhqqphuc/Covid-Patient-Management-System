@@ -2,7 +2,7 @@ const db = require("./db");
 
 module.exports = {
   add: async (noftify) => {
-    const res = await db.add(db.tableName.tai_khoan, noftify);
+    const res = await db.add(db.tableName.thong_bao, noftify);
     return res;
   },
   get: async (userId) => {
