@@ -222,5 +222,14 @@ router.get("/paymentHistory", async (req, res) => {
     data: data,
   });
 });
+router.get("/info", async (req, res) => {
+  // call api
+  let id = req.user.patientId || 2;
 
+  const data = await patientM.basicInfo(id);
+  return res.render("patient/basicInfo", {
+    layout: "patientLayout",
+    patient: data[0],
+  });
+});
 module.exports = router;

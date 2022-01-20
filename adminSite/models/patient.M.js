@@ -77,4 +77,9 @@ module.exports = {
 
     return (await db.runQuery(query)).length === 0 ? false : true;
   },
+  basicInfo: async (id) => {
+    const query = `select * from public.benh_nhan_covid bn where id_benh_nhan = '${id}'`;
+
+    return await db.runQuery(query);
+  },
 };
