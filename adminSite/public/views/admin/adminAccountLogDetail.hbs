@@ -21,7 +21,6 @@
                                 <table class="table table-bordered" id="action_log">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th>ID</th>
                                             <th>Tên hoạt động</th>
                                             <th>Thời gian</th>
                                             <th></th>
@@ -30,11 +29,10 @@
                                     <tbody>
                                         {{#each detail}}
                                             <tr>
-                                                <td>{{id_action}}</td>
                                                 <td>{{action_name}}</td>
                                                 <td>{{action_date}}</td>
                                                 <td class="text-end">
-                                                    <a href="/admin/detail/delete?id={{id_action}}" type="button" class="btn btn-light btn-small"><i class="bi bi-eye"></i>
+                                                    <a href="/admin/detail-filter/delete?id={{id_action}}" type="button" class="btn btn-light btn-small"><i class="bi bi-eye"></i>
                                                         </a>
                                                 </td>
                                             </tr>

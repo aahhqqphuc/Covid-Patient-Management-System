@@ -40,8 +40,8 @@ module.exports = {
 
   detail_treatHis: async (id,page, pagesize) => {
     var query = `SELECT CASE WHEN ls.status = 1 THEN 'Hiện tại'
-        WHEN ls.status = 2 THEN 'Quá khứ' END as status,ngay_di_chuyen,ngay_cap_nhat,vt.tennoidieutri,tinh,huyen,xa 
-      FROM public.lich_su_dieu_tri ls join noi_dieu_tri vt on ls.mavitri = vt.mavitri
+        WHEN ls.status = 2 THEN 'Quá khứ' END as status,ngay_di_chuyen,ls.ngay_cap_nhat,vt.tennoidieutri,tinh,huyen,xa,tt.trang_thai
+      FROM public.lich_su_dieu_tri ls join noi_dieu_tri vt on ls.mavitri = vt.mavitri join Trang_Thai_Benh_Nhan tt on ls.id_lich_su_dieu_tri = tt.lich_su_dieu_tri
       where ls.id_benh_nhan = '${id}'
       ORDER BY ls.mavitri ASC limit ${pagesize} offset ${pagesize * (page - 1)}; `;
       const qtotal = `select count(*) from lich_su_dieu_tri ls where ls.id_benh_nhan = '${id}'`;

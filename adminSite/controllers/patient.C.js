@@ -160,7 +160,6 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/filter", async (req, res) => {
-  console.log(req.query);
   const page = +req.query.page || 1;
   const tinh = req.query.tinh || "";
   const pagesize = +req.query.pagesize || 5;
@@ -169,8 +168,6 @@ router.get("/filter", async (req, res) => {
   const asc = req.query.asc;
   const trangthai = req.query.trangthai || -1;
   const tinh_place = await patientM.getTinh(tinh);
-  console.log(tinh,trangthai,sortby,asc,search,page,pagesize);
-  console.log(trangthai);
   var result;
   if(trangthai == -1)
     result = await patientM.filter1(tinh,sortby, asc, search, page, pagesize);
@@ -223,6 +220,22 @@ router.get("/check-id-number", async (req, res) => {
   res.status(200).json({
     msg: "success",
     check: check,
+  });
+});
+
+router.get("/self", async (req, res) => {
+
+  const page = +req.query.page || 1;
+  const pagesize = +req.query.pagesize || 5;
+  const patient = await patientM.get_patient(req.query.id);
+
+  const data = await patientM.detail_treatHis(req.query.id,page,pagesize);
+  
+  res.render("patient/patientTreatHis", {
+    patient: patient[0],
+    detail: data.data,
+    layout: "patientLayout",
+    pagination1: { page: parseInt(page), limit: pagesize, totalRows: data.total },
   });
 });
 
