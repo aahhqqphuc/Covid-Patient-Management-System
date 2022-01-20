@@ -16,12 +16,11 @@ $("#login-form").submit(function (e) {
         document.cookie = "jwt =" + response.msg + ";" + expires + ";path=/";
 
         if (response.role == "user") {
-          console.log("fđf");
-          location.href = "/product";
+          location.href = "/product-package";
         } else if (response.role == "admin") {
           location.href = "/admin";
         } else {
-          location.href = "/product-package";
+          location.href = "/patient";
         }
       } else {
         $("#alert").text(response.msg);

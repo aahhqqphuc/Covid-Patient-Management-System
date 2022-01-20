@@ -43,8 +43,10 @@ END AS status,t2.action_name,t2.action_date from tai_khoan t3 left outer join
       console.log("error db/all :", error);
     }
   },
-  getdetail: async (id,page, pagesize) => {
-    const query = `select * from admin_action_log where id_account = ${id} order by action_date desc limit ${pagesize} offset ${pagesize * (page - 1)}; `;
+  getdetail: async (id, page, pagesize) => {
+    const query = `select * from admin_action_log where id_account = ${id} order by action_date desc limit ${pagesize} offset ${
+      pagesize * (page - 1)
+    }; `;
     const qtotal = `select count(*) from admin_action_log where id_account = ${id};`;
     try {
       const r1 = await db.getDb.any(query);
@@ -77,11 +79,6 @@ END AS status,t2.action_name,t2.action_date from tai_khoan t3 left outer join
   deleteAction: async (id) => {
     var query = `Delete from admin_action_log where id_action = ${id}`;
     const res = await db.runQuery(query);
-    return res;
-  },
-  adduser: async (inputObj) => {
-    var valueStr = `default,'${inputObj.user_name}','${inputObj.password}','${inputObj.role}',1`;
-    var res = await db.addnew(tbName, tbCol, valueStr);
     return res;
   },
 };

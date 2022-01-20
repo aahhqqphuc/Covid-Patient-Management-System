@@ -105,6 +105,11 @@ module.exports = {
 
     return (await db.runQuery(query)).length === 0 ? false : true;
   },
+  basicInfo: async (id) => {
+    const query = `select * from public.benh_nhan_covid bn where id_benh_nhan = '${id}'`;
+
+    return await db.runQuery(query);
+  },
   getPaging: async (page, pagesize) => {
     const query = `select distinct on (bn.ID_Benh_Nhan) bn.ID_Benh_Nhan, bn.Ho_Ten,bn.CMND,bn.Nam_Sinh,bn.Tinh,bn.Huyen,bn.Xa,tt.trang_thai,vt.tennoidieutri 
     FROM public.benh_nhan_covid bn join public.trang_thai_benh_nhan tt on bn.id_benh_nhan = tt.id_benh_nhan 

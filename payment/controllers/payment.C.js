@@ -172,7 +172,6 @@ router.get("/debt-patient", auth, async (req, res) => {
       msg: "unauthorized",
     });
   }
-
   const result = await paymentAccountM.getDebtPatient(req.body.time);
 
   res.status(200).json({

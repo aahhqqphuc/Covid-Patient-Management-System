@@ -1,0 +1,47 @@
+<h1 class="">Thông tin cá nhân</h1>
+<button type="button" class="btn btn-lg btn-secondary align-self-center mb-3" onclick="goBack()">Trở
+    lại</button>
+<div class="card w-75">
+    <div class="card-body">
+        <form>
+            <div class="row">
+                <div class="col-8 ">
+                    <div class="form-group row">
+                        <label class="col-5" for="floatingInput">Mã bệnh nhân</label>
+                        <input class="col" class="form-control" value="{{patient.id_benh_nhan}}" readonly />
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-5" for="floatingInput">Họ tên bệnh nhân</label>
+                        <input class="col" class="form-control" value="{{patient.ho_ten}}" readonly />
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-5" for="floatingInput">Chứng minh nhân dân</label>
+                        <input class="col" class="form-control" value="{{patient.cmnd}}" readonly />
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-5" for="floatingInput">Năm sinh</label>
+                        <input class="col" class="form-control" value="{{patient.nam_sinh}}" readonly />
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-5" for="floatingInput">Tỉnh</label>
+                        <input class="col" class="form-control" value="{{patient.tinh}}" readonly />
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-5" for="floatingInput">Huyện</label>
+                        <input class="col" class="form-control" value="{{patient.huyen}}" readonly />
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-5" for="floatingInput">Xã</label>
+                        <input class="col" class="form-control" value="{{patient.xa}}" readonly />
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<script type="col/javascript">
+    function goBack() {
+        window.history.back();
+    }
+</script>

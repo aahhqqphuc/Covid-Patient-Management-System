@@ -4,6 +4,7 @@ const model = require("../models/admin.M");
 const TreatmentPlacemodel = require("../models/treatmentPlace.M");
 const patientModel = require("../models/patient.M");
 const accountUlt = require("../utils/account");
+const accountM = require("../models/account.M");
 
 router.get("/", async (req, res) => {
   const page = +req.query.page || 1;
@@ -121,8 +122,8 @@ router.post("/register", async (req, res) => {
     });
     return;
   } else {
-    user = accountUlt.createAccountManager(username, psw);
-    const rs = await model.adduser(user);
+    user = await accountUlt.createAccount(username, psw, "manager");
+    await accountM.add(user);
     res.redirect("/admin");
   }
 });

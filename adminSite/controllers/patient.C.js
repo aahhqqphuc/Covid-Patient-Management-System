@@ -11,7 +11,7 @@ const accountM = require("../models/account.M");
 const orderM = require("../models/order.M");
 const { createAccount } = require("../utils/account");
 const axios = require("axios");
-const { auth, isManager } = require("../utils/auth");
+const { isManager } = require("../utils/auth");
 
 router.get("/add", isManager, async (req, res) => {
   let patient = await patientM.all();
@@ -27,7 +27,6 @@ router.get("/add", isManager, async (req, res) => {
 });
 router.post("/add", isManager, async (req, res) => {
   let createdDate = new Date();
-  console.log("first");
   let patient = {
     ho_ten: req.body.name,
     cmnd: req.body.id,
@@ -57,8 +56,7 @@ router.post("/add", isManager, async (req, res) => {
   };
   await relatedPatientM.add(relatedPatient);
 
-  const user = await createAccount(req.body.id, req.body.id);
-  console.log(user);
+  const user = await createAccount(req.body.id, req.body.id, "user");
 
   user.id_benh_nhan = result[0].id_benh_nhan;
 
@@ -236,7 +234,6 @@ router.get("/order-history", async (req, res) => {
 router.get("/order-history/:id", async (req, res) => {
   const id = req.params.id;
   const data = await orderM.orderHistoryDetail(id);
-  console.log(data);
   res.render("patient/orderHistoryDetail", {
     layout: "patientLayout",
     package: data.package[0],
@@ -257,5 +254,83 @@ router.get("/self", async (req, res) => {
     pagination1: { page: parseInt(page), limit: pagesize, totalRows: data.total },
   });
 });
-
+router.get("/paymentHistory", async (req, res) => {
+  let so_du = 0,
+    du_no = 0,
+    data = [];
+  await axios({
+    method: "get",
+    url: "https://localhost:3001/payment/payment-account/balance",
+    responseType: "json",
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
+  })
+    .then(function (response) {
+      so_du = response.data.so_du;
+    })
+    .catch(function (err) {
+      console.log("err /payment/balance", err);
+    });
+  await axios({
+    method: "get",
+    url: "https://localhost:3001/payment/payment-account/debt",
+    responseType: "json",
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
+  })
+    .then(function (response) {
+      du_no = response.data.du_no;
+    })
+    .catch(function (err) {
+      console.log("err /payment/debt", err);
+    });
+  await axios({
+    method: "get",
+    url: "https://localhost:3001/payment/transaction-history",
+    responseType: "json",
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
+  })
+    .then(function (response) {
+      data = response.data.giao_dich;
+    })
+    .catch(function (err) {
+      console.log("err /payment/transaction-history", err);
+    });
+  return res.render("patient/paymentInfo", {
+    so_du: so_du,
+    du_no: du_no,
+    layout: "patientLayout",
+    data: data,
+  });
+});
+router.get("/info", async (req, res) => {
+  let id = req.user.patientId || 2;
+  const data = await patientM.basicInfo(id);
+  return res.render("patient/basicInfo", {
+    layout: "patientLayout",
+    patient: data[0],
+  });
+});
+router.post("/deposit", async (req, res) => {
+  // call api
+  let amount = req.body.amount;
+  await axios({
+    method: "post",
+    url: "https://localhost:3001/payment/payment-account/deposit",
+    responseType: "json",
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
+    data: { amount: amount },
+  })
+    .then(function (response) {
+      return res.render("patient/basicInfo", {
+        layout: "patientLayout",
+        patient: data[0],
+      });
+    })
+    .catch(function (err) {
+      console.log("err /payment/transaction-history", err);
+    });
+  return res.render("patient/basicInfo", {
+    layout: "patientLayout",
+    patient: data[0],
+  });
+});
 module.exports = router;
