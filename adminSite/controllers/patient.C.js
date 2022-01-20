@@ -8,11 +8,12 @@ const relatedPatientM = require("../models/relatedPatient.M");
 const treatmentHistoryM = require("../models/treatmentHistory.M");
 const treatmentPlaceM = require("../models/treatmentPlace.M");
 const accountM = require("../models/account.M");
+const orderM = require("../models/order.M");
 const { createAccount } = require("../utils/account");
 const axios = require("axios");
-const { auth } = require("../utils/auth");
+const { auth, isManager } = require("../utils/auth");
 
-router.get("/add", async (req, res) => {
+router.get("/add", isManager, async (req, res) => {
   let patient = await patientM.all();
   let province = await provinceM.all();
   let state = await stateM.all();
@@ -24,9 +25,9 @@ router.get("/add", async (req, res) => {
     states: state,
   });
 });
-
-router.post("/add", auth, async (req, res) => {
+router.post("/add", isManager, async (req, res) => {
   let createdDate = new Date();
+  console.log("first");
   let patient = {
     ho_ten: req.body.name,
     cmnd: req.body.id,
@@ -61,7 +62,6 @@ router.post("/add", auth, async (req, res) => {
   user.id_benh_nhan = result[0].id_benh_nhan;
 
   await accountM.add(user);
-
   axios({
     method: "post",
     url: "http://localhost:3001/payment/add",
@@ -83,7 +83,7 @@ router.post("/add", auth, async (req, res) => {
     });
 });
 
-router.get("/change-state/:id", async (req, res) => {
+router.get("/change-state/:id", isManager, async (req, res) => {
   let id = req.params.id;
   let patient_state = await stateHistoryM.get_cur(id);
   let states = await stateM.all();
@@ -96,7 +96,7 @@ router.get("/change-state/:id", async (req, res) => {
   });
 });
 
-router.post("/change-state/:id", async (req, res) => {
+router.post("/change-state/:id", isManager, async (req, res) => {
   let id = req.params.id;
   await stateHistoryM.edit(id);
 
@@ -111,7 +111,7 @@ router.post("/change-state/:id", async (req, res) => {
   res.render("patient/patientList", { layout: "managerLayout" });
 });
 
-router.get("/change-place/:id", async (req, res) => {
+router.get("/change-place/:id", isManager, async (req, res) => {
   let id = req.params.id;
   let cur_place = await treatmentHistoryM.get_cur(id);
   let places = await treatmentPlaceM.all();
@@ -124,7 +124,7 @@ router.get("/change-place/:id", async (req, res) => {
   });
 });
 
-router.post("/change-place/:id", async (req, res) => {
+router.post("/change-place/:id", isManager, async (req, res) => {
   let id = req.params.id;
   await treatmentHistoryM.edit(id);
 
@@ -139,12 +139,12 @@ router.post("/change-place/:id", async (req, res) => {
   res.render("patient/patientList", { layout: "managerLayout" });
 });
 
-router.get("/all", async (req, res) => {
+router.get("/all", isManager, async (req, res) => {
   let data = await patientM.all();
   res.send(data);
 });
 
-router.get("/", async (req, res) => {
+router.get("/", isManager, async (req, res) => {
   const data = await patientM.get();
   res.render("patient/patientList", {
     patients: data,
@@ -153,7 +153,7 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.get("/detail", async (req, res) => {
+router.get("/detail", isManager, async (req, res) => {
   const patient = await patientM.get_patient(req.query.id);
   const data = await patientM.detail_treatHis(req.query.id);
   const patientTrailDown = await patientM.viewPatientsDetail_PatientTrailDown(req.query.id);
@@ -168,7 +168,7 @@ router.get("/detail", async (req, res) => {
   });
 });
 
-router.get("/check-id-number", async (req, res) => {
+router.get("/check-id-number", isManager, async (req, res) => {
   const idNumber = req.query.idNumber;
 
   const check = await patientM.checkExistsIdNumber(idNumber);
@@ -178,5 +178,36 @@ router.get("/check-id-number", async (req, res) => {
     check: check,
   });
 });
+router.get("/order-history", async (req, res) => {
+  const patientId = 9;
+  const data = await orderM.orderHistory(patientId);
+  console.log(data);
 
+  res.render("patient/orderHistory", {
+    layout: "patientLayout",
+    orders: data,
+  });
+});
+router.get("/order-history/:id", async (req, res) => {
+  const id = req.params.id;
+  const data = await orderM.orderHistoryDetail(id);
+  console.log(data);
+  res.render("patient/orderHistoryDetail", {
+    layout: "patientLayout",
+    package: data.package[0],
+    products: data.products,
+  });
+});
+router.get("/self", async (req, res) => {
+  const page = +req.params.page || 1;
+  const pagesize = +req.query.pagesize || 5;
+  const patient = await patientM.get_patient(req.query.id);
+  const data = await patientM.detail_treatHis(req.query.id, page, pagesize);
+  res.render("patient/patientTreatHis", {
+    patient: patient[0],
+    detail: data.data,
+    layout: "patientLayout",
+    pagination1: { page: parseInt(page), limit: pagesize, totalRows: data.total },
+  });
+});
 module.exports = router;

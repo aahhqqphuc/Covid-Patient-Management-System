@@ -2,11 +2,11 @@ const jwt = require("jsonwebtoken");
 
 function auth(req, res, next) {
   const token = req.cookies.jwt;
+  console.log(token);
 
   if (!token) {
     return res.redirect("/");
   }
-
   try {
     const verified = jwt.verify(token, process.env.TOKEN_SECRET);
     req.user = verified;
@@ -15,7 +15,20 @@ function auth(req, res, next) {
     return res.status(401).send("Invalid token");
   }
 }
-
+function isManager(req, res, next) {
+  const token = req.cookies.jwt;
+  if (!token) {
+    return res.redirect("/");
+  }
+  try {
+    const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+    req.user = verified;
+    if (req.user.role != "manager") return res.redirect("/");
+    next();
+  } catch (error) {
+    return res.status(401).send("Invalid token");
+  }
+}
 function authLogin(req, res, next) {
   const token = req.cookies.jwt;
 
@@ -23,7 +36,6 @@ function authLogin(req, res, next) {
     try {
       const verified = jwt.verify(token, process.env.TOKEN_SECRET);
       req.user = verified;
-
       if (req.user.role == "user") {
         return res.redirect("/product");
       } else if (req.user.role == "admin") {
@@ -38,4 +50,4 @@ function authLogin(req, res, next) {
   next();
 }
 
-module.exports = { auth, authLogin };
+module.exports = { auth, authLogin, isManager };

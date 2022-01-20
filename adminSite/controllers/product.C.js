@@ -3,20 +3,19 @@ const router = express.Router();
 const productM = require("../models/product.M");
 module.exports = router;
 const upload = require("../middlewares/upload");
-const manager = -1;
-
-router.get("/", async (req, res) => {
+const { isManager } = require("../utils/auth");
+router.get("/", isManager, async (req, res) => {
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 8;
-  const result = await productM.getPaging(page, pagesize, manager);
+  const result = await productM.getPaging(page, pagesize, role);
   res.render("product/productList", {
-    layout: "managerLayout",
+    layout: role == "manager" ? "managerLayout" : "patientLayout",
     products: result.data,
     pagination: { page: parseInt(page), limit: pagesize, totalRows: result.total },
   });
 });
 
-router.get("/filter", async (req, res) => {
+router.get("/filter", isManager, async (req, res) => {
   const page = +req.query.page || 1;
   const priceFrom = +req.query.price || 0;
   const priceTo = priceFrom != 0 ? priceFrom + 100000 : 100000000;
@@ -25,9 +24,8 @@ router.get("/filter", async (req, res) => {
   const sortby = req.query.sortby || "id_nhu_yeu_pham";
   const asc = req.query.asc;
   const result = await productM.filter(priceFrom, priceTo, sortby, asc, search, page, pagesize);
-  console.log(result.data);
   res.render("product/productList", {
-    layout: "managerLayout",
+    layout: role == "manager" ? "managerLayout" : "patientLayout",
     products: result.data,
     search: search,
     price: priceFrom,
@@ -42,10 +40,10 @@ router.get("/filter", async (req, res) => {
   });
 });
 
-router.get("/add", async (req, res) => {
+router.get("/add", isManager, async (req, res) => {
   res.render("product/newProduct", { script: ["../product/upload.js"], layout: "managerLayout" });
 });
-router.post("/add", upload.array("ImagePath"), async (req, res) => {
+router.post("/add", isManager, upload.array("ImagePath"), async (req, res) => {
   let data = req.body;
   var product = {
     ten_sanpham: data.ten_sanpham,
@@ -68,18 +66,19 @@ router.post("/add", upload.array("ImagePath"), async (req, res) => {
   res.redirect("/product");
 });
 router.get("/detail/:id", async (req, res) => {
+  const role = req.user.role;
   let id = req.params.id;
   let data = await productM.getById(id);
   console.log("data", data.images[0]);
   res.render("product/productdetail", {
-    layout: "managerLayout",
+    layout: role == "manager" ? "managerLayout" : "patientLayout",
     product: data.pro[0],
     mainImage: data.images[0],
     images: data.images.slice(1),
   });
 });
 
-router.get("/edit/:id", async (req, res) => {
+router.get("/edit/:id", isManager, async (req, res) => {
   let id = req.params.id;
   let data = await productM.getById(id);
   console.log(data.images[0]);
@@ -89,7 +88,7 @@ router.get("/edit/:id", async (req, res) => {
     images: data.images,
   });
 });
-router.post("/edit/:id", upload.array("ImagePath"), async (req, res) => {
+router.post("/edit/:id", isManager, upload.array("ImagePath"), async (req, res) => {
   let data = req.body;
   let id = req.params.id;
   var product = {
@@ -112,18 +111,18 @@ router.post("/edit/:id", upload.array("ImagePath"), async (req, res) => {
   res.redirect("/product");
 });
 
-router.get("/disable/:id", async (req, res) => {
+router.get("/disable/:id", isManager, async (req, res) => {
   const id = req.params.id;
   const rs = await productM.disable(id);
   res.redirect("/product/detail/" + id);
 });
-router.get("/enable/:id", async (req, res) => {
+router.get("/enable/:id", isManager, async (req, res) => {
   const id = req.params.id;
   const rs = await productM.enable(id);
   res.redirect("/product/detail/" + id);
 });
 
-router.get("/image/delete/:id", async (req, res) => {
+router.get("/image/delete/:id", isManager, async (req, res) => {
   const id = req.params.id;
   const img = await productM.deleteImg(id);
   if (img) {

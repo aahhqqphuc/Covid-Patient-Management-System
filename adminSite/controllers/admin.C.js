@@ -97,8 +97,6 @@ router.get("/hospital-register", async (req, res) => {
 });
 
 router.post("/hospital-register", async (req, res) => {
-  console.log(req.body);
-
   const rs = await TreatmentPlacemodel.addnew(req.body);
 
   res.redirect("/admin/hospital");

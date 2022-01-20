@@ -7,14 +7,12 @@ const accountM = require("../models/account.M");
 router.post("/login", async (req, res) => {
   //Check Exist Account
   const user = await accountM.findByUsername(req.body.username);
-
   if (user == false) {
     return res.status(200).json({
       success: false,
       msg: "Tài khoản hoặc mật khẩu không đúng",
     });
   }
-
   const validPass = await compare(req.body.password, user[0].password);
   if (!validPass) {
     return res.status(200).json({
@@ -23,13 +21,9 @@ router.post("/login", async (req, res) => {
     });
   }
 
-  const token = jwt.sign(
-    { username: user[0].user_name, role: user[0].role, patientId: user[0].id_benh_nhan },
-    process.env.TOKEN_SECRET,
-    {
-      expiresIn: 86400,
-    }
-  );
+  const token = jwt.sign({ username: user[0].user_name, role: user[0].role, patientId: user[0].id_benh_nhan }, process.env.TOKEN_SECRET, {
+    expiresIn: 86400,
+  });
 
   return res.status(200).json({
     success: true,

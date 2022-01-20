@@ -3,8 +3,7 @@ const moment = require("moment");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
-const { authLogin } = require("./utils/auth");
-
+const { authLogin, auth } = require("./utils/auth");
 const express = require("express"),
   app = express(),
   exphbs = require("express-handlebars");
@@ -46,24 +45,24 @@ app.use(function (req, res, next) {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.info = req.flash("info");
-    next();
+  next();
 });
 
 app.use(express.static(__dirname + "/public"));
 
-app.use("/patient", require("./controllers/patient.C"));
+app.use("/patient", auth, require("./controllers/patient.C"));
 
-app.use("/address", require("./controllers/address.C"));
+app.use("/address", auth, require("./controllers/address.C"));
 
-app.use("/product", require("./controllers/product.C"));
+app.use("/product", auth, require("./controllers/product.C"));
 
-app.use("/product-package", require("./controllers/product-package.C"));
+app.use("/product-package", auth, require("./controllers/product-package.C"));
 
-app.use("/admin", require("./controllers/admin.C"));
+app.use("/admin", auth, require("./controllers/admin.C"));
 
-app.use("/statistic", require("./controllers/statistic.C"));
+app.use("/statistic", auth, require("./controllers/statistic.C"));
 
-app.use("/payment", require("./controllers/payment.C"));
+app.use("/payment", auth, require("./controllers/payment.C"));
 
 app.use("/account", require("./controllers/account.C"));
 
@@ -85,6 +84,7 @@ hbs.handlebars.registerHelper("formatMoney", function (value) {
 const DateFormats = {
   short: "DD MMMM - YYYY",
   long: "dddd DD-MM-YYYY HH:mm",
+  vn: "DD/MM/YYYY",
 };
 
 hbs.handlebars.registerHelper("formatDate", function (datetime, format) {
