@@ -109,7 +109,7 @@ router.post("/change-state/:id", async (req, res) => {
   };
   await stateHistoryM.add(stateHistory);
 
-  res.render("patient/patientList", { layout: "managerLayout" });
+  return res.redirect("/patient");
 });
 
 router.get("/change-place/:id", async (req, res) => {
@@ -133,11 +133,12 @@ router.post("/change-place/:id", async (req, res) => {
     id_benh_nhan: id,
     mavitri: req.body.place,
     ngay_tao: new Date(),
+    ngay_cap_nhat: new Date(),
     status: 1,
   };
   await treatmentHistoryM.add(treatmentHistory);
 
-  res.render("patient/patientList", { layout: "managerLayout" });
+  return res.redirect("/patient");
 });
 
 router.get("/all", async (req, res) => {

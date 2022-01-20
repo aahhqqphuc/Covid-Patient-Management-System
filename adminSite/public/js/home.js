@@ -11,11 +11,12 @@ $("#login-form").submit(function (e) {
     success: function (response) {
       if (response.success) {
         const d = new Date();
-        d.setTime(d.getTime() + response.expiresIn);
+        d.setTime(d.getTime() + response.expiresIn * 1000);
         let expires = "expires=" + d.toUTCString();
         document.cookie = "jwt =" + response.msg + ";" + expires + ";path=/";
 
         if (response.role == "user") {
+          console.log("fđf");
           location.href = "/product";
         } else if (response.role == "admin") {
           location.href = "/admin";

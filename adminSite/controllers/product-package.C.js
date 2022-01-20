@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const model = require("../models/product-package.M");
-module.exports = router;
 let products_selected = [];
-//const role = "patient";
 const role = "manager";
+
 router.get("/", async (req, res) => {
   console.log(req.user);
   const page = +req.query.page || 1;
@@ -18,6 +17,7 @@ router.get("/", async (req, res) => {
     role: role,
   });
 });
+
 router.get("/filter", async (req, res) => {
   const page = +req.query.page || 1;
   const period = req.query.period || -1;
@@ -34,9 +34,15 @@ router.get("/filter", async (req, res) => {
     sortby: sortby,
     asc: asc,
     role: role,
-    pagination: { page: parseInt(page), limit: pagesize, totalRows: result.total, queryParams: { search: search, period: period, sortby: sortby, asc: asc } },
+    pagination: {
+      page: parseInt(page),
+      limit: pagesize,
+      totalRows: result.total,
+      queryParams: { search: search, period: period, sortby: sortby, asc: asc },
+    },
   });
 });
+
 router.get("/detail/:id", async (req, res) => {
   let id = req.params.id;
   console.log("id", id);
@@ -48,6 +54,7 @@ router.get("/detail/:id", async (req, res) => {
     role: role,
   });
 });
+
 router.get("/add", async (req, res) => {
   let pros = await model.getElseProducts(0);
   res.render("product-package/product-packageNew", {
@@ -56,6 +63,7 @@ router.get("/add", async (req, res) => {
     products: pros,
   });
 });
+
 router.post("/add", async (req, res) => {
   let pros = await model.getElseProducts(0);
   if (req.body.pre_add == "true") {
@@ -87,6 +95,7 @@ router.post("/add", async (req, res) => {
   }
   return res.redirect(`/product-package`);
 });
+
 router.get("/edit/:id", async (req, res) => {
   let id = req.params.id;
   let data = await model.getById(id);
@@ -103,6 +112,7 @@ router.get("/edit/:id", async (req, res) => {
     role: role,
   });
 });
+
 router.get("/delete-product/:id", async (req, res) => {
   let id = req.params.id;
   let result = await model.getPackageId(id);
@@ -123,6 +133,7 @@ router.get("/delete-product/:id", async (req, res) => {
   let rs = await model.deleteProduct(id);
   return res.redirect(`/product-package/edit/${packageId}`);
 });
+
 router.post("/edit/:id", async (req, res) => {
   let id = req.params.id;
   let pros = await model.getElseProducts(id);
@@ -153,11 +164,13 @@ router.post("/edit/:id", async (req, res) => {
   }
   return res.redirect(`/product-package/detail/${id}`);
 });
+
 router.get("/disable/:id", async (req, res) => {
   const id = req.params.id;
   const rs = await model.disable(id);
   res.redirect("/product-package/detail/" + id);
 });
+
 router.get("/enable/:id", async (req, res) => {
   const id = req.params.id;
   const rs = await model.enable(id);
@@ -168,22 +181,24 @@ router.get("/enable/:id", async (req, res) => {
 
 router.get("/package-detail/:id", async (req, res) => {
   try {
-    if(!req.user?.patientId){
-      return res.status(501).json({ 'info': 'Vui lòng đăng nhập' });
+    if (!req.user?.patientId) {
+      return res.status(501).json({ info: "Vui lòng đăng nhập" });
     }
 
     const checkPuchase = await models.checkPuchase(req.user.patientId, req.params.id);
     if (checkPuchase.length) {
-      return res.status(501).json({ 'info': 'Bạn đã mua gói này trước đó <br> Vui lòng chọn mua Gói nhu yếu phẩm khác' });
+      return res.status(501).json({ info: "Bạn đã mua gói này trước đó <br> Vui lòng chọn mua Gói nhu yếu phẩm khác" });
     }
 
     const result = await model.getPackageProducts(req.params.id);
     const data = {
-      'info': result.package,
-      'products': result.packageProducts
-    }
+      info: result.package,
+      products: result.packageProducts,
+    };
     res.json(data);
   } catch (error) {
     res.status(404, error.message);
   }
 });
+
+module.exports = router;

@@ -29,7 +29,7 @@ module.exports = {
 
   edit: async (id) => {
     var query = `update public.lich_su_dieu_tri
-      set status = 0
+      set status = 0, ngay_di_chuyen = CURRENT_DATE, ngay_cap_nhat = CURRENT_DATE
       where id_benh_nhan = ${id} and status = 1`;
     const res = await db.runQuery(query);
     return res;

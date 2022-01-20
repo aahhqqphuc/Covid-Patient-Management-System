@@ -30,6 +30,29 @@
       </form>
     </div>
   </div>
-</div>
+  <div class="col-3">
+    <label for="floatingInput">Nơi điều trị hiện tại: {{place}}</label>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Nơi điều trị mới: </label>
+    <select name="place" id="place" required>
+      <option value="place-empty">---Chọn nơi điều trị---</option>
+      {{#each places}}
+        <option value={{mavitri}}>{{tennoidieutri}}</option>
+      {{/each}}
+    </select>
+    <br />
+    <span class="text-danger" hidden id="place-danger">Chưa chọn nơi điều trị</span>
+  </div>
+  <div class="col-2 d-grid mt-2">
+    <button class="btn btn-primary" type="submit">Chuyển nơi điều trị</button>
+  </div>
+</form>
+
+<script
+  src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"
+></script>
 <script type="text/javascript" src="/js/patient/change-place.js"></script>
 <script type="text/javascript" src="/js/patient/validation.js"></script>

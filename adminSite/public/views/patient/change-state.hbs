@@ -30,7 +30,30 @@
       </form>
     </div>
   </div>
-</div>
+  <div class="col-3">
+    <label for="floatingInput">Trạng thái cũ: {{state}}</label>
+  </div>
+  <div class="col-6">
+    <label for="floatingInput">Trạng thái mới: </label>
+    <select name="state" id="state" required>
+      <option value="state-empty">---Chọn trạng thái---</option>
+      {{#each states}}
+        <option value={{id_trang_thai}}>{{ten_trang_thai}}</option>
+      {{/each}}
+    </select>
+    <br />
+    <span class="text-danger" hidden id="state-danger">Chưa chọn trạng thái</span>
+  </div>
+  <div class="col-2 d-grid mt-2">
+    <button class="btn btn-primary" type="submit">Chuyển trạng thái</button>
+  </div>
+</form>
+
+<script
+  src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"
+></script>
 <script type="text/javascript" src="/js/patient/change-state.js"></script>
 <script type="text/javascript" src="/js/patient/validation.js"></script>
 <script type="text/javascript">
