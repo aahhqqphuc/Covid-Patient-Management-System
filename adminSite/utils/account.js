@@ -17,4 +17,8 @@ async function compare(password, hashPassword) {
   return await bcrypt.compare(password, hashPassword);
 }
 
-module.exports = { createAccount, compare };
+async function hashPassword(pwd) {
+  return await bcrypt.hash(pwd, saltRounds);
+}
+
+module.exports = { createAccount, compare, hashPassword };

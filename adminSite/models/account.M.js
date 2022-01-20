@@ -10,4 +10,9 @@ module.exports = {
   findAdmin: async () => {
     return (res = await db.get(db.tableName.tai_khoan, "role", "admin"));
   },
+  changePwd: async (userId, pwd) => {
+    var query = `update tai_khoan set password = '${pwd}' where user_name = '${userId}'`;
+
+    return await db.runQuery(query);
+  },
 };

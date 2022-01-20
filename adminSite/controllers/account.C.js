@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const { compare } = require("../utils/account");
+const { compare, hashPassword } = require("../utils/account");
 const accountM = require("../models/account.M");
 const accountUlt = require("../utils/account");
+const { auth } = require("../utils/auth");
+const bcrypt = require("bcrypt");
 
 router.post("/login", async (req, res) => {
   //Check Exist Account
@@ -69,7 +71,6 @@ router.post("/logout", async (req, res) => {
 });
 
 router.get("/admin", async (req, res) => {
-  console.log("fd");
   const check = await accountM.findAdmin();
 
   if (check.length != 0) {
@@ -90,6 +91,44 @@ router.post("/admin", async (req, res) => {
   await accountM.add(user);
 
   res.redirect("/admin");
+});
+
+router.get("/change-patient-pwd", auth, async (req, res) => {
+  res.render("patient/change-password", {
+    layout: "patientLayout",
+    display: `none`,
+  });
+});
+
+router.post("/change-patient-pwd", auth, async (req, res) => {
+  const username = req.user.username;
+  const oldPwd = req.body.oldPwd;
+  let newPwd = req.body.newPwd;
+  const cfPwd = req.body.cfPwd;
+
+  const user = await accountM.findByUsername(username);
+
+  if (!(await compare(oldPwd, user[0].password))) {
+    return res.render("patient/change-password", {
+      message: "Mật khẩu cũ sai",
+      layout: "patientLayout",
+      display: `block`,
+    });
+  }
+
+  if (newPwd != cfPwd) {
+    return res.render("patient/change-password", {
+      message: "Mật khẩu mới không trùng khớp",
+      layout: "patientLayout",
+      display: `block`,
+    });
+  }
+
+  newPwd = await hashPassword(newPwd);
+
+  await accountM.changePwd(username, newPwd);
+
+  return res.redirect("/product-package");
 });
 
 module.exports = router;
