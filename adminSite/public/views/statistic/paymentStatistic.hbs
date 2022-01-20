@@ -1,5 +1,4 @@
 <div id="content" class="content-statistical mt-5">
-
     <div class="statistic-info container-fluid col-lg-10 col-md-12 col-sm-12">
         <!-- Page Heading -->
         <div class="d-sm-flex justify-content-center py-2">
@@ -7,9 +6,22 @@
         </div>
 
         <div class="mt-2 mb-4">
-            <h3>Tổng dư nợ: <span class="badge rounded-pill bg-info text-dark m-2">{{formatMoney debtTotal}}</span></h3>
+            <h3>Tổng dư nợ: <span class="badge rounded-pill bg-info text-danger m-2 px-4 fs-4">{{formatMoney
+                    debtTotal}}</span></h3>
 
-            <table class="table table-bordered text-center" id="payment-Managerment-Table">
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-chart-bar mr-1"></i>
+                            thống kê dư nợ theo mức tiền
+                        </div>
+                        <div class="card-body"><canvas id="deptBarChart" width="100%" height="40"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-bordered text-center" id="debt-Statistic-Table">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Id bệnh nhân</th>
@@ -22,7 +34,7 @@
                     {{#each paymentAccounts}}
                     <tr>
                         <td><a href="/patient/detail?id={{id_benh_nhan}}">{{id_benh_nhan}}</a></td>
-                        <td>{{formatMoney du_no}}</td>
+                        <td class="text-danger">{{formatMoney du_no}}</td>
                         <td>{{formatDate ngay_giao_dich_gan_nhat "long"}}</td>
                         <td>{{trang_thai}}</td>
                     </tr>
@@ -32,3 +44,4 @@
         </div>
     </div>
 </div>
+<script src="/js/chart/chart-bar-debt.js"></script>

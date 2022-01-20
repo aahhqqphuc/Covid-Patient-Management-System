@@ -203,4 +203,22 @@ module.exports = {
       console.log("err at getPackageProduct", error);
     }
   },
-};
+
+  checkPuchase: async (idPatient, idPackage) => {
+    const packageQuery = `SELECT * FROM hoa_don h, chi_tiet_hoa_don c
+    where h.id_nguoi_mua = ${idPatient}
+     and c.id_goi_nhu_cau_yeu_pham = ${idPackage}
+     and h.id_hoa_don = c.id_hoa_don
+     and DATE_PART('day', CURRENT_DATE::timestamp - ngay_mua::timestamp) < (
+    select calculate_time(thoi_gian, muc_gioi_han_goi)
+    from goi_nhu_yeu_pham
+    where id_goi_nhu_yeu_pham = ${idPackage})`;
+
+    try {
+      const res = await db.any(query);
+      return res;
+    } catch (error) {
+      console.log("err checkPuchase", error);
+    }
+  },
+}

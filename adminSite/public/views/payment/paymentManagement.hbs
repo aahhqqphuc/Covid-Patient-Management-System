@@ -1,9 +1,33 @@
 <div id="content" class="content-statistical mt-5">
+    {{#if success}}
+    <div class="alert alert-success w-50 text-center m-auto" role="alert" id="message-alert">
+        <strong>Thành công!</strong> {{success}}.
+    </div>
+    {{/if}}
+    {{#if error}}
+    <div class="alert alert-danger w-50 text-center m-auto" role="alert" id="message-alert">
+        <strong>Thất bại</strong> {{error}}
+    </div>
+    {{/if}}
 
     <div class="statistic-info container-fluid col-lg-10 col-md-12 col-sm-12">
         <!-- Page Heading -->
         <div class="d-sm-flex justify-content-center py-2">
             <h1 class="h2 mb-0 text-gray-800 text-center">Quản lý thông tin thanh toán</h1>
+        </div>
+
+        <div class="dropdown my-2">
+            <a class="btn btn-primary btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Ngày giao dịch gần nhất
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li><a class="dropdown-item" href="/payment/manage/all">tất cả</a></li>
+                <li><a class="dropdown-item" href="/payment/manage/10">> 10 ngày</a></li>
+                <li><a class="dropdown-item" href="/payment/manage/20">> 20 ngày</a></li>
+                <li><a class="dropdown-item" href="/payment/manage/30">> 30 ngày</a></li>
+            </ul>
         </div>
 
         <div class="mt-3 mb-4">
@@ -14,17 +38,19 @@
                         <th scope="col">Dư nợ</th>
                         <th scope="col">Ngày giao dịch gần nhất</th>
                         <th scope="col">Trạng thái</th>
-                        <th scope="col">Thông báo<a href="/payment/notify/all" class="p-2 ml-2"><i class="far fa-bell fs-5"></i></a></th>
+                        <th scope="col">Thông báo<a href="/payment/notify-all/{{time}}" class="p-2 ml-2"><i
+                                    class="far fa-bell fs-5"></i></a></th>
                     </tr>
                 </thead>
                 <tbody>
                     {{#each paymentAccounts}}
                     <tr>
                         <td><a href="/patient/detail?id={{id_benh_nhan}}">{{id_benh_nhan}}</a></td>
-                        <td>{{formatMoney du_no}}</td>
+                        <td class="text-danger">{{formatMoney du_no}}</td>
                         <td>{{formatDate ngay_giao_dich_gan_nhat "long"}}</td>
                         <td>{{trang_thai}}</td>
-                        <td class="text-center"><a href="/payment/notify/{{id_benh_nhan}}" class="p-2"><i class="far fa-bell fs-4"></i></a></td>
+                        <td class="text-center"><a href="/payment/notify/{{id_benh_nhan}}" class="p-2"><i
+                                    class="far fa-bell fs-4"></i></a></td>
                     </tr>
                     {{/each}}
                 </tbody>
@@ -32,3 +58,12 @@
         </div>
     </div>
 </div>
+<script src="/js/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#message-alert").slideDown();
+        window.setTimeout(function () {
+            $("#message-alert").slideUp(500);
+        }, 1500);
+    });
+</script>

@@ -58,6 +58,7 @@ router.post("/add", isManager, async (req, res) => {
   await relatedPatientM.add(relatedPatient);
 
   const user = await createAccount(req.body.id, req.body.id);
+  console.log(user);
 
   user.id_benh_nhan = result[0].id_benh_nhan;
 
@@ -108,7 +109,7 @@ router.post("/change-state/:id", isManager, async (req, res) => {
   };
   await stateHistoryM.add(stateHistory);
 
-  res.render("patient/patientList", { layout: "managerLayout" });
+  return res.redirect("/patient");
 });
 
 router.get("/change-place/:id", isManager, async (req, res) => {
@@ -132,11 +133,12 @@ router.post("/change-place/:id", isManager, async (req, res) => {
     id_benh_nhan: id,
     mavitri: req.body.place,
     ngay_tao: new Date(),
+    ngay_cap_nhat: new Date(),
     status: 1,
   };
   await treatmentHistoryM.add(treatmentHistory);
 
-  res.render("patient/patientList", { layout: "managerLayout" });
+  return res.redirect("/patient");
 });
 
 router.get("/all", isManager, async (req, res) => {

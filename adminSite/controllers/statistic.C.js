@@ -99,11 +99,11 @@ router.get("/product", (req, res) => {
 router.get("/payment", async (req, res) => {
   axios({
     method: "get",
-    url: "http://127.0.0.1:3000/payment-system/payment-account",
+    url: "http://127.0.0.1:3001/payment/debt-patient",
     responseType: "json",
   })
     .then(function (response) {
-      const paymentAccounts = response.data;
+      const paymentAccounts = response.data.danh_sach;
 
       const debtTotal = paymentAccounts.reduce((sum, item) => sum + parseInt(item.du_no), 0);
 

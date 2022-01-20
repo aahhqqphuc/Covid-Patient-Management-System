@@ -53,7 +53,7 @@ exports.add = async (tbName, entity) => {
     table: tbName,
     schema: schema,
   });
-  const query = pgPromise.helpers.insert(entity, null, table) + "RETURNING *";
+  const query = pgPromise.helpers.insert(entity, null, table) + " RETURNING *";
   try {
     const res = await db.any(query);
     return res;
