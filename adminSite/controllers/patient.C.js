@@ -11,7 +11,7 @@ const accountM = require("../models/account.M");
 const orderM = require("../models/order.M");
 const { createAccount } = require("../utils/account");
 const axios = require("axios");
-const { auth, isManager } = require("../utils/auth");
+const { isManager } = require("../utils/auth");
 
 router.get("/add", isManager, async (req, res) => {
   let patient = await patientM.all();
@@ -27,7 +27,6 @@ router.get("/add", isManager, async (req, res) => {
 });
 router.post("/add", isManager, async (req, res) => {
   let createdDate = new Date();
-  console.log("first");
   let patient = {
     ho_ten: req.body.name,
     cmnd: req.body.id,
@@ -57,8 +56,7 @@ router.post("/add", isManager, async (req, res) => {
   };
   await relatedPatientM.add(relatedPatient);
 
-  const user = await createAccount(req.body.id, req.body.id);
-  console.log(user);
+  const user = await createAccount(req.body.id, req.body.id, "user");
 
   user.id_benh_nhan = result[0].id_benh_nhan;
 
@@ -236,7 +234,6 @@ router.get("/order-history", async (req, res) => {
 router.get("/order-history/:id", async (req, res) => {
   const id = req.params.id;
   const data = await orderM.orderHistoryDetail(id);
-  console.log(data);
   res.render("patient/orderHistoryDetail", {
     layout: "patientLayout",
     package: data.package[0],

@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 
 function auth(req, res, next) {
   const token = req.cookies.jwt;
-  console.log(token);
 
   if (!token) {
     return res.redirect("/");
@@ -37,11 +36,11 @@ function authLogin(req, res, next) {
       const verified = jwt.verify(token, process.env.TOKEN_SECRET);
       req.user = verified;
       if (req.user.role == "user") {
-        return res.redirect("/product");
+        return res.redirect("/product-package");
       } else if (req.user.role == "admin") {
         return res.redirect("/admin");
       } else {
-        return res.redirect("/product-package");
+        return res.redirect("/patient");
       }
     } catch (error) {
       return res.status(401).send("Invalid token");
