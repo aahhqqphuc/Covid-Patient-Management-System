@@ -1,0 +1,52 @@
+<div class="row mt-3 ml-3">
+    <button type="button" class="btn btn-lg btn-secondary align-self-center mb-3 col-2" onclick="goBack()">Trở
+        lại</button>
+</div>
+<div class="container-fluid mt-3 row">
+
+    <div class="col-6">
+        <div class="border border-secondary p-5 rounded">
+            <h1 class="mt-4">Thông tin tài khoản</h1>
+            <div class="form-group row">
+                <label class="col-4">Số dư</label>
+                <input type="text" class="form-control col w-75" value={{so_du}} readonly>
+            </div>
+            <div class="form-group row">
+                <label class="col-4">Dư nợ</label>
+                <input type="text" class="form-control col w-75" value={{du_no}} readonly>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="border border-secondary p-5 rounded">
+            <h1 class=" mt-4">Lịch sử giao dịch</h1>
+            <div class="row mb-3 mt-3">
+                <table class="table table-bordered ml-2" style="width:95%">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col" data-filter-control='select'>Ngày giao dịch</th>
+                            <th scope="col">Số tiền giao dịch</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each data}}
+                        <tr>
+                            <td class="pt-5"> {{ten_goi}} demo</td>
+                            <td class="pt-5">{{total}} demo</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation example">
+                    {{{paginateHelper pagination paginationClass="pagination"}}}
+                </nav>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    function goBack() {
+        window.history.back();
+    }
+</script>

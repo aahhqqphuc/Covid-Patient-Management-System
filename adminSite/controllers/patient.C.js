@@ -212,4 +212,15 @@ router.get("/self", async (req, res) => {
     pagination1: { page: parseInt(page), limit: pagesize, totalRows: data.total },
   });
 });
+router.get("/paymentHistory", async (req, res) => {
+  // call api
+  const data = [];
+  return res.render("patient/paymentInfo", {
+    so_du: 0,
+    du_no: 0,
+    layout: "patientLayout",
+    data: data,
+  });
+});
+
 module.exports = router;
