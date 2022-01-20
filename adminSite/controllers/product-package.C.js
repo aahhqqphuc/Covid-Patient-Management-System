@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const model = require("../models/product-package.M");
-module.exports = router;
+
 router.get("/", async (req, res) => {
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 5;
@@ -12,6 +12,7 @@ router.get("/", async (req, res) => {
     pagination: { page: parseInt(page), limit: pagesize, totalRows: result.total },
   });
 });
+
 router.get("/filter", async (req, res) => {
   const page = +req.query.page || 1;
   const period = req.query.period || -1;
@@ -30,23 +31,25 @@ router.get("/filter", async (req, res) => {
     pagination: { page: parseInt(page), limit: pagesize, totalRows: result.total, queryParams: { period: period } },
   });
 });
+
 router.get("/detail/:id", async (req, res) => {
   let id = req.params.id;
   let data = await model.getById(id);
-  console.log(data);
+
   res.render("product-package/product-packageDetail", {
     layout: "managerLayout",
     package: data.package[0],
     products: data.products,
   });
 });
+
 router.get("/add", async (req, res) => {
   let pros = await model.getAllProducts();
   res.render("product-package/product-packageNew", { layout: "managerLayout", products: pros });
 });
+
 router.post("/add", async (req, res) => {
   let pros = await model.getAllProducts();
-  console.log("body", req.body);
   if (req.body.pre_add == "true") {
     let arr = req.body.products_selected ? req.body.products_selected.toString() : "";
     var products_selected = arr.length > 1 ? await model.getProducts(arr) : [];
@@ -62,7 +65,6 @@ router.post("/add", async (req, res) => {
   } else if (req.body.main == "true") {
     return res.render("product-package/product-packageNew", { layout: "managerLayout", products: pros });
   }
-  console.log("error");
   return res.render("product-package/product-packageNew", { layout: "managerLayout", products: pros });
 });
 
@@ -71,15 +73,15 @@ const db = require("../models/db");
 
 router.get("/package-detail/:id", async (req, res) => {
   try {
-      const result = await model.getPackageProducts(req.params.id);
-      console.log(result);
-      const data = {
-          'info': result.package,
-          'products': result.packageProducts
-      }
-      res.json(data);
+    const result = await model.getPackageProducts(req.params.id);
+    const data = {
+      info: result.package,
+      products: result.packageProducts,
+    };
+    res.json(data);
   } catch (error) {
-      res.status(404, error.message);
+    res.status(404, error.message);
   }
 });
 
+module.exports = router;

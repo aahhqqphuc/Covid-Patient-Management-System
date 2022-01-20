@@ -198,4 +198,20 @@ router.put("/change-state", auth, async (req, res) => {
   });
 });
 
+// get lịch sử giao dịch
+router.get("/transaction-history", auth, async (req, res) => {
+  if (req.user.patientId == null) {
+    return res.status(401).json({
+      msg: "unauthorized",
+    });
+  }
+
+  const result = await transactionM.getTransactionHistory(req.user.patientId);
+
+  res.status(200).json({
+    msg: "success",
+    giao_dich: result,
+  });
+});
+
 module.exports = router;
