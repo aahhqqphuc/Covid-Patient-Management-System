@@ -108,20 +108,19 @@ router.post("/purchase", async (req, res) => {
     const packageProducts = await packageM.get_package_product(packageId);
 
     // tính tổng tiền
-    const total = packageProducts.reduce((sum, item, index) => sum + item.gia_tien * productQuantity[index], 0);
+    const amount = packageProducts.reduce((sum, item, index) => sum + item.gia_tien * productQuantity[index], 0);
 
-    const account = accountM.findByUsername(req.user.username);
     // tạo hóa đơn
     const order = {
-      id_nguoi_mua: account.id_tai_khoan,
+      id_nguoi_mua: res.user.patientID,
       total: null,
       trang_thai: 1,
     };
 
     axios({
       method: "post",
-      url: "",
-      data: total,
+      url: "http://127.0.0.1:3001/payment-account/payment",
+      data: amount,
     })
       .then(async function (response) {
         // thêm vào hóa đơn
@@ -130,7 +129,7 @@ router.post("/purchase", async (req, res) => {
         const orderDetail = {
           id_hoa_don: orderId.id_hoa_don,
           id_goi_nhu_cau_yeu_pham: packageId,
-          total: total,
+          total: amount,
         };
         // thêm vào chi tiết hóa đơn
         const orderDetailId = await orderM.addOrderDetail(orderDetail);
@@ -147,59 +146,63 @@ router.post("/purchase", async (req, res) => {
             const re = await packageM.addPackageDetail(packageDetail);
           }
         }
-        res.redirect("/product");
+        res.redirect("/product-package");
       })
       .catch(async function (err) {
         console.log("paying", err);
       });
   } catch (error) {
     console.log("puchase", error);
+    res.status(404);
   }
 });
 
 router.get("/payment-debt", async (req, res) => {
   // call API
   try {
-    const level = await axios.get(``, { headers: { Authorization: `Bearer ${req.cookies.jwt}` } });
-    const pAccount = await axios.get(``, { headers: { Authorization: `Bearer ${req.cookies.jwt}` } });
+    const level = await axios.get(`http://127.0.0.1:3001/payment/limit`, { headers: { Authorization: `Bearer ${req.cookies.jwt}` } });
+    const debt = await axios.get(`http://127.0.0.1:3001/payment/payment-account/debt`, { headers: { Authorization: `Bearer ${req.cookies.jwt}` } });
+    const accountBalance = await axios.get(`http://127.0.0.1:3001/payment/payment-account/balance`, { headers: { Authorization: `Bearer ${req.cookies.jwt}` } });
+
+    const so_du = parseInt(accountBalance.data.so_du);
+    const du_no = parseInt(debt.data.du_no);
+    const phan_tram = parseInt(level.data.han_muc.phan_tram_han_muc) / 100;
+    const tien_toi_thieu = parseInt(level.data.han_muc.o_tien_thanh_toan_toi_thieu);
+
+    let from = du_no * phan_tram,
+      to = du_no;
+
+    if (du_no < tien_toi_thieu || du_no * phan_tram < tien_toi_thieu || du_no - du_no * phan_tram < tien_toi_thieu) {
+      from = du_no;
+      to = du_no;
+    }
+
+    let isEqual = from == to ? 0 : 1;
+
+    const dataPay = {
+      moneyAvailable: so_du,
+      debt: du_no,
+      from,
+      to,
+      isEqual,
+    };
+
+    res.render("payment/debtPayment", {
+      layout: "managerLayout",
+      dataPay,
+    });
   } catch (error) {
     return res.render("payment/debtPayment", {
       layout: "managerLayout",
       error: "Lỗi hệ thống",
     });
   }
-
-  const so_du = parseInt(pAccount.so_du);
-  const du_no = parseInt(pAccount.du_no);
-  const phan_tram = parseInt(level.phan_tram_han_muc) / 100;
-  const tien_toi_thieu = parseInt(level.so_tien_thanh_toan_toi_thieu);
-
-  let from = du_no * phan_tram,
-    to = du_no;
-
-  if (du_no < tien_toi_thieu || du_no * phan_tram < tien_toi_thieu || du_no - du_no * phan_tram < tien_toi_thieu) {
-    from = du_no;
-    to = du_no;
-  }
-
-  let isEqual = from == to ? 0 : 1;
-
-  const dataPay = {
-    moneyAvailable: so_du,
-    debt: du_no,
-    from,
-    to,
-    isEqual,
-  };
-
-  res.render("payment/debtPayment", {
-    layout: "managerLayout",
-    dataPay,
-  });
 });
 
 router.post("/payment-debt", async (req, res) => {
-  const { password, paymentAmount } = req.body;
+  const password = req.body.password;
+  const amount = req.body.paymentAmount;
+
   const user = await accountM.findByUsername(req.user.username);
   const validPass = await compare(password, user[0].password);
 
@@ -208,20 +211,20 @@ router.post("/payment-debt", async (req, res) => {
     return res.redirect("/payment/payment-debt");
   }
 
-  // axios({
-  //   method: "post",
-  //   url: "",
-  //   data: paymentAmount,
-  //   headers: { Authorization: `Bearer ${req.cookies.jwt}` }
-  // })
-  //   .then(function (response) {
-  //      req.flash('success', 'Thanh toán thành công.')
-  //     res.redirect('/payment/payment-debt');
-  //   })
-  //   .catch(function (err) {
-  //     req.flash('error', 'Thanh toán không thành công.')
-  //     res.redirect('/payment/payment-debt');
-  //   });
+  axios({
+    method: "post",
+    url: "http://127.0.0.1:3001/payment/payment-account/debt",
+    data: amount,
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` }
+  })
+    .then(function (response) {
+       req.flash('success', 'Thanh toán thành công.')
+       res.redirect('/payment/payment-debt');
+    })
+    .catch(function (err) {
+      req.flash('error', 'Thanh toán không thành công.')
+      res.redirect('/payment/payment-debt');
+    });
 });
 
 router.get("/notify/:id", async (req, res) => {

@@ -168,12 +168,20 @@ router.get("/enable/:id", async (req, res) => {
 
 router.get("/package-detail/:id", async (req, res) => {
   try {
+    if(!req.user?.patientId){
+      return res.status(501).json({ 'info': 'Vui lòng đăng nhập' });
+    }
+
+    const checkPuchase = await models.checkPuchase(req.user.patientId, req.params.id);
+    if (checkPuchase.length) {
+      return res.status(501).json({ 'info': 'Bạn đã mua gói này trước đó <br> Vui lòng chọn mua Gói nhu yếu phẩm khác' });
+    }
+
     const result = await model.getPackageProducts(req.params.id);
-    console.log(result);
     const data = {
-      info: result.package,
-      products: result.packageProducts,
-    };
+      'info': result.package,
+      'products': result.packageProducts
+    }
     res.json(data);
   } catch (error) {
     res.status(404, error.message);
