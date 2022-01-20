@@ -27,7 +27,6 @@ router.get("/add", async (req, res) => {
 
 router.post("/add", auth, async (req, res) => {
   let createdDate = new Date();
-
   let patient = {
     ho_ten: req.body.name,
     cmnd: req.body.id,
@@ -58,6 +57,7 @@ router.post("/add", auth, async (req, res) => {
   await relatedPatientM.add(relatedPatient);
 
   const user = await createAccount(req.body.id, req.body.id);
+  console.log(user);
 
   user.id_benh_nhan = result[0].id_benh_nhan;
 

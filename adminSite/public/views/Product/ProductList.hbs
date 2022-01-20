@@ -26,9 +26,10 @@
                     <option {{#cond sortby "id_nhu_yeu_pham" }} selected {{/cond}} value="id_nhu_yeu_pham">Sắp xếp: Mặc
                         định
                     </option>
-                    <option {{#cond sortby "gia_tien" }} selected {{/cond}}value="gia_tien">Sắp xếp: Giá tiền</option>
-                    <option {{#cond sortby "ten_sanpham" }} selected {{/cond}}value="ten_sanpham">Sắp xếp: Tên</option>
-                    <option {{#cond sortby "con_lai" }} selected {{/cond}}value="con_lai">Sắp xếp: Số lượng</option>
+                    <option {{#cond sortby "gia_tien" }} selected {{/cond}} value="gia_tien">Sắp xếp: Giá tiền</option>
+                    <option {{#cond sortby "ten_sanpham" }} selected {{/cond}} value="ten_sanpham">Sắp xếp: Tên</option>
+                    <option {{#cond sortby "con_lai" }} selected {{/cond}} value="con_lai">Sắp xếp: Số lượng</option>
+                    <option {{#cond sortby "status" }} selected {{/cond}} value="status">Sắp xếp: Trạng thái</option>
                 </select>
             </div>
             <div class="col-2">
@@ -36,6 +37,7 @@
                     <option {{#cond asc "asc" }} selected {{/cond}} value="asc">Tăng dần</option>
                     <option {{#cond asc "desc" }} selected {{/cond}}value="desc">Giảm dần</option>
                 </select>
+
             </div>
             <div class="col-1">
                 <button class="btn btn-outline-primary align-self-center" type="submit"><i class="fa fa-search fa-lg"
@@ -50,38 +52,32 @@
             </div>
         </form>
     </div>
-
-    <table class="table table-bordered ml-2" style="width:95%">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col" data-filter-control='select'>Tên nhu yếu phẩm</th>
-                <th scope="col">Hình ảnh</th>
-                <th scope="col">Giá tiền</th>
-                <th scope="col">Đơn vị</th>
-                <th scope="col">Số lượng </th>
-                <th scope="col" class="text-end"></th>
-            </tr>
-        </thead>
-        <tbody>
-
+    <div class="container-fluid  ">
+        <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
             {{#each products}}
-            <tr>
-                <td class="pt-5">{{ten_sanpham}}</td>
-                <td><img style="width: 100px; height:100px" src={{url}}></td>
-                <td class="pt-5">{{gia_tien}}</td>
-                <td class="pt-5">{{don_vi}}</td>
-                <td class="pt-5">{{con_lai}}</td>
-                <td style="padding-top: 40px;">
-                    <a href="/product/detail/{{id_nhu_yeu_pham}}" type="button"
-                        class="btn btn-light btn-small border-0"><i class="bi bi-eye"></i>
-                        Chi tiết</a>
-                </td>
-            </tr>
+            <div class="col p-2">
+                <div
+                    class="cus-card h-100 w-100 shadow-sm border border-{{#cond status 1}}warning{{/cond}}{{#cond status 0}}danger{{/cond}}">
+                    <img src={{url}} class="card-img-top">
+                    {{#cond status 0}} <div class="label-top shadow-sm">Vô hiệu hóa</div>{{/cond}}
+                    <div class="card-body">
+                        <div class="clearfix mb-3"> <span
+                                class="float-start badge rounded-pill bg-success">{{#formatMoney gia_tien}}
+                                {{/formatMoney}}
+                                VND</span>
+                            <span class="float-end"><a href="#" class="small text-muted">Số lượng:
+                                    {{con_lai}}</a></span>
+                        </div>
+                        <h5 class="card-title">{{ten_sanpham}}</h5>
+                        <h6 class="card-title">{{mo_ta}}</h6>
+                        <div class="text-center my-4"> <a href="/product/detail/{{id_nhu_yeu_pham}}"
+                                class="btn btn-warning">Chi tiết</a> </div>
+                    </div>
+                </div>
+            </div>
             {{/each}}
-
-        </tbody>
-    </table>
-
+        </div>
+    </div>
     <nav aria-label="Page navigation example">
         {{{paginateHelper pagination paginationClass="pagination"}}}
     </nav>

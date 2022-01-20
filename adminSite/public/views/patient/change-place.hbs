@@ -1,12 +1,34 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/patient">Bệnh nhân</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Chuyển nơi điều trị</li>
-  </ol>
-</nav>
-<form method="post" action="/patient/change-place/{{id}}" id="change-place-form">
-  <div class="col-3">
-    <label for="floatingInput">Mã bệnh nhân: {{id}}</label>
+<div class="container-fluid">
+  <h1 class="mt-5">Chuyển nơi điều trị</h1>
+  <button type="button" class="btn btn-lg btn-secondary align-self-center mb-3" onclick="goBack()">Trở
+    lại</button>
+  <div class="card">
+    <div class="card-body w-50">
+      <form method="post" action="/patient/change-place/{{id}}" id="change-place-form">
+        <div class="form-group row">
+          <label for="floatingInput" class="col-4">Mã bệnh nhân</label>
+          <input type="text" class="form-control col" value={{id}} readonly>
+        </div>
+        <div class="form-group row">
+          <label for="floatingInput" class="col-4">Nơi điều trị hiện tại:</label>
+          <input type="text" class="form-control col" value={{place}} readonly>
+        </div>
+        <div class="form-group row">
+          <label for="floatingInput" class="col-4">Nơi điều trị mới: </label>
+          <select name="place" id="place" required class="col form-select form-select-md border border-secondary">
+            <option value="place-empty">---Chọn nơi điều trị---</option>
+            {{#each places}}
+            <option value={{mavitri}}>{{tennoidieutri}}</option>
+            {{/each}}
+          </select>
+          <br />
+          <span class="text-danger" hidden id="place-danger">Chưa chọn nơi điều trị</span>
+        </div>
+        <div class="form-group row">
+          <button class="btn btn-primary col-4" type="submit">Chuyển nơi điều trị</button>
+        </div>
+      </form>
+    </div>
   </div>
   <div class="col-3">
     <label for="floatingInput">Nơi điều trị hiện tại: {{place}}</label>

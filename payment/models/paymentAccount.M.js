@@ -54,4 +54,13 @@ module.exports = {
 
     return await db.getSingleResut(query);
   },
+
+  getDebtPatient: async (time) => {
+    var query = `select id_tai_khoan, id_benh_nhan, du_no, ngay_giao_dich_gan_nhat, trang_thai from public.${db.tableName.tai_khoan_thanh_toan}`;
+    if(time){
+      query = query + ` where DATE_PART('day', CURRENT_DATE::timestamp - ngay_giao_dich_gan_nhat::timestamp) > ${time}`;
+    }
+
+    return await db.runQuery(query);
+  }
 };

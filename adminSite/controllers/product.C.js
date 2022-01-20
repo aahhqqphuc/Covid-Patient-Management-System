@@ -3,11 +3,12 @@ const router = express.Router();
 const productM = require("../models/product.M");
 module.exports = router;
 const upload = require("../middlewares/upload");
+const manager = -1;
 
 router.get("/", async (req, res) => {
   const page = +req.query.page || 1;
-  const pagesize = +req.query.pagesize || 5;
-  const result = await productM.getPaging(page, pagesize);
+  const pagesize = +req.query.pagesize || 8;
+  const result = await productM.getPaging(page, pagesize, manager);
   res.render("product/productList", {
     layout: "managerLayout",
     products: result.data,
@@ -19,11 +20,12 @@ router.get("/filter", async (req, res) => {
   const page = +req.query.page || 1;
   const priceFrom = +req.query.price || 0;
   const priceTo = priceFrom != 0 ? priceFrom + 100000 : 100000000;
-  const pagesize = +req.query.pagesize || 5;
+  const pagesize = +req.query.pagesize || 8;
   const search = req.query.search || "";
   const sortby = req.query.sortby || "id_nhu_yeu_pham";
   const asc = req.query.asc;
   const result = await productM.filter(priceFrom, priceTo, sortby, asc, search, page, pagesize);
+  console.log(result.data);
   res.render("product/productList", {
     layout: "managerLayout",
     products: result.data,
@@ -68,17 +70,20 @@ router.post("/add", upload.array("ImagePath"), async (req, res) => {
 router.get("/detail/:id", async (req, res) => {
   let id = req.params.id;
   let data = await productM.getById(id);
+  console.log("data", data.images[0]);
   res.render("product/productdetail", {
     layout: "managerLayout",
     product: data.pro[0],
-    images: data.images,
+    mainImage: data.images[0],
+    images: data.images.slice(1),
   });
 });
 
 router.get("/edit/:id", async (req, res) => {
   let id = req.params.id;
   let data = await productM.getById(id);
-  res.render("product/editproduct", {
+  console.log(data.images[0]);
+  return res.render("product/editproduct", {
     layout: "managerLayout",
     product: data.pro[0],
     images: data.images,
@@ -107,20 +112,15 @@ router.post("/edit/:id", upload.array("ImagePath"), async (req, res) => {
   res.redirect("/product");
 });
 
-router.get("/delete/:id", async (req, res) => {
+router.get("/disable/:id", async (req, res) => {
   const id = req.params.id;
-  let data = await productM.getById(id);
-  const rs = await productM.delete(id);
-  if (rs) {
-    data.images.forEach(async (item) => {
-      try {
-        await fs.remove("public" + item.url);
-      } catch (err) {
-        console.error("delete image file error", err);
-      }
-    });
-  }
-  res.redirect("/product");
+  const rs = await productM.disable(id);
+  res.redirect("/product/detail/" + id);
+});
+router.get("/enable/:id", async (req, res) => {
+  const id = req.params.id;
+  const rs = await productM.enable(id);
+  res.redirect("/product/detail/" + id);
 });
 
 router.get("/image/delete/:id", async (req, res) => {
