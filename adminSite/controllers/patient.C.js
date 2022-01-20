@@ -213,20 +213,79 @@ router.get("/self", async (req, res) => {
   });
 });
 router.get("/paymentHistory", async (req, res) => {
-  // call api
-  const data = [];
+  let so_du = 0,
+    du_no = 0,
+    data = [];
+  await axios({
+    method: "get",
+    url: "https://localhost:3001/payment/payment-account/balance",
+    responseType: "json",
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
+  })
+    .then(function (response) {
+      so_du = response.data.so_du;
+    })
+    .catch(function (err) {
+      console.log("err /payment/balance", err);
+    });
+  await axios({
+    method: "get",
+    url: "https://localhost:3001/payment/payment-account/debt",
+    responseType: "json",
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
+  })
+    .then(function (response) {
+      du_no = response.data.du_no;
+    })
+    .catch(function (err) {
+      console.log("err /payment/debt", err);
+    });
+  await axios({
+    method: "get",
+    url: "https://localhost:3001/payment/transaction-history",
+    responseType: "json",
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
+  })
+    .then(function (response) {
+      data = response.data.giao_dich;
+    })
+    .catch(function (err) {
+      console.log("err /payment/transaction-history", err);
+    });
   return res.render("patient/paymentInfo", {
-    so_du: 0,
-    du_no: 0,
+    so_du: so_du,
+    du_no: du_no,
     layout: "patientLayout",
     data: data,
   });
 });
 router.get("/info", async (req, res) => {
-  // call api
   let id = req.user.patientId || 2;
-
   const data = await patientM.basicInfo(id);
+  return res.render("patient/basicInfo", {
+    layout: "patientLayout",
+    patient: data[0],
+  });
+});
+router.post("/deposit", async (req, res) => {
+  // call api
+  let amount = req.body.amount;
+  await axios({
+    method: "post",
+    url: "https://localhost:3001/payment/payment-account/deposit",
+    responseType: "json",
+    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
+    data: { amount: amount },
+  })
+    .then(function (response) {
+      return res.render("patient/basicInfo", {
+        layout: "patientLayout",
+        patient: data[0],
+      });
+    })
+    .catch(function (err) {
+      console.log("err /payment/transaction-history", err);
+    });
   return res.render("patient/basicInfo", {
     layout: "patientLayout",
     patient: data[0],
