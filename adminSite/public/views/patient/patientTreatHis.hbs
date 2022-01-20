@@ -1,45 +1,43 @@
-    <body >
-            <div id="layoutSidenav_content" style="margin-top:-20px">
-                <main>
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4">Chi tiết bệnh nhân</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="/patient">Home</a></li>
-                            <li class="breadcrumb-item active">Lịch sử điều trị bệnh của <b> {{patient.ho_ten}} / CMND: {{patient.cmnd}} </b></li>
-                        </ol>
-                    
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                Lịch sử điều trị của bệnh nhân <b> {{patient.ho_ten}} / CMND: {{patient.cmnd}} </b>
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-bordered" >
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>Tên bệnh viện</th>
-                                            <th>Vị trí bệnh viện</th>
-                                            <th>Trạng thái</th>
-                                            <th>Ngày di chuyển</th>
-                                            <th>Ngày cập nhật thông tin</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{#each detail}}
-                                            <tr>
-                                                <td>{{tennoidieutri}}</td>
-                                                <td>{{tinh}}, {{huyen}}, {{xa}}</td>
-                                                <td>F{{trang_thai}}</td>
-                                                <td>{{ngay_di_chuyen}}</td>
-                                                <td>{{ngay_cap_nhat}}</td>
-                                            </tr>
-                                            {{/each}}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <nav aria-label="Page navigation example">
-                                {{{paginateHelper pagination1 paginationClass="pagination"}}}
-                            </nav>
-                        </div>
-                </main>
-    </body>
+<div class="container-fluid px-4">
+  <h1 class="mt-4">Chi tiết bệnh nhân</h1>
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="/patient">Home</a></li>
+    <li class="breadcrumb-item active">Lịch sử điều trị bệnh của
+      <b> {{patient.ho_ten}} / CMND: {{patient.cmnd}} </b></li>
+  </ol>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      Lịch sử điều trị của bệnh nhân
+      <b> {{patient.ho_ten}} / CMND: {{patient.cmnd}} </b>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th>Tên bệnh viện</th>
+            <th>Vị trí bệnh viện</th>
+            <th>Trạng thái</th>
+            <th>Ngày di chuyển</th>
+            <th>Ngày cập nhật thông tin</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each detail}}
+            <tr>
+              <td>{{tennoidieutri}}</td>
+              <td>{{tinh}}, {{huyen}}, {{xa}}</td>
+              <td>F{{trang_thai}}</td>
+              <td>{{ngay_di_chuyen}}</td>
+              <td>{{ngay_cap_nhat}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <nav aria-label="Page navigation example">
+      {{{paginateHelper pagination1 paginationClass="pagination"}}}
+    </nav>
+  </div>
+</div>

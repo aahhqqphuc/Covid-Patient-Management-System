@@ -1,0 +1,35 @@
+<div class="row mb-3 mt-3">
+    <div class="col">
+        <h1>Lịch sử tiêu thụ gói Nhu yếu phẩm
+        </h1>
+    </div>
+</div>
+<div class="row mb-3 mt-3">
+    <table class="table table-bordered ml-2" style="width:95%">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" data-filter-control='select'>Tên gói nhu yếu phẩm</th>
+                <th scope="col">Tổng tiền</th>
+                <th scope="col">Ngày mua</th>
+                <th scope="col" class="text-end"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each orders}}
+            <tr>
+                <td class="pt-5"> {{ten_goi}}</td>
+                <td class="pt-5">{{total}}</td>
+                <td class="pt-5">{{formatDate ngay_mua "vn"}}</td>
+                <td style="padding-top: 40px;">
+                    <a href="/patient/order-history/{{id_chi_tiet}}" type="button" class="btn btn-light btn-small"><i
+                            class="bi bi-eye"></i>
+                        Chi tiết</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        {{{paginateHelper pagination paginationClass="pagination"}}}
+    </nav>
+</div>

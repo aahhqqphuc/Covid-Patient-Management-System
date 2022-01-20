@@ -46,50 +46,6 @@ function updateQuantityPrice(quantityInput) {
   });
 }
 
-// ---------------------------------------------------
-// const html =`<div class="product">
-// <div class="product-image">
-//     <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
-// </div>
-// <div class="product-details">
-//     <h5 class="product-title">Dingo Dog Bones</h5>
-//     <p class="product-description" style="text-align:justify">The best dog bones of all time. Holy crap. Your dog
-//         will
-//         be begging for these things! I got curious once and ate one myself. I'm a fan.
-//     </p>
-// </div>
-// <div class="product-price mt-1">25000</div>
-// <div class="product-quantity">
-//   <span><i class="fas fa-minus decrease"></i></span>
-//   <input type="number" name="product1" value="2" min="1" max="5">
-//   <span><i class="fas fa-plus increase"></i></span>
-// </div>
-// <div class="product-line-price mt-1">50000</div>
-// </div>
-
-// <div class="product">
-// <div class="product-image">
-//     <img src="https://s.cdpn.io/3/large-NutroNaturalChoiceAdultLambMealandRiceDryDogFood.png"
-//         alt="Ảnh sản phẩm" />
-// </div>
-// <div class="product-details">
-//     <h5 class="product-title">Nutro™ Adult Lamb and Rice Dog Food</h5>
-//     <p class="product-description" style="text-align:justify">Who doesn't like lamb and rice? We've all hit the
-//         halal
-//         cart at 3am while quasi-blackout after a night of binge drinking in Manhattan.
-//         Now
-//         it's your dog's turn!</p>
-// </div>
-// <div class="product-price mt-1">45000</div>
-// <div class="product-quantity">
-//   <span><i class="fas fa-minus decrease"></i></span>
-//   <input type="number" name="product2" value="2" min="0" max="3">
-//   <span><i class="fas fa-plus increase"></i></span>
-// </div>
-// <div class="product-line-price mt-1">45000</div>
-// </div>`
-
-
 $(document).on('click', '.decrease', function () {
   updateQuantity(this, 0);
 })
@@ -122,15 +78,20 @@ function updateQuantity(e, opt) {
 
 
 $('.btn-request-form').on("click", async function (e) {
-  nodeId = $(e.target)[0].nextElementSibling;
-  const id = $(nodeId).val();
-
+  const id = $('form input[name="packageId"]').val();
   try {
     const data = await fetch(`http://127.0.0.1:3000/product-package/package-detail/${id}`)
+    
     const package = await data.json();
+
+    if(data.status != '200'){
+      $('.shopping-cart .list-product').html(`<h4 class="text-center text-info my-4">${package.info}</h4>`);
+      $('.shopping-cart .totals').addClass('d-none');
+      return;
+    }
+
     const info = package.info[0];
 
-    $('form input[name="packageId"]').val(`${info.id_goi_nhu_yeu_pham}`);
     $('.cart .package-name').text(`${info.ten_goi}`)
     
     let html = '';

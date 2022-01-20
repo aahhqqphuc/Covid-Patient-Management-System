@@ -38,69 +38,66 @@ module.exports = {
     return res;
   },
 
-  detail_treatHis: async (id,page, pagesize) => {
+  detail_treatHis: async (id, page, pagesize) => {
     var query = `SELECT CASE WHEN ls.status = 1 THEN 'Hiện tại'
         WHEN ls.status = 2 THEN 'Quá khứ' END as status,ngay_di_chuyen,ls.ngay_cap_nhat,vt.tennoidieutri,tinh,huyen,xa,tt.trang_thai
       FROM public.lich_su_dieu_tri ls join noi_dieu_tri vt on ls.mavitri = vt.mavitri join Trang_Thai_Benh_Nhan tt on ls.id_lich_su_dieu_tri = tt.lich_su_dieu_tri
       where ls.id_benh_nhan = '${id}'
       ORDER BY ls.mavitri ASC limit ${pagesize} offset ${pagesize * (page - 1)}; `;
-      const qtotal = `select count(*) from lich_su_dieu_tri ls where ls.id_benh_nhan = '${id}'`;
-      try {
-        const r1 = await db.getDb.any(query);
-        r1.forEach((element) => {
-          element.ngay_di_chuyen =
-            "Ngày " +
-            element.ngay_di_chuyen.getDate() +
-            " Tháng " +
-            element.ngay_di_chuyen.getMonth() +
-            " Năm " +
-            element.ngay_di_chuyen.getFullYear();
-          element.ngay_cap_nhat =
-            "Ngày " +
-            element.ngay_cap_nhat.getDate() +
-            " Tháng " +
-            element.ngay_cap_nhat.getMonth() +
-            " Năm " +
-            element.ngay_cap_nhat.getFullYear();
-        });
-        const r2 = await db.getDb.any(qtotal);
-        return { data: r1, total: r2[0].count };
-      } 
-      catch (error) {
-        console.log("error db/all :", error);
-      };
+    const qtotal = `select count(*) from lich_su_dieu_tri ls where ls.id_benh_nhan = '${id}'`;
+    try {
+      const r1 = await db.getDb.any(query);
+      r1.forEach((element) => {
+        element.ngay_di_chuyen =
+          "Ngày " +
+          element.ngay_di_chuyen.getDate() +
+          " Tháng " +
+          element.ngay_di_chuyen.getMonth() +
+          " Năm " +
+          element.ngay_di_chuyen.getFullYear();
+        element.ngay_cap_nhat =
+          "Ngày " +
+          element.ngay_cap_nhat.getDate() +
+          " Tháng " +
+          element.ngay_cap_nhat.getMonth() +
+          " Năm " +
+          element.ngay_cap_nhat.getFullYear();
+      });
+      const r2 = await db.getDb.any(qtotal);
+      return { data: r1, total: r2[0].count };
+    } catch (error) {
+      console.log("error db/all :", error);
+    }
   },
 
-  viewPatientsDetail_PatientTrailDown: async (id,page, pagesize) => {
+  viewPatientsDetail_PatientTrailDown: async (id, page, pagesize) => {
     var query = `SELECT bn.*,lq.noi_tiep_xuc_tinh,noi_tiep_xuc_huyen,noi_tiep_xuc_xa 
       FROM public.benh_nhan_covid bn join public.nguoi_lien_quan lq on bn.id_benh_nhan = lq.id_nguoi_bi_lay
       where lq.id_nguoi_lay = '${id}'
       ORDER BY bn.id_benh_nhan ASC limit ${pagesize} offset ${pagesize * (page - 1)}; `;
-      const qtotal = `select count(*) from public.nguoi_lien_quan lq where lq.id_nguoi_lay = '${id}'`;
-      try {
-        const r1 = await db.getDb.any(query);
-        const r2 = await db.getDb.any(qtotal);
-        return { data: r1, total: r2[0].count };
-      } 
-      catch (error) {
-        console.log("error db/all :", error);
-      };;
+    const qtotal = `select count(*) from public.nguoi_lien_quan lq where lq.id_nguoi_lay = '${id}'`;
+    try {
+      const r1 = await db.getDb.any(query);
+      const r2 = await db.getDb.any(qtotal);
+      return { data: r1, total: r2[0].count };
+    } catch (error) {
+      console.log("error db/all :", error);
+    }
   },
 
-  viewPatientsDetail_PatientTrailUp: async (id,page, pagesize) => {
+  viewPatientsDetail_PatientTrailUp: async (id, page, pagesize) => {
     var query = `SELECT bn.*,lq.noi_tiep_xuc_tinh,noi_tiep_xuc_huyen,noi_tiep_xuc_xa 
       FROM public.benh_nhan_covid bn join public.nguoi_lien_quan lq on bn.id_benh_nhan = lq.id_nguoi_lay
       where lq.id_nguoi_bi_lay = '${id}'
       ORDER BY bn.id_benh_nhan ASC limit ${pagesize} offset ${pagesize * (page - 1)}; `;
-      const qtotal = `select count(*) from public.nguoi_lien_quan lq where lq.id_nguoi_bi_lay = '${id}'`;
-      try {
-        const r1 = await db.getDb.any(query);
-        const r2 = await db.getDb.any(qtotal);
-        return { data: r1, total: r2[0].count };
-      } 
-      catch (error) {
-        console.log("error db/all :", error);
-      };
+    const qtotal = `select count(*) from public.nguoi_lien_quan lq where lq.id_nguoi_bi_lay = '${id}'`;
+    try {
+      const r1 = await db.getDb.any(query);
+      const r2 = await db.getDb.any(qtotal);
+      return { data: r1, total: r2[0].count };
+    } catch (error) {
+      console.log("error db/all :", error);
+    }
   },
 
   checkExistsIdNumber: async (idNumber) => {
@@ -124,22 +121,21 @@ module.exports = {
     }
   },
   getTinh: async (tinh) => {
-    try{
-      if(tinh == '')
-      tinh = 'All';
-    var query = `SELECT t.*, null AS curTinh
+    try {
+      if (tinh == "") tinh = "All";
+      var query = `SELECT t.*, null AS curTinh
     FROM public.tinh t
     ORDER BY id_tinh ASC`;
       const res = await db.runQuery(query);
-      res.forEach((element)=>{
-          element.curTinh = tinh;
+      res.forEach((element) => {
+        element.curTinh = tinh;
       });
       return res;
     } catch (error) {
       console.log("error db/all :", error);
     }
   },
-  filter: async (tinh,trangthai, sortby, asc, search, page, pagesize) => {
+  filter: async (tinh, trangthai, sortby, asc, search, page, pagesize) => {
     const query = `select * from
     (select distinct on (bn.ID_Benh_Nhan) bn.ID_Benh_Nhan, bn.Ho_Ten,bn.CMND,bn.Nam_Sinh,bn.Tinh,bn.Huyen,bn.Xa,tt.trang_thai,vt.tennoidieutri 
     FROM public.benh_nhan_covid bn join public.trang_thai_benh_nhan tt on bn.id_benh_nhan = tt.id_benh_nhan 
@@ -158,7 +154,7 @@ module.exports = {
       console.log("error db/all :", error);
     }
   },
-  
+
   filter1: async (tinh, sortby, asc, search, page, pagesize) => {
     const query = `select * from
     (select distinct on (bn.ID_Benh_Nhan) bn.ID_Benh_Nhan, bn.Ho_Ten,bn.CMND,bn.Nam_Sinh,bn.Tinh,bn.Huyen,bn.Xa,tt.trang_thai,vt.tennoidieutri 
@@ -167,7 +163,7 @@ module.exports = {
       WHERE ls.status = '1' and bn.ho_ten like '%${search}%' and
     bn.tinh like '%${tinh}%' ) data order by ${sortby} ${asc}
     limit ${pagesize} offset ${pagesize * (page - 1)}`;
-    
+
     const qtotal = `select count(*) from benh_nhan_covid bn join public.trang_thai_benh_nhan tt on bn.id_benh_nhan = tt.id_benh_nhan
     where bn.tinh like '%${tinh}%'  and ho_ten like '%${search}%' `;
     try {

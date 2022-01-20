@@ -168,14 +168,13 @@ router.post("/payment-account/pay", auth, async (req, res) => {
 });
 
 // get list bệnh nhân hơn 30 ngày chưa trả nợ
-router.get("/debt-patient", auth, async (req, res) => {
-  if (req.user.role != "manager") {
-    return res.status(401).json({
-      msg: "unauthorized",
-    });
-  }
-
-  const result = await paymentAccountM.getDebtPatient();
+router.get("/debt-patient", async (req, res) => {
+  // if (req.user.role != "manager") {
+  //   return res.status(401).json({
+  //     msg: "unauthorized",
+  //   });
+  // }
+  const result = await paymentAccountM.getDebtPatient(req.body.time);
 
   res.status(200).json({
     msg: "success",
@@ -195,6 +194,22 @@ router.put("/change-state", auth, async (req, res) => {
 
   res.status(200).json({
     msg: "success",
+  });
+});
+
+// get lịch sử giao dịch
+router.get("/transaction-history", auth, async (req, res) => {
+  if (req.user.patientId == null) {
+    return res.status(401).json({
+      msg: "unauthorized",
+    });
+  }
+
+  const result = await transactionM.getTransactionHistory(req.user.patientId);
+
+  res.status(200).json({
+    msg: "success",
+    giao_dich: result,
   });
 });
 

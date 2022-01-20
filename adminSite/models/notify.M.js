@@ -2,13 +2,18 @@ const db = require("./db");
 
 module.exports = {
   add: async (noftify) => {
-    const res = await db.add(db.tableName.thong_bao, noftify);
-    return res;
+    const query = `insert into thong_bao values(default, '${noftify.id_benh_nhan}', '${noftify.thong_bao}', 0)`;
+    try {
+        const res = await db.runQuery(query);
+        return res;
+    } catch (error) {
+        console.log("err noftify/get", error);
+    }
   },
   get: async (userId) => {
     const query = `select * from thong_bao where id_benh_nhan = ${userId}`;
     try {
-        const res = await db.any(query);
+        const res = await db.runQuery(query);
         return res;
     } catch (error) {
         console.log("err noftify/get", error);

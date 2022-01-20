@@ -3,7 +3,7 @@ const router = express.Router();
 const model = require("../models/admin.M");
 const TreatmentPlacemodel = require("../models/treatmentPlace.M");
 const patientModel = require("../models/patient.M");
-const accountUlt = require("../utils/account")
+const accountUlt = require("../utils/account");
 
 router.get("/", async (req, res) => {
   const page = +req.query.page || 1;
@@ -19,10 +19,10 @@ router.get("/", async (req, res) => {
 router.get("/hospital", async (req, res) => {
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 5;
-  const data = await TreatmentPlacemodel.getPaging(page,pagesize);
+  const data = await TreatmentPlacemodel.getPaging(page, pagesize);
   const search = req.query.search || "";
   const asc = req.query.asc;
-  const tinh = req.body.tinh || 'All';
+  const tinh = req.body.tinh || "All";
   const tinh_place = await patientModel.getTinh(tinh);
   res.render("admin/adminHospital", {
     layout: "adminLayout",
@@ -37,14 +37,13 @@ router.get("/hospital", async (req, res) => {
   });
 });
 
-
 router.get("/hospital-filter", async (req, res) => {
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 5;
   const search = req.query.search || "";
   const tinh = req.query.tinh || "All";
   const tinh_place = await patientModel.getTinh(tinh);
-  const data = await TreatmentPlacemodel.filter(tinh,search,page,pagesize);
+  const data = await TreatmentPlacemodel.filter(tinh, search, page, pagesize);
   res.render("admin/adminHospital", {
     layout: "adminLayout",
     hospital: data.data,
@@ -53,7 +52,7 @@ router.get("/hospital-filter", async (req, res) => {
       page: parseInt(page),
       limit: pagesize,
       totalRows: data.total,
-      queryParams: { tinh: tinh, search: search},
+      queryParams: { tinh: tinh, search: search },
     },
   });
 });
@@ -62,8 +61,8 @@ router.get("/detail-filter", async (req, res) => {
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 5;
   const id = req.query.id || 0;
-  const data = await model.getdetail(id,page,pagesize);
-   
+  const data = await model.getdetail(id, page, pagesize);
+
   const user_name = await model.getUsername(id);
   res.render("admin/adminAccountLogDetail", {
     layout: "adminLayout",
@@ -73,7 +72,7 @@ router.get("/detail-filter", async (req, res) => {
       page: parseInt(page),
       limit: pagesize,
       totalRows: data.total,
-      queryParams: { id: id},
+      queryParams: { id: id },
     },
   });
 });
@@ -88,12 +87,10 @@ router.get("/unlock", async (req, res) => {
   res.redirect("/admin");
 });
 
-
 router.get("/detail-filter/delete", async (req, res) => {
   const data1 = await model.deleteAction(req.query.id);
   res.redirect("/admin");
 });
-
 
 router.get("/register", async (req, res) => {
   res.render("admin/adminAccountRegister", {
@@ -124,9 +121,7 @@ router.post("/register", async (req, res) => {
     });
     return;
   } else {
-    
-
-    user = accountUlt.createAccountManager(username,psw);
+    user = accountUlt.createAccountManager(username, psw);
     const rs = await model.adduser(user);
     res.redirect("/admin");
   }
@@ -136,12 +131,10 @@ router.get("/hospital-register", async (req, res) => {
   res.render("admin/adminHospitalRegister", {
     layout: "adminLayout",
     display: `none`,
-    
   });
 });
 
 router.post("/hospital-register", async (req, res) => {
-
   const rs = await TreatmentPlacemodel.addnew(req.body);
 
   res.redirect("/admin/hospital");
@@ -152,16 +145,14 @@ router.get("/hospital-detail", async (req, res) => {
   res.render("admin/adminHospitalEdit", {
     layout: "adminLayout",
     display: `none`,
-    place:data[0]
+    place: data[0],
   });
 });
 
 router.post("/hospital-detail", async (req, res) => {
-
   const rs = await TreatmentPlacemodel.addnew(req.body);
 
   res.redirect("/admin/hospital");
 });
-
 
 module.exports = router;
