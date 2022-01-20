@@ -1,0 +1,52 @@
+<div class="container-fluid mt-3">
+    <h1 class="">Chi tiết lịch sử thanh toán Gói Nhu Yếu Phẩm</h1>
+    <button type="button" class="btn btn-lg btn-secondary align-self-center mb-3" onclick="goBack()">Trở
+        lại</button>
+    <div class="card">
+        <div class="card-body">
+            <form>
+                <div class="form-group">
+                    <label for="title">Tên Gói Nhu yếu phẩm</label>
+                    <input type="text" class="form-control" readonly id="title" value='{{package.ten_goi}}'>
+                </div>
+                <div class="form-group">
+                    <label for="basePrice">Thời gian tối thiểu đặt hàng</label>
+                    <input type="text" class="form-control" readonly id="basePrice"
+                        value='{{package.thoi_gian}} {{package.muc_gioi_han_goi_string}}'>
+                </div>
+                <div class="form-group">
+                    <label for="description">Nhu yếu phẩm</label>
+                    <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">
+                        <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+                            {{#each products}}
+                            <div class="col p-2">
+                                <div class="cus-card h-100 w-100 shadow-sm border border-}">
+                                    <img src={{url}} class="card-img-top">
+                                    <div class="card-body">
+                                        <div class="clearfix mb-3"> <span
+                                                class="float-start badge rounded-pill bg-success">{{#formatMoney
+                                                gia}}
+                                                {{/formatMoney}}
+                                                VND</span>
+                                            <span class="float-end"><a href="#" class="small text-muted">Số lượng:
+                                                    {{so_luong}}</a></span>
+                                        </div>
+                                        <h4 class="card-title">{{ten_sanpham}}</h4>
+                                        <div class="text-center mt-3"> <a href="/product/detail/{{id_nhu_yeu_pham}}"
+                                                class="btn btn-warning">Chi tiết</a> </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function goBack() {
+        window.history.back();
+    }
+</script>

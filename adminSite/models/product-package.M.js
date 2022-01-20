@@ -22,7 +22,7 @@ module.exports = {
         left join hinh_anh_san_pham img on nyp.id_nhu_yeu_pham = img.id_nhu_yeu_pham
         left join (select count( id_goi ) as count ,id_goi 
         from danh_sach_nhu_yeu_pham group by id_goi) c on ds.id_goi = c.id_goi 
-        where g.status != ${opposite}
+        where g.status != ${opposite} and img.url is not null
         order by g.id_goi_nhu_yeu_pham limit ${pagesize} offset ${pagesize * (page - 1)}; `;
     const qtotal = `select count(*) from goi_nhu_yeu_pham where status != ${opposite}`;
     try {

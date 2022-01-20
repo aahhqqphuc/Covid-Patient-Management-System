@@ -46,20 +46,8 @@ module.exports = {
       ORDER BY ls.mavitri ASC`;
     const res = await db.runQuery(query);
     res.forEach((element) => {
-      element.ngay_di_chuyen =
-        "Ngày " +
-        element.ngay_di_chuyen.getDate() +
-        " Tháng " +
-        element.ngay_di_chuyen.getMonth() +
-        " Năm " +
-        element.ngay_di_chuyen.getFullYear();
-      element.ngay_cap_nhat =
-        "Ngày " +
-        element.ngay_cap_nhat.getDate() +
-        " Tháng " +
-        element.ngay_cap_nhat.getMonth() +
-        " Năm " +
-        element.ngay_cap_nhat.getFullYear();
+      element.ngay_di_chuyen = "Ngày " + element.ngay_di_chuyen.getDate() + " Tháng " + element.ngay_di_chuyen.getMonth() + " Năm " + element.ngay_di_chuyen.getFullYear();
+      element.ngay_cap_nhat = "Ngày " + element.ngay_cap_nhat.getDate() + " Tháng " + element.ngay_cap_nhat.getMonth() + " Năm " + element.ngay_cap_nhat.getFullYear();
     });
     return res;
   },
