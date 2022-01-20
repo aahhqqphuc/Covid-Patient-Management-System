@@ -1,0 +1,56 @@
+<head>
+    <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 col-xl-9 mx-auto">
+        <div class="card flex-row my-5 border-0 shadow rounded-3 overflow-hidden">
+          
+          <div class="card-body p-4 p-sm-5">
+            <h5 class="card-title text-center mb-5 fw-light fs-5">Chỉnh sửa thông tin bệnh viện</h5>
+            <form method="post" action="admin/hospital-detail">
+              
+              <div class="form-floating mb-3">
+                <input name="mavitri" type="text" class="form-control" value="{{place.mavitri}}" id="floatingInputUsername1" disabled>
+                <label for="floatingInputUsername1">Mã vị trí</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input name="tennoidieutri" type="text" class="form-control" value="{{place.tennoidieutri}}" id="floatingInputUsername" placeholder="" required autofocus>
+                <label for="floatingInputUsername">Tên nơi điều trị</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input name="tinh"  value ="{{place.tinh}}" type="text" class="form-control" id="floatingInputEmail" placeholder="" required>
+                <label for="floatingInputEmail">Tỉnh</label>
+              </div>
+              
+              <div class="form-floating mb-3">
+                <input name="huyen" value="{{place.huyen}}" type="text" class="form-control" id="floatingInputEmail" placeholder="" required>
+                <label for="floatingInputEmail">Huyện</label>
+              </div>
+              
+              <div class="form-floating mb-3">
+                <input name="xa" value="{{place.xa}}" type="text" class="form-control" id="floatingInputEmail" placeholder="" required>
+                <label for="floatingInputEmail">Xã</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input name="succhua" value="{{place.succhua}}" type="number" class="form-control" id="floatingInputEmail" placeholder="" required>
+                <label for="floatingInputEmail">Sức chứa tổng</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input name="soluonghientai" value="{{place.soluonghientai}}" type="number" class="form-control" id="floatingInputEmail" placeholder="" required>
+                <label for="floatingInputEmail">Số lượng người hiện tại</label>
+              </div>
+              <hr>
+              <div class="d-grid mb-2">
+                <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase" type="submit">Sửa chữa</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
