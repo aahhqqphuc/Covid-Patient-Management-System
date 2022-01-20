@@ -1,12 +1,25 @@
 const db = require("./db").getDb;
-
+function getOpposite(status) {
+  switch (status) {
+    case -1:
+      return -1;
+    case 0:
+      return 1;
+    case 1:
+      return 0;
+    default:
+      return -1;
+  }
+}
 module.exports = {
-  getPaging: async (page, pagesize) => {
-    const query = `select distinct on (p.id_nhu_yeu_pham) p.id_nhu_yeu_pham, p.ten_sanpham,p.gia_tien,p.don_vi,p.con_lai,url 
+  getPaging: async (page, pagesize, status) => {
+    const opposite = getOpposite(status);
+    const query = `select distinct on (p.id_nhu_yeu_pham) p.id_nhu_yeu_pham, p.ten_sanpham,p.gia_tien,p.don_vi,p.con_lai,url,status
     from nhu_yeu_pham p left join hinh_anh_san_pham img 
 		on p.id_nhu_yeu_pham = img.id_nhu_yeu_pham 
+    where status != ${opposite}
 		order by p.id_nhu_yeu_pham limit ${pagesize} offset ${pagesize * (page - 1)}; `;
-    const qtotal = `select count(*) from nhu_yeu_pham `;
+    const qtotal = `select count(*) from nhu_yeu_pham where status != ${opposite} `;
     try {
       const r1 = await db.any(query);
       const r2 = await db.any(qtotal);
@@ -15,16 +28,18 @@ module.exports = {
       console.log("error db/all :", error);
     }
   },
-  filter: async (priceFrom, priceTo, sortby, asc, search, page, pagesize) => {
+  filter: async (priceFrom, priceTo, sortby, asc, search, page, pagesize, status) => {
+    const opposite = getOpposite(status);
     const query = `select * from 
-    (select distinct on (p.id_nhu_yeu_pham) p.id_nhu_yeu_pham, p.ten_sanpham,p.gia_tien,p.don_vi,p.con_lai,url 
+    (select distinct on (p.id_nhu_yeu_pham) p.id_nhu_yeu_pham, p.ten_sanpham,p.gia_tien,p.don_vi,p.con_lai,url,status 
     from nhu_yeu_pham p left join hinh_anh_san_pham img 
 		on p.id_nhu_yeu_pham = img.id_nhu_yeu_pham 
-		where  ten_sanpham like '%${search}%' and
+		where  ten_sanpham like '%${search}%' and status != ${opposite} and
     gia_tien between ${priceFrom} and ${priceTo} ) data order by ${sortby} ${asc}
     limit ${pagesize} offset ${pagesize * (page - 1)}`;
     const qtotal = `select count(*) from nhu_yeu_pham 
-    where gia_tien between ${priceFrom} and ${priceTo} and ten_sanpham like '%${search}%' `;
+    where gia_tien between ${priceFrom} and ${priceTo} 
+    and ten_sanpham like '%${search}%' and  status != ${opposite} `;
     try {
       const r1 = await db.any(query);
       const r2 = await db.any(qtotal);
@@ -42,7 +57,7 @@ module.exports = {
       const images = await db.any(q2);
       return { pro, images };
     } catch (error) {
-      console.log("error db/add :", error);
+      console.log("error detail/add :", error);
     }
   },
   add: async (pro) => {
@@ -74,20 +89,27 @@ module.exports = {
       console.log("error edit pro :", error);
     }
   },
-  delete: async (id) => {
-    const query1 = `delete from Nhu_Yeu_Pham where id_nhu_yeu_pham = ${id};`;
-    const query2 = `delete from Hinh_Anh_San_Pham where id_nhu_yeu_pham = ${id};`;
+  disable: async (id) => {
+    const query = `update Nhu_Yeu_Pham 
+                  set status = 0
+                  where id_nhu_yeu_pham = ${id};`;
     try {
-      await db.any(query2);
+      return await db.any(query);
     } catch (error) {
-      console.log("error delete product :", error);
-    }
-    try {
-      await db.any(query1);
-    } catch (error) {
-      console.log("error delete images of product :", error);
+      console.log("error edit pro :", error);
     }
   },
+  enable: async (id) => {
+    const query = `update Nhu_Yeu_Pham 
+                  set status = 1
+                  where id_nhu_yeu_pham = ${id};`;
+    try {
+      return await db.any(query);
+    } catch (error) {
+      console.log("error edit pro :", error);
+    }
+  },
+
   deleteImg: async (id) => {
     const query = `delete from Hinh_Anh_San_Pham where id_hinh_anh = ${id};`;
     const imgQuery = `select * from Hinh_Anh_San_Pham where id_hinh_anh = ${id};`;

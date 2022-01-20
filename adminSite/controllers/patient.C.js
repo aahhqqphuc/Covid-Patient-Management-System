@@ -27,7 +27,6 @@ router.get("/add", async (req, res) => {
 
 router.post("/add", auth, async (req, res) => {
   let createdDate = new Date();
-
   let patient = {
     ho_ten: req.body.name,
     cmnd: req.body.id,

@@ -31,6 +31,9 @@
                     <option {{#cond sortby "thoi_gian_tinh_toan" }} selected {{/cond}}value="thoi_gian_tinh_toan">Sắp
                         xếp: Thời gian
                     </option>
+                    <option {{#cond sortby "status" }} selected {{/cond}}value="status">Sắp
+                        xếp: Trạng thái
+                    </option>
                 </select>
             </div>
             <div class="col-2">
@@ -43,46 +46,40 @@
                 <button class="btn btn-outline-primary align-self-center" type="submit"><i class="fa fa-search fa-lg"
                         aria-hidden="true"></i></button>
             </div>
+            {{#cond role "manager"}}
             <div class="col-1 d-flex flex-row-reverse d-inline" style="width:111%">
                 <a href="/product-package/add">
                     <button type="button" class="btn btn-primary d-flex "><i style="margin-top: 5px;"
                             class="fas fa-plus mr-2"></i>Thêm</button>
                 </a>
             </div>
+            {{/cond}}
         </form>
     </div>
-
-    <table class="table table-bordered ml-2" style="width:95%">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col" data-filter-control='select'>Tên gói nhu yếu phẩm</th>
-                <th scope="col">Hình ảnh đại diện</th>
-                <th scope="col">Số lượng loại sản phẩm</th>
-                <th scope="col">Thời gian tối thiếu đặt hàng</th>
-                <th scope="col" class="text-end"></th>
-            </tr>
-        </thead>
-        <tbody>
-
+    <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">
+        <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
             {{#each packages}}
-            <tr>
-                <td class="pt-5"> {{ten_goi}}</td>
-                <td><img style="width: 100px; height:100px" src={{url}}></td>
-                <td class="pt-5">{{so_luong_san_pham}}</td>
-                <td class="pt-5">{{thoi_gian}} {{muc_gioi_han_goi_string}}</td>
-                <td style="padding-top: 40px;">
-                    <a href="/product-package/detail/{{id_goi_nhu_yeu_pham}}" type="button"
-                        class="btn btn-light btn-small"><i class="bi bi-eye"></i>
-                        Chi tiết</a>
-                    <button type="button" class="btn btn-info btn-lg btn-request-form btn-sm" data-toggle="modal"
-                        data-target="#myModal">Mua</button>
-                    <input type="text" name="packageID" value="{{id_goi_nhu_yeu_pham}}" hidden>
-                </td>
-            </tr>
+            <div class="col p-2">
+                <div
+                    class="cus-card h-100 w-100 shadow-sm border border-{{#cond status 1}}warning{{/cond}}{{#cond status 0}}danger{{/cond}}">
+                    <img src={{url}} class="card-img-top">
+                    {{#cond status 0}} <div class="label-top shadow-sm">Vô hiệu hóa</div>{{/cond}}
+                    <div class="card-body">
+                        <div class="clearfix mb-3">
+                            <span class="float-start badge rounded-pill bg-success"> {{so_luong_san_pham}} sản
+                                phẩm</span>
+                        </div>
+                        <h5 class="card-title">{{ten_goi}}</h5>
+                        <h6 class="card-title">Bạn cần {{thoi_gian}} {{muc_gioi_han_goi_string}} để mua lần tiếp theo kể
+                            từ lần mua gần nhất</h6>
+                        <div class="text-center my-4"> <a href="/product-package/detail/{{id_goi_nhu_yeu_pham}}"
+                                class="btn btn-warning">Chi tiết</a> </div>
+                    </div>
+                </div>
+            </div>
             {{/each}}
-
-        </tbody>
-    </table>
+        </div>
+    </div>
 
     <nav aria-label="Page navigation example">
         {{{paginateHelper pagination paginationClass="pagination"}}}
