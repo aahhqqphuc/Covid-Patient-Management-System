@@ -1,24 +1,14 @@
 
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Tables - SB Admin</title>
-        {{#each script}}
-        <script src = "{{this}}"></script>
-        {{/each}}
-    </head>
+  <body>
             <div id="layoutSidenav_content" style="margin-top: 60px;">
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Tables</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="/admin">Home</a></li>
                             <li class="breadcrumb-item active">Thông tin hoạt động của tài khoản <b> {{account.user_name}}</b></li>
                         </ol>
-                        <div style="text-align:end">
+                        <div style="text-align:end;margin-bottom:20px">
                             <a href="/admin/lock?id={{account.id_tai_khoan}}"type="button" class="btn btn-primary" >Khoá tài khoản</a>
                             <a href="/admin/unlock?id={{account.id_tai_khoan}}"type="button" class="btn btn-primary" >Mở khoá tài khoản</a>
                         </div>
@@ -51,6 +41,9 @@
                                             {{/each}}
                                     </tbody>
                                 </table>
+                                <nav aria-label="Page navigation example">
+                                    {{{paginateHelper pagination paginationClass="pagination"}}}
+                                </nav>
                             </div>
                         </div>
                     </div>

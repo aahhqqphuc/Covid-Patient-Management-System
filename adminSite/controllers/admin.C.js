@@ -2,15 +2,13 @@ const express = require("express");
 const router = express.Router();
 const model = require("../models/admin.M");
 const TreatmentPlacemodel = require("../models/treatmentPlace.M");
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const accountUlt = require("../utils/account")
 
 router.get("/", async (req, res) => {
   const data = await model.get();
   res.render("admin/adminAccountList", {
     layout: "adminLayout",
     admin: data,
-    script: ["../js/adminList.js"],
   });
 });
 
@@ -19,7 +17,6 @@ router.get("/hospital", async (req, res) => {
   res.render("admin/adminHospital", {
     layout: "adminLayout",
     hospital: data,
-    script: ["../js/adminList.js"],
   });
 });
 
@@ -31,7 +28,6 @@ router.get("/detail", async (req, res) => {
     layout: "adminLayout",
     detail: data,
     account: user_name[0],
-    script: ["../js/adminList.js"],
   });
 });
 
@@ -56,7 +52,6 @@ router.post("/register", async (req, res) => {
   var username = req.body.user_name;
   var psw = req.body.password;
   var cofpsw = req.body.confpassword;
-  var role = req.body.role;
   if (psw != cofpsw) {
     res.render("admin/adminAccountRegister", {
       message: "Password confirm is incorrect",
@@ -75,15 +70,9 @@ router.post("/register", async (req, res) => {
     });
     return;
   } else {
-    var hashedpwd = await bcrypt.hash(psw, saltRounds);
+    
 
-    user = {
-      id_tai_khoan: "default",
-      user_name: username,
-      password: hashedpwd,
-      role: role,
-      status: 1,
-    };
+    user = accountUlt.createAccountManager(username,psw);
     const rs = await model.adduser(user);
     res.redirect("/admin");
   }
