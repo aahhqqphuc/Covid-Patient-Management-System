@@ -1,16 +1,16 @@
 <div class="pt-5 mb-3">
     {{#if success}}
-    <div class="alert alert-success w-50 text-center m-auto" role="alert" id="success-alert">
+    <div class="alert alert-success w-50 text-center m-auto" role="alert" id="message-alert">
         <strong>Thành công!</strong> {{success}}.
     </div>
     {{/if}}
     {{#if error}}
-        <div class="alert alert-danger w-50 text-center m-auto" role="alert" id="success-alert">
+        <div class="alert alert-danger w-50 text-center m-auto" role="alert" id="message-alert">
         <strong>Thất bại</strong> {{error}}
     </div>
     {{/if}}
     {{#if info}}
-    <div class="alert alert-danger w-50 text-center m-auto" role="alert" id="success-alert">
+    <div class="alert alert-danger w-50 text-center m-auto" role="alert" id="message-alert">
         <strong>lỗi!</strong> {{info}}
     {{/if}}
 
@@ -50,9 +50,9 @@
 <script src="/js/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        $("#success-alert").slideDown();
+        $("#message-alert").slideDown();
         window.setTimeout(function () {
-            $("#success-alert").slideUp(500);
+            $("#message-alert").slideUp(500);
         }, 2000);
     });
 </script>

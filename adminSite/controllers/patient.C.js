@@ -57,6 +57,7 @@ router.post("/add", auth, async (req, res) => {
   await relatedPatientM.add(relatedPatient);
 
   const user = await createAccount(req.body.id, req.body.id);
+  console.log(user);
 
   user.id_benh_nhan = result[0].id_benh_nhan;
 
