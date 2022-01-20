@@ -6,10 +6,11 @@ const notifyM = require("../models/notify.M");
 const { compare } = require("../utils/account");
 const accountM = require("../models/account.M");
 const productM = require("../models/product.M");
+const { isManager } = require("../utils/auth");
 
 const axios = require("axios");
 
-router.get("/manage/:time", async (req, res) => {
+router.get("/manage/:time", isManager, async (req, res) => {
   const time = req.params.time == 'all' ? null : req.params.time
 
   axios({
@@ -33,7 +34,7 @@ router.get("/manage/:time", async (req, res) => {
     });
 });
 
-router.get("/min-payment", async (req, res) => {
+router.get("/min-payment", isManager, async (req, res) => {
   axios({
     method: "get",
     url: "http://127.0.0.1:3001/payment/limit",
@@ -65,7 +66,7 @@ router.get("/min-payment", async (req, res) => {
     });
 });
 
-router.post("/min-payment", async (req, res) => {
+router.post("/min-payment", isManager, async (req, res) => {
   axios({
     method: "put",
     url: "http://127.0.0.1:3001/payment/limit",
@@ -240,7 +241,7 @@ router.post("/payment-debt", async (req, res) => {
     });
 });
 
-router.get("/notify/:id", async (req, res) => {
+router.get("/notify/:id", isManager, async (req, res) => {
   const noftify = {
     id_benh_nhan: req.params.id,
     thong_bao: `Vui lòng thanh toán dư nợ của bạn`,
@@ -255,7 +256,7 @@ router.get("/notify/:id", async (req, res) => {
   }
 });
 
-router.get("/notify-all/:time", async (req, res) => {
+router.get("/notify-all/:time", isManager, async (req, res) => {
   const time = req.params.time == 'all' ? null : req.params.time
 
   axios({
