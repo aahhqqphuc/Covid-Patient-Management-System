@@ -1,28 +1,26 @@
 const db = require("./db").getDb;
-function getOpposite(status) {
-  switch (status) {
-    case -1:
+function getOpposite(role) {
+  switch (role) {
+    case "manager":
       return -1;
-    case 0:
-      return 1;
-    case 1:
+    case "patient":
       return 0;
     default:
       return -1;
   }
 }
 module.exports = {
-  getAll: async (page, pagesize, status) => {
-    const opposite = getOpposite(status);
+  getAll: async (page, pagesize, role) => {
+    const opposite = getOpposite(role);
     const query = `SELECT distinct on (g.id_goi_nhu_yeu_pham) g.id_goi_nhu_yeu_pham, g.status,
         g.ten_goi,img.url,g.thoi_gian,
         to_string(g.muc_gioi_han_goi) muc_gioi_han_goi_string,
         c.count as So_luong_san_pham
         FROM goi_nhu_yeu_pham g 
-        join danh_sach_nhu_yeu_pham ds on g.id_goi_nhu_yeu_pham = ds.id_goi
-        join nhu_yeu_pham nyp on ds.id_sanpham = nyp.id_nhu_yeu_pham
-        join hinh_anh_san_pham img on nyp.id_nhu_yeu_pham = img.id_nhu_yeu_pham
-        join (select count( id_goi ) as count ,id_goi 
+        left join danh_sach_nhu_yeu_pham ds on g.id_goi_nhu_yeu_pham = ds.id_goi
+        left join nhu_yeu_pham nyp on ds.id_sanpham = nyp.id_nhu_yeu_pham
+        left join hinh_anh_san_pham img on nyp.id_nhu_yeu_pham = img.id_nhu_yeu_pham
+        left join (select count( id_goi ) as count ,id_goi 
         from danh_sach_nhu_yeu_pham group by id_goi) c on ds.id_goi = c.id_goi 
         where g.status != ${opposite}
         order by g.id_goi_nhu_yeu_pham limit ${pagesize} offset ${pagesize * (page - 1)}; `;
@@ -36,8 +34,8 @@ module.exports = {
       console.log("query  :", query);
     }
   },
-  filter: async (period, sortby, asc, search, page, pagesize, status) => {
-    const opposite = getOpposite(status);
+  filter: async (period, sortby, asc, search, page, pagesize, role) => {
+    const opposite = getOpposite(role);
     let query = `select * from 
             (SELECT distinct on (g.id_goi_nhu_yeu_pham) g.id_goi_nhu_yeu_pham, g.status,
             g.ten_goi,img.url,g.thoi_gian,g.muc_gioi_han_goi,
@@ -79,6 +77,7 @@ module.exports = {
       return { package, products };
     } catch (error) {
       console.log("error getById :", error);
+      console.log(q1);
     }
   },
   add: async (package) => {

@@ -22,7 +22,7 @@
                             <div class="col p-2">
                                 <div
                                     class="cus-card h-100 w-100 shadow-sm border border-{{#cond status 1}}warning{{/cond}}{{#cond status 0}}danger{{/cond}}">
-                                    <img src={{url}} class="card-img-top" alt="...">
+                                    <img src={{url}} class="card-img-top">
                                     {{#cond status 0}} <div class="label-top shadow-sm">Vô hiệu hóa</div>{{/cond}}
                                     <div class="card-body">
                                         <div class="clearfix mb-3"> <span
@@ -49,6 +49,7 @@
                         </div>
                     </div>
                 </div>
+                {{#cond role "manager"}}
                 <div class="d-flex ">
                     <a type="button" href="/product-package/edit/{{package.id_goi_nhu_yeu_pham}}"
                         class="btn btn-lg btn-primary align-self-center mr-5">Chỉnh
@@ -109,10 +110,13 @@
                     {{/cond}}
 
                 </div>
+                {{/cond}}
+                {{#cond role "patient"}}
+                <div class="d-flex ">
+                    <a type="button" href="#" class="btn btn-lg btn-primary align-self-center mr-5">Mua gói</a>
+                </div>
+                {{/cond}}
             </form>
-
-
-
         </div>
     </div>
 </div>

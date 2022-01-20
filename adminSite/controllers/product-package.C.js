@@ -3,15 +3,19 @@ const router = express.Router();
 const model = require("../models/product-package.M");
 module.exports = router;
 let products_selected = [];
-const manager = -1;
+//const role = "patient";
+const role = "manager";
 router.get("/", async (req, res) => {
+  console.log(req.user);
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 8;
-  const result = await model.getAll(page, pagesize, manager);
+  const result = await model.getAll(page, pagesize, role);
+  console.log(role == "manager" ? "managerLayout" : "patientLayout");
   res.render("product-package/product-packageList", {
-    layout: "managerLayout",
+    layout: role == "manager" ? "managerLayout" : "patientLayout",
     packages: result.data,
     pagination: { page: parseInt(page), limit: pagesize, totalRows: result.total },
+    role: role,
   });
 });
 router.get("/filter", async (req, res) => {
@@ -21,29 +25,36 @@ router.get("/filter", async (req, res) => {
   const search = req.query.search || "";
   const sortby = req.query.sortby || "id_goi_nhu_yeu_pham";
   const asc = req.query.asc;
-  const result = await model.filter(period, sortby, asc, search, page, pagesize, manager);
+  const result = await model.filter(period, sortby, asc, search, page, pagesize, role);
   res.render("product-package/product-packageList", {
-    layout: "managerLayout",
+    layout: role == "manager" ? "managerLayout" : "patientLayout",
     packages: result.data,
     search: search,
     period: period,
     sortby: sortby,
     asc: asc,
+    role: role,
     pagination: { page: parseInt(page), limit: pagesize, totalRows: result.total, queryParams: { search: search, period: period, sortby: sortby, asc: asc } },
   });
 });
 router.get("/detail/:id", async (req, res) => {
   let id = req.params.id;
+  console.log("id", id);
   let data = await model.getById(id);
   res.render("product-package/product-packageDetail", {
-    layout: "managerLayout",
+    layout: role == "manager" ? "managerLayout" : "patientLayout",
     package: data.package[0],
     products: data.products,
+    role: role,
   });
 });
 router.get("/add", async (req, res) => {
   let pros = await model.getElseProducts(0);
-  res.render("product-package/product-packageNew", { layout: "managerLayout", products: pros });
+  res.render("product-package/product-packageNew", {
+    role: role,
+    layout: "managerLayout",
+    products: pros,
+  });
 });
 router.post("/add", async (req, res) => {
   let pros = await model.getElseProducts(0);
@@ -51,7 +62,7 @@ router.post("/add", async (req, res) => {
     let arr = req.body.products_selected ? req.body.products_selected.toString() : "";
     products_selected = arr.length > 1 ? await model.getProducts(arr) : [];
     return res.render("product-package/product-packageNew", {
-      layout: "managerLayout",
+      layout: role == "manager" ? "managerLayout" : "patientLayout",
       ten_goi: req.body.ten_goi,
       thoi_gian: req.body.thoi_gian,
       muc_gioi_han: req.body.muc_gioi_han,
@@ -82,13 +93,14 @@ router.get("/edit/:id", async (req, res) => {
   let package = data.package[0];
   let pros = await model.getElseProducts(id);
   res.render("product-package/product-packageEdit", {
-    layout: "managerLayout",
+    layout: role == "manager" ? "managerLayout" : "patientLayout",
     id: package.id_goi_nhu_yeu_pham,
     ten_goi: package.ten_goi,
     thoi_gian: package.thoi_gian,
     muc_gioi_han: package.muc_gioi_han_goi,
     products_selected: data.products,
     products: pros,
+    role: role,
   });
 });
 router.get("/delete-product/:id", async (req, res) => {

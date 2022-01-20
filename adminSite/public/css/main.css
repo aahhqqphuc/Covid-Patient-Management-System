@@ -7032,7 +7032,6 @@ label {
 .fixed-top,
 .sb-nav-fixed #layoutSidenav #layoutSidenav_nav,
 .sb-nav-fixed .sb-topnav {
-  position: fixed;
   top: 0;
   right: 0;
   left: 0;
@@ -12222,10 +12221,6 @@ body {
 
 h2 {
   font-weight: 900;
-}
-
-.container-fluid {
-  max-width: 1200px;
 }
 
 .card {

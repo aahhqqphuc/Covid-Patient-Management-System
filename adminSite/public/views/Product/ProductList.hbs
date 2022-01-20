@@ -52,13 +52,13 @@
             </div>
         </form>
     </div>
-    <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">
+    <div class="container-fluid  ">
         <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
             {{#each products}}
             <div class="col p-2">
                 <div
                     class="cus-card h-100 w-100 shadow-sm border border-{{#cond status 1}}warning{{/cond}}{{#cond status 0}}danger{{/cond}}">
-                    <img src={{url}} class="card-img-top" alt="...">
+                    <img src={{url}} class="card-img-top">
                     {{#cond status 0}} <div class="label-top shadow-sm">Vô hiệu hóa</div>{{/cond}}
                     <div class="card-body">
                         <div class="clearfix mb-3"> <span
