@@ -16,15 +16,20 @@ $("#login-form").submit(function (e) {
         document.cookie = "jwt =" + response.msg + ";" + expires + ";path=/";
 
         if (response.role == "user") {
-          location.href = "/product-package";
+          if (response.active) {
+            location.href = "/product-package";
+          } else {
+            location.href = "/account/change-patient-pwd";
+          }
         } else if (response.role == "admin") {
           location.href = "/admin";
         } else {
           location.href = "/patient";
         }
       } else {
-        $("#alert").text(response.msg);
+        $("#alert-msg").text(response.msg);
         $("#alert").attr("hidden", true);
+        return;
       }
     },
     error: function (response) {

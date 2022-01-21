@@ -15,4 +15,9 @@ module.exports = {
 
     return await db.runQuery(query);
   },
+  changeActive: async (userId) => {
+    var query = `update tai_khoan set active = 1 where user_name = '${userId}'`;
+
+    return await db.runQuery(query);
+  },
 };
