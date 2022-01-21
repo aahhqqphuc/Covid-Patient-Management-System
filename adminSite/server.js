@@ -60,7 +60,7 @@ app.use("/product-package", auth, require("./controllers/product-package.C"));
 
 app.use("/admin", auth, require("./controllers/admin.C"));
 
-app.use("/statistic", auth, isManager, require("./controllers/statistic.C"));
+app.use("/statistic", isManager, require("./controllers/statistic.C"));
 
 app.use("/payment", auth, require("./controllers/payment.C"));
 

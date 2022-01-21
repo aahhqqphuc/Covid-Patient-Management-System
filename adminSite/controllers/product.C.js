@@ -4,9 +4,9 @@ const productM = require("../models/product.M");
 module.exports = router;
 const upload = require("../middlewares/upload");
 const { isManager } = require("../utils/auth");
+const role = "manager";
 
 router.get("/", isManager, async (req, res) => {
-  const role = req.user.role;
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 8;
   const result = await productM.getPaging(page, pagesize);
@@ -70,10 +70,8 @@ router.post("/add", isManager, upload.array("ImagePath"), async (req, res) => {
 });
 
 router.get("/detail/:id", async (req, res) => {
-  const role = req.user.role;
   let id = req.params.id;
   let data = await productM.getById(id);
-  console.log("data", data.images[0]);
   res.render("product/productdetail", {
     layout: role == "manager" ? "managerLayout" : "patientLayout",
     product: data.pro[0],
@@ -85,7 +83,6 @@ router.get("/detail/:id", async (req, res) => {
 router.get("/edit/:id", isManager, async (req, res) => {
   let id = req.params.id;
   let data = await productM.getById(id);
-  console.log(data.images[0]);
   return res.render("product/editproduct", {
     layout: "managerLayout",
     product: data.pro[0],

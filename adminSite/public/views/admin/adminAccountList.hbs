@@ -1,47 +1,47 @@
-
 <body>
-    
-    <div class="row" style="padding-top: 60px;">
-        <div class="col-6">
-            <h1>Danh sách tài khoản quản lý</h1>
-        </div>
 
+  <div class="row" style="padding-top: 60px;">
+    <div class="col-6">
+      <h1>Danh sách tài khoản quản lý</h1>
     </div>
 
-    <table class="table table-bordered" id="AccountTable">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">Tên User</th>
-                <th scope="col">Role</th>
-                <th scope="col">Hoạt động cuối</th>
-                <th scope="col">Thời gian hoạt động cuối</th>
-                <th scope="col">Trạng thái tài khoản</th>
-                <th scope="col" class="text-end">Action</th>
-            </tr>
-        </thead>
-        <tbody>
+  </div>
 
-            {{#each admin}}
-            <tr>
-                <td>{{user_name}}</td>
-                <td>{{role}}</td>
-                <td>{{action_name}}</td>
-                <td>{{action_date}}</td>
-                <td>{{status}}</td>
-                <td class="text-end">
-                   <a href="/admin/detail-filter?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small"><i class="bi bi-eye"></i>
-                        </a>
-                    <a href="/admin/lock?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small"><i class="bi bi-lock-fill"></i>
-                        </a>
-                    <a href="/admin/unlock?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small"><i class="bi bi-lock-fill"></i>
-                    </a>
-                </td>
-            </tr>
-            {{/each}}
+  <table class="table table-bordered" id="AccountTable">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Tên User</th>
+        <th scope="col">Role</th>
+        <th scope="col">Hoạt động cuối</th>
+        <th scope="col">Thời gian hoạt động cuối</th>
+        <th scope="col">Trạng thái tài khoản</th>
+        <th scope="col" class="text-end">Action</th>
+      </tr>
+    </thead>
+    <tbody>
 
-        </tbody>
-    </table>
-    <nav aria-label="Page navigation example">
-        {{{paginateHelper pagination paginationClass="pagination"}}}
-    </nav>
+      {{#each admin}}
+        <tr>
+          <td>{{user_name}}</td>
+          <td>{{role}}</td>
+          <td>{{action_name}}</td>
+          <td>{{action_date}}</td>
+          <td>{{status}}</td>
+          <td class="text-end">
+            <a href="/admin/detail-filter?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small">Chi
+              tiết
+            </a>
+            <a href="/admin/lock?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small">Khóa
+            </a>
+            <a href="/admin/unlock?id={{this.id_tai_khoan}}" type="button" class="btn btn-light btn-small">Mở khóa
+            </a>
+          </td>
+        </tr>
+      {{/each}}
+
+    </tbody>
+  </table>
+  <nav aria-label="Page navigation example">
+    {{{paginateHelper pagination paginationClass="pagination"}}}
+  </nav>
 </body>

@@ -60,7 +60,7 @@ router.get("/patient", async (req, res) => {
 });
 
 router.get("/product/:time", async (req, res) => {
-  let timeLine = req.params.time || 'today';
+  let timeLine = req.params.time || "today";
 
   const productDetail = await orderM.getOrderProductDetail(timeLine);
   const packageDetail = await orderM.getOrderPackageDetail(timeLine);
@@ -68,16 +68,14 @@ router.get("/product/:time", async (req, res) => {
   const numProduct = await orderM.countOrderProductDetail(timeLine);
   const numPackage = await orderM.countOrderPackageDetail(timeLine);
 
-  if(timeLine == 'today'){
+  if (timeLine == "today") {
     timeLine = `ngày ${dateNow}`;
-  }
-  else if(timeLine == 'this-month'){
-    timeLine = `tháng ${dnow.getMonth() + 1}/${dnow.getFullYear()}`
-  }
-  else if(timeLine == 'this-year'){
-    timeLine = `năm ${dnow.getFullYear()}`
-  }else {
-    timeLine = 'toàn thời gian'
+  } else if (timeLine == "this-month") {
+    timeLine = `tháng ${dnow.getMonth() + 1}/${dnow.getFullYear()}`;
+  } else if (timeLine == "this-year") {
+    timeLine = `năm ${dnow.getFullYear()}`;
+  } else {
+    timeLine = "toàn thời gian";
   }
 
   res.render("statistic/productStatistic", {
@@ -91,32 +89,30 @@ router.get("/product/:time", async (req, res) => {
   });
 });
 
-
 router.get("/product", (req, res) => {
-  res.redirect('/statistic/product/today');
+  res.redirect("/statistic/product/today");
 }),
-
-router.get("/payment", async (req, res) => {
-  axios({
-    method: "get",
-    url: "http://127.0.0.1:3001/payment/debt-patient",
-    responseType: "json",
-    headers: { Authorization: `Bearer ${req.cookies.jwt}` },
-  })
-    .then(function (response) {
-      const paymentAccounts = response.data.danh_sach;
-
-      const debtTotal = paymentAccounts.reduce((sum, item) => sum + parseInt(item.du_no), 0);
-
-      res.render("statistic/paymentStatistic", {
-        layout: "managerLayout",
-        debtTotal,
-        paymentAccounts 
-      });
+  router.get("/payment", async (req, res) => {
+    axios({
+      method: "get",
+      url: "http://127.0.0.1:3001/payment/debt-patient",
+      responseType: "json",
+      headers: { Authorization: `Bearer ${req.cookies.jwt}` },
     })
-    .catch(function (err) {
-      console.log("err /payment ", err);
-    });
-});
+      .then(function (response) {
+        const paymentAccounts = response.data.danh_sach;
+
+        const debtTotal = paymentAccounts.reduce((sum, item) => sum + parseInt(item.du_no), 0);
+
+        res.render("statistic/paymentStatistic", {
+          layout: "managerLayout",
+          debtTotal,
+          paymentAccounts,
+        });
+      })
+      .catch(function (err) {
+        console.log("err /payment ", err);
+      });
+  });
 
 module.exports = router;

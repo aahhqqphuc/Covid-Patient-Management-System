@@ -1,53 +1,35 @@
 <div class="container-fluid">
   <h1 class="mt-5">Chuyển trạng thái bệnh nhân</h1>
-  <button type="button" class="btn btn-lg btn-secondary align-self-center mb-3" onclick="goBack()">Trở
-    lại</button>
+  <button type="button" class="btn btn-lg btn-secondary align-self-center mb-3" onclick="goBack()">Trở lại</button>
   <div class="card w-50">
     <div class="card-body">
       <form method="post" action="/patient/change-state/{{id}}" id="change-state-form">
         <div class="form-group row">
           <label class="col-4">Mã bệnh nhân</label>
-          <input type="text" class="form-control col" value={{id}} readonly>
+          <input type="text" class="form-control col" value={{id}} readonly />
         </div>
         <div class="form-group row">
           <label class="col-4">Trạng thái cũ</label>
-          <input type="text" class="form-control col" value={{state}} readonly>
+          <input type="text" class="form-control col" value={{state}} readonly />
         </div>
         <div class="form-group row">
           <label class="col-4">Trạng thái mới</label>
           <select name="state" id="state" required class="col form-select form-select-md border border-secondary">
             <option value="state-empty">---Chọn trạng thái---</option>
             {{#each states}}
-            <option value={{id_trang_thai}}>{{ten_trang_thai}}</option>
+              <option value={{id_trang_thai}}>{{ten_trang_thai}}</option>
             {{/each}}
           </select>
           <br />
           <span class="text-danger" hidden id="state-danger">Chưa chọn trạng thái</span>
         </div>
-        <div class="form-group row ">
-          <button class="btn btn-primary col-4 align-self-end " type="submit">Chuyển trạng thái</button>
+        <div class="form-group row">
+          <button class="btn btn-primary col-4 align-self-end" type="submit">Chuyển trạng thái</button>
         </div>
       </form>
     </div>
   </div>
-  <div class="col-3">
-    <label for="floatingInput">Trạng thái cũ: {{state}}</label>
-  </div>
-  <div class="col-6">
-    <label for="floatingInput">Trạng thái mới: </label>
-    <select name="state" id="state" required>
-      <option value="state-empty">---Chọn trạng thái---</option>
-      {{#each states}}
-        <option value={{id_trang_thai}}>{{ten_trang_thai}}</option>
-      {{/each}}
-    </select>
-    <br />
-    <span class="text-danger" hidden id="state-danger">Chưa chọn trạng thái</span>
-  </div>
-  <div class="col-2 d-grid mt-2">
-    <button class="btn btn-primary" type="submit">Chuyển trạng thái</button>
-  </div>
-</form>
+</div>
 
 <script
   src="https://code.jquery.com/jquery-3.6.0.js"
@@ -57,7 +39,5 @@
 <script type="text/javascript" src="/js/patient/change-state.js"></script>
 <script type="text/javascript" src="/js/patient/validation.js"></script>
 <script type="text/javascript">
-  function goBack() {
-    window.history.back();
-  }
+  function goBack() { window.history.back(); }
 </script>

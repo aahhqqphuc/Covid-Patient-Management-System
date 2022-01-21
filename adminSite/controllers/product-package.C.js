@@ -98,6 +98,7 @@ router.post("/add", isManager, async (req, res) => {
 });
 
 router.get("/edit/:id", isManager, async (req, res) => {
+  const role = req.user.role;
   let id = req.params.id;
   let data = await model.getById(id);
   let package = data.package[0];
