@@ -1,0 +1,28 @@
+<div class="row mb-3 mt-3">
+    <div class="col">
+        <h1>Thông báo nhắc thanh toán
+        </h1>
+    </div>
+</div>
+<div class="row mb-3 mt-3">
+    <table class="table table-bordered ml-2" style="width:95%">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" data-filter-control='select'>Thông báo</th>
+                <th scope="col" class="text-end"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each notifies}}
+            <tr>
+                <td class="pt-5"> {{thong_bao}}</td>
+                <td style="padding-top: 40px;">
+                    <a href="/patient/notify/read/{{id_thong_bao}}" type="button" class="btn btn-light btn-small"><i
+                            class="bi bi-eye"></i>
+                        Đã đọc</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

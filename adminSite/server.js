@@ -3,7 +3,7 @@ const moment = require("moment");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
-const { authLogin, auth } = require("./utils/auth");
+const { authLogin, auth, isManager } = require("./utils/auth");
 const express = require("express"),
   app = express(),
   exphbs = require("express-handlebars");
@@ -60,7 +60,7 @@ app.use("/product-package", auth, require("./controllers/product-package.C"));
 
 app.use("/admin", auth, require("./controllers/admin.C"));
 
-app.use("/statistic", auth, require("./controllers/statistic.C"));
+app.use("/statistic", auth, isManager, require("./controllers/statistic.C"));
 
 app.use("/payment", auth, require("./controllers/payment.C"));
 

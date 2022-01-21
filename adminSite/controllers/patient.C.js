@@ -9,6 +9,7 @@ const treatmentHistoryM = require("../models/treatmentHistory.M");
 const treatmentPlaceM = require("../models/treatmentPlace.M");
 const accountM = require("../models/account.M");
 const orderM = require("../models/order.M");
+const notifyM = require("../models/notify.M");
 const { createAccount } = require("../utils/account");
 const axios = require("axios");
 const { isManager } = require("../utils/auth");
@@ -188,7 +189,19 @@ router.get("/filter", async (req, res) => {
     },
   });
 });
-
+router.get("/notify/read/:id", async (req, res) => {
+  const id = req.params.id;
+  const data = await notifyM.read(id);
+  res.redirect("/notify");
+});
+router.get("/notify", async (req, res) => {
+  const id = req.user.patientId;
+  const data = await notifyM.get(id);
+  res.render("patient/notify", {
+    layout: "patientLayout",
+    notifies: data,
+  });
+});
 router.get("/detail", isManager, async (req, res) => {
   const page = +req.query.page || 1;
   const pagesize = +req.query.pagesize || 5;
