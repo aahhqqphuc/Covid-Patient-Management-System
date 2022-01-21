@@ -29,12 +29,6 @@ router.post("/add", auth, async (req, res) => {
 
 // get hạn mức
 router.get("/limit", auth, async (req, res) => {
-  if (req.user.role != "manager") {
-    return res.status(401).json({
-      msg: "unauthorized",
-    });
-  }
-
   const limit = await limitM.getLimit();
 
   res.status(200).json({
